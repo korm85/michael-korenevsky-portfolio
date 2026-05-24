@@ -1,0 +1,36 @@
+Michael Korenevsky Product Portfolio
+
+AMVero - Go-to-Market
+●​ AMVero Product Article - Written overview of AMVero's capabilities and value proposition, positioning
+it as a machine-agnostic AI monitoring platform for industrial 3D printing fleets.
+●​ AMVero Launch Announcement - External product launch communication published at general
+availability, covering key benefits and target customers.
+●​ AMVero Sales Deck - Customer-facing presentation used by the sales team in discovery and demo
+conversations.
+
+AMVero - Product & Pricing
+●​ Alerts Feature PRD - High-level product requirements document for the real-time alerting feature,
+covering user scenarios, decision logic, and acceptance criteria.
+●​ AMVero Licensing ROI Optimizer - Interactive simulation tool built to model and validate the
+credit-based licensing model. Takes fleet size, print volume, and layer resolution as inputs; outputs cost
+comparison and break-even threshold against the legacy per-machine license. Used internally to define
+optimal credit pricing and by sales teams in customer conversations.
+
+AMVero - Customer Success
+●​ AMVero Onboarding Checklist - Customer-facing guide used during onboarding to ensure successful
+platform setup, camera configuration, and initial build monitoring.
+●​ AMVero Customer Summary Report - Sample of the automated end-of-build report generated for
+customers, summarizing detected anomalies, severity, and part-level traceability data.
+●​ AMVero Quality Report Sample - Raw machine-generated quality report from a live production run,
+showing the level of detail captured and surfaced through AMVero's monitoring pipeline.
+
+Simulation Suite - Validation & Customers
+●​ Simulation Technical Whitepaper: Heat Exchange - Technical whitepaper validating the heat
+exchange simulation module against real production data, published following beta completion with
+enterprise customers.
+●​ Simulation Customer Story: Knauf - Customer success story documenting how Knauf used the
+simulation suite to reduce build failures and validate part designs before production.
+●​ Simulation Customer Story: Emerson - Customer success story documenting Emerson's use of the
+simulation suite for aerospace-grade part validation.
+
+

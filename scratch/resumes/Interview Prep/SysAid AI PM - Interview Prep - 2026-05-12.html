@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SysAid Technologies — AI Product Manager | Interview Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --color-bg: #ffffff;
+  --color-alt: #f6f5f4;
+  --color-text: rgba(0,0,0,0.95);
+  --color-secondary: #615d59;
+  --color-muted: #a39e98;
+  --color-border: 1px solid rgba(0,0,0,0.1);
+  --color-accent: #0075de;
+  --color-accent-hover: #005bab;
+  --color-badge-bg: #f2f9ff;
+  --color-badge-text: #097fe8;
+  --color-success: #1aae39;
+  --color-warning: #dd5b00;
+  --radius-sm: 4px;
+  --radius-md: 12px;
+  --radius-pill: 9999px;
+  --shadow-card: rgba(0,0,0,0.04) 0px 4px 18px, rgba(0,0,0,0.027) 0px 2.025px 7.84688px, rgba(0,0,0,0.02) 0px 0.8px 2.925px, rgba(0,0,0,0.01) 0px 0.175px 1.04062px;
+  --max-width: 960px;
+}
+body {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Header */
+.header {
+  background: var(--color-alt);
+  border-bottom: var(--color-border);
+  padding: 0;
+}
+.header-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 40px 24px 32px;
+}
+.header-label {
+  display: inline-block;
+  background: var(--color-badge-bg);
+  color: var(--color-badge-text);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.125px;
+  padding: 4px 8px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 12px;
+}
+.header h1 {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.625px;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+.header-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+}
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--color-secondary);
+}
+.meta-item strong {
+  color: var(--color-text);
+  font-weight: 500;
+}
+.badge {
+  display: inline-block;
+  background: var(--color-badge-bg);
+  color: var(--color-badge-text);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.125px;
+  padding: 4px 8px;
+  border-radius: var(--radius-pill);
+}
+.badge-success { background: #e9f9ee; color: #1a7d2e; }
+.badge-warning { background: #fff3e6; color: #b84a00; }
+
+/* Content */
+.content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+/* Section */
+.section { margin-bottom: 48px; }
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: var(--color-border);
+}
+.section-header h2 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.25px;
+}
+.section-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-badge-bg);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+}
+
+/* Info Grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.info-card {
+  background: var(--color-bg);
+  border: var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+}
+.info-card h3 {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-muted);
+  margin-bottom: 8px;
+}
+.info-card .value {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Key Points */
+.key-points { list-style: none; }
+.key-points li {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: var(--color-border);
+}
+.key-points li:last-child { border-bottom: none; }
+.key-points .point-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  margin-top: 2px;
+}
+.key-points .point-text h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.key-points .point-text p {
+  font-size: 14px;
+  color: var(--color-secondary);
+  line-height: 1.5;
+}
+
+/* Q&A */
+.qa-item {
+  border: var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.qa-question {
+  padding: 14px 20px;
+  background: var(--color-alt);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.qa-question .q-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.qa-answer {
+  padding: 14px 20px;
+  font-size: 14px;
+  color: var(--color-secondary);
+  line-height: 1.5;
+  border-top: var(--color-border);
+}
+
+/* Table */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.data-table th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-muted);
+  padding: 8px 12px;
+  border-bottom: 2px solid var(--color-border);
+}
+.data-table td {
+  padding: 10px 12px;
+  border-bottom: var(--color-border);
+  vertical-align: top;
+}
+.data-table tr:last-child td { border-bottom: none; }
+
+/* Product cards */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.product-card {
+  border: var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+.product-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.product-card p {
+  font-size: 13px;
+  color: var(--color-secondary);
+  line-height: 1.5;
+}
+
+/* Angle cards */
+.angle-card {
+  border: var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 12px;
+}
+.angle-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.125px;
+  margin-bottom: 6px;
+}
+.angle-card h4 .angle-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--color-accent);
+  color: white;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.angle-card p {
+  font-size: 14px;
+  color: var(--color-secondary);
+  line-height: 1.6;
+}
+
+/* Stat bar */
+.stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-item {
+  flex: 1;
+  min-width: 140px;
+  text-align: center;
+  padding: 20px 16px;
+  border: var(--color-border);
+  border-radius: var(--radius-md);
+}
+.stat-number {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: var(--color-accent);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-label {
+  font-size: 12px;
+  color: var(--color-secondary);
+  font-weight: 500;
+}
+
+/* Footer */
+.footer {
+  border-top: var(--color-border);
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-muted);
+  background: var(--color-alt);
+}
+
+/* Logo bar */
+.logo-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+.logo-item {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border: var(--color-border);
+  border-radius: var(--radius-pill);
+  color: var(--color-secondary);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .header h1 { font-size: 28px; letter-spacing: -0.5px; }
+  .info-grid { grid-template-columns: 1fr; }
+  .product-grid { grid-template-columns: 1fr; }
+  .stat-row { flex-direction: column; }
+  .stat-item { min-width: unset; }
+  .header-meta { flex-direction: column; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-label">Interview Prep · May 12, 2026</div>
+    <h1>SysAid Technologies<br>AI Product Manager</h1>
+    <div class="header-meta">
+      <div class="meta-item"><strong>Format:</strong> Comeet Video (45 min)</div>
+      <div class="meta-item"><strong>Time:</strong> 12:30 – 13:15 IDT</div>
+      <div class="meta-item"><strong>Location:</strong> Israel · Hybrid</div>
+      <div class="meta-item"><strong>Status:</strong> <span class="badge badge-warning">Interview Scheduled</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- Stats -->
+<div class="stat-row">
+  <div class="stat-item"><div class="stat-number">5</div><div class="stat-label">Enterprise Customers (your win)</div></div>
+  <div class="stat-item"><div class="stat-number">98%</div><div class="stat-label">Manual Review Reduction</div></div>
+  <div class="stat-item"><div class="stat-number">90%</div><div class="stat-label">AI Model Accuracy</div></div>
+  <div class="stat-item"><div class="stat-number">$150K</div><div class="stat-label">Annual Savings per Machine</div></div>
+</div>
+
+<!-- Company Overview -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🏢</div>
+    <h2>Company Overview</h2>
+  </div>
+  <div class="info-grid">
+    <div class="info-card"><h3>Product</h3><div class="value">AI-powered ITSM platform — help desk, asset management, automation</div></div>
+    <div class="info-card"><h3>Position</h3><div class="value">Competes with ServiceNow, Freshservice, Jira Service Desk, BMC Helix</div></div>
+    <div class="info-card"><h3>Value Prop</h3><div class="value">"AI takes care of the daily grind so IT teams can focus on what matters"</div></div>
+    <div class="info-card"><h3>Customers</h3><div class="value">Honda, Toyota, Xerox, Motorola Solutions, University of Michigan, BDO</div></div>
+  </div>
+</div>
+
+<!-- Leadership -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">👥</div>
+    <h2>Leadership</h2>
+  </div>
+  <table class="data-table">
+    <tr><th width="180">Name</th><th>Title</th><th>Background</th></tr>
+    <tr><td><strong>Avi Kedmi</strong></td><td>CEO</td><td>Former LivePerson exec. Founded ML startup (acquired 2012). MBA Kellogg-Recanati.</td></tr>
+    <tr><td><strong>Sasha Shapirov</strong></td><td>CTO</td><td>28yr R&D. Ex-ClickSoftware (acquired by Salesforce), ex-Codefresh CEngO.</td></tr>
+    <tr><td><strong>Jason Schwartz</strong></td><td>CFO</td><td>Ex-Similarweb (took them public NYSE:SMWB). CPA. Ex-Shopping.com (IPO).</td></tr>
+  </table>
+</div>
+
+<!-- AI Product Suite -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🤖</div>
+    <h2>AI Product Suite</h2>
+  </div>
+  <div class="product-grid">
+    <div class="product-card">
+      <h4>SysAid Copilot</h4>
+      <p>AI assistant for IT — conversational querying, ticket summarization, reply drafting.</p>
+    </div>
+    <div class="product-card">
+      <h4>AI Agents</h4>
+      <p>Pre-built agents automating ITSM tasks (onboarding, license assignment, account unlock).</p>
+    </div>
+    <div class="product-card">
+      <h4>AI Agent Builder</h4>
+      <p>No-code tool for building custom AI agents — democratizes AI in IT teams.</p>
+    </div>
+    <div class="product-card">
+      <h4>Agentic Service Mgmt</h4>
+      <p>Newest offering — autonomous AI-driven service management across the tech stack.</p>
+    </div>
+    <div class="product-card">
+      <h4>AI Governance & Security</h4>
+      <p>Guardrails, controls, and compliance for enterprise AI deployments.</p>
+    </div>
+    <div class="product-card">
+      <h4>AI Certification</h4>
+      <p>Training program for partners and employees to build AI skills.</p>
+    </div>
+  </div>
+  <p style="font-size:13px;color:var(--color-secondary);margin-top:4px;"><strong>Key claim:</strong> 60%+ of incidents auto-resolved before becoming tickets. Integrates with M365, Azure AD, Slack, Salesforce.</p>
+</div>
+
+<!-- Your Alignment -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🎯</div>
+    <h2>Your Fit — Why You're a Strong Candidate</h2>
+  </div>
+  <div class="angle-card">
+    <h4><span class="angle-tag">1</span>AI That Drives Outcomes</h4>
+    <p>SysAid claims 60%+ incidents auto-resolved. You delivered 98% manual review reduction and 90% model accuracy at Oqton. You have proof that AI products deliver real, measurable impact — not just promises.</p>
+  </div>
+  <div class="angle-card">
+    <h4><span class="angle-tag">2</span>Bridging Engineering and AI</h4>
+    <p>SysAid's CTO Sasha Shapirov has 28 years in R&D. Your path from mechanical engineering → physics simulation → AI PM means you speak both "how things work" and "AI product." Most PMs come from one side only.</p>
+  </div>
+  <div class="angle-card">
+    <h4><span class="angle-tag">3</span>Concept to Scale</h4>
+    <p>SysAid is expanding AI features rapidly. You built an AI platform from concept → 5 enterprise customers in 5 months. You know how to take AI from zero to production adoption.</p>
+  </div>
+  <div class="angle-card">
+    <h4><span class="angle-tag">4</span>Customer-First AI Thinking</h4>
+    <p>SysAid's brand is "AI that makes IT teams' lives better." You simplified onboarding and reduced manual review — customer-first AI, not tech-for-tech's-sake. Direct cultural fit.</p>
+  </div>
+</div>
+
+<!-- Talking Points -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">💡</div>
+    <h2>Talking Points to Weave In</h2>
+  </div>
+  <ul class="key-points">
+    <li>
+      <div class="point-icon" style="background:#e9f9ee;color:#1a7d2e;">✓</div>
+      <div class="point-text">
+        <h4>Competitive positioning</h4>
+        <p>"I noticed SysAid positions against ServiceNow, Freshservice, and Jira. With an AI-first approach, you're uniquely positioned against legacy ITSM players — similar dynamics to what I experienced in my market."</p>
+      </div>
+    </li>
+    <li>
+      <div class="point-icon" style="background:#e9f9ee;color:#1a7d2e;">✓</div>
+      <div class="point-text">
+        <h4>AI Agent Builder insight</h4>
+        <p>"Your AI Agent Builder is strategically smart — the no-code angle is critical for democratizing AI in IT teams that don't have ML engineers on staff."</p>
+      </div>
+    </li>
+    <li>
+      <div class="point-icon" style="background:#e9f9ee;color:#1a7d2e;">✓</div>
+      <div class="point-text">
+        <h4>Auto-resolution comparison</h4>
+        <p>"The 60% auto-resolution stat is powerful. At Oqton we saw similar dynamics — when you reduce manual work by 98%, the value prop sells itself."</p>
+      </div>
+    </li>
+    <li>
+      <div class="point-icon" style="background:#e9f9ee;color:#1a7d2e;">✓</div>
+      <div class="point-text">
+        <h4>Your one-sentence differentiator</h4>
+        <p>"I'm a PM who came from mechanical engineering into physics simulation, then into AI — so I can deeply understand complex systems AND ship AI products that solve real problems."</p>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- Expected Questions -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">❓</div>
+    <h2>Expected Questions</h2>
+  </div>
+  <div class="qa-item">
+    <div class="qa-question"><span class="q-num">1</span> "Walk me through how you built the AI monitoring platform at Oqton from scratch."</div>
+    <div class="qa-answer"><strong>Frame:</strong> Problem → approach → iteration → results. Start with the pain (manual review of production data), your 0→1 process, the 5-customer rollout, and the 98%/90% numbers. Emphasize customer discovery and how you validated the model's decision engine.</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-question"><span class="q-num">2</span> "How do you decide what gets AI and what doesn't?"</div>
+    <div class="qa-answer"><strong>Frame:</strong> High-volume repetitive tasks first, where errors have low cost. AI for augmentation before automation. Manual review for edge cases. At Oqton, we targeted the 80% of cases the model could confidently handle.</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-question"><span class="q-num">3</span> "How would you improve SysAid Copilot?"</div>
+    <div class="qa-answer"><strong>Frame:</strong> Start by understanding current usage data. If I had to guess without data: (1) make Copilot proactive — suggest actions before users ask, (2) tighten integration with Agentic Service Management so Copilot can trigger agents, (3) improve the feedback loop so Copilot learns from agent corrections.</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-question"><span class="q-num">4</span> "How do you measure AI product success beyond accuracy?"</div>
+    <div class="qa-answer"><strong>Frame:</strong> Time saved per IT agent, reduction in mean-time-to-resolution (MTTR), CSAT scores, adoption rate (% of eligible tickets handled by AI), escalation rate (how often AI-touched tickets get escalated to humans), and net promoter score from IT teams.</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-question"><span class="q-num">5</span> "How is AI Product Management different from traditional PM?"</div>
+    <div class="qa-answer"><strong>Frame:</strong> AI PM needs to manage model uncertainty — you're shipping probabilistic systems, not deterministic ones. More investment in evaluation/data quality. Closer collaboration with research/ML teams. User trust is harder to earn and easier to lose. You measure in ranges not exact numbers.</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-question"><span class="q-num">6</span> "Why SysAid? Why AI for IT service management?"</div>
+    <div class="qa-answer"><strong>Frame:</strong> ITSM is a massive market dominated by legacy players (ServiceNow). AI-native approach is a genuine disruptor. SysAid's focus on making IT teams' work better — not replacing them — resonates with my experience building AI that augments human work. Also: Israeli company, AI-first culture, hybrid in Israel.</div>
+  </div>
+</div>
+
+<!-- Questions To Ask -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🗣️</div>
+    <h2>Questions You Should Ask</h2>
+  </div>
+  <div class="qa-item">
+    <div class="qa-question"><span class="q-num" style="background:var(--color-warning)">A</span> "What does success look like for this role in the first 90 days? First 6 months?"</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-question"><span class="q-num" style="background:var(--color-warning)">B</span> "Which AI product would I own day one — Copilot, AI Agents, or something new?"</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-question"><span class="q-num" style="background:var(--color-warning)">C</span> "How does product management interface with the AI research and ML engineering teams?"</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-question"><span class="q-num" style="background:var(--color-warning)">D</span> "SysAid positions against ServiceNow. How does AI change that competitive dynamic?"</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-question"><span class="q-num" style="background:var(--color-warning)">E</span> "What's the biggest AI capability customers are asking for that doesn't exist yet?"</div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-question"><span class="q-num" style="background:var(--color-warning)">F</span> "How does the CEO's ML startup background influence product culture?"</div>
+  </div>
+</div>
+
+<!-- Logistics -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🔗</div>
+    <h2>Logistics & Checklist</h2>
+  </div>
+  <div class="info-grid">
+    <div class="info-card"><h3>Join Link</h3><div class="value"><a href="https://meet.comeet.com/join?token=7cbd3282" style="color:var(--color-accent);text-decoration:none;font-weight:500;">meet.comeet.com/join</a></div></div>
+    <div class="info-card"><h3>Duration</h3><div class="value">45 minutes</div></div>
+  </div>
+  <ul class="key-points" style="margin-top:16px;">
+    <li>
+      <div class="point-icon" style="background:var(--color-alt);color:var(--color-secondary);">☐</div>
+      <div class="point-text"><h4>Charged laptop, stable internet</h4></div>
+    </li>
+    <li>
+      <div class="point-icon" style="background:var(--color-alt);color:var(--color-secondary);">☐</div>
+      <div class="point-text"><h4>Have your resume ready (on Drive)</h4></div>
+    </li>
+    <li>
+      <div class="point-icon" style="background:var(--color-alt);color:var(--color-secondary);">☐</div>
+      <div class="point-text"><h4>Prepare 1-2 specific ideas for SysAid AI features</h4></div>
+    </li>
+    <li>
+      <div class="point-icon" style="background:var(--color-alt);color:var(--color-secondary);">☐</div>
+      <div class="point-text"><h4>Review your "why AI for ITSM" narrative</h4></div>
+    </li>
+  </ul>
+</div>
+
+</div>
+
+<div class="footer">
+  Generated by Hermes Agent · May 11, 2026 · <a href="https://docs.google.com/spreadsheets/d/1GIDsGPatT6By3IaYay5h_RFIV0JsXE3SklL8n5Q3Y2g/edit" style="color:var(--color-accent);">Job Search Tracker</a>
+</div>
+
+</body>
+</html>

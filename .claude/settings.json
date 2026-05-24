@@ -1,0 +1,40 @@
+{
+  "model": "claude-sonnet-4-6",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/session-start.sh",
+            "timeout": 15,
+            "statusMessage": "Loading portfolio design system..."
+          }
+        ]
+      },
+      {
+        "matcher": "resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/session-start.sh",
+            "timeout": 15,
+            "statusMessage": "Reloading portfolio design system..."
+          }
+        ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/session-start.sh",
+            "timeout": 15,
+            "statusMessage": "Reloading portfolio design system after compaction..."
+          }
+        ]
+      }
+    ]
+  }
+}
