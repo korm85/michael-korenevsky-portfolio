@@ -17,11 +17,11 @@ export default function ContactSection() {
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto text-center">
-        <span className="text-[10px] tracking-[0.4em] uppercase text-[#71717a]">Contact</span>
+        <span className="text-xs tracking-[0.2em] uppercase text-[#5eead4] font-mono">Contact</span>
         <h2 className="text-4xl md:text-6xl font-extralight text-[#fafafa] mt-4 mb-4">
           Get in touch
         </h2>
-        <p className="text-sm text-[#71717a] mb-12">
+        <p className="text-base text-[#8a8580] mb-12">
           Based in Israel. Open to remote and hybrid roles.
         </p>
 
