@@ -80,14 +80,14 @@ export default function Home() {
       {/* Custom Follower Cursor */}
       {isVisible && (
         <div
-          className="hidden md:block pointer-events-none fixed z-[9999] rounded-full border transition-all duration-75 -translate-x-1/2 -translate-y-1/2 mix-blend-screen"
+          className="hidden md:block pointer-events-none fixed z-[9999] rounded-full transition-all duration-75 -translate-x-1/2 -translate-y-1/2"
           style={{
             left: cursorPos.x,
             top: cursorPos.y,
             width: isHovering ? "48px" : "24px",
             height: isHovering ? "48px" : "24px",
-            backgroundColor: isHovering ? "rgba(94, 234, 212, 0.15)" : "transparent",
-            borderColor: "#5eead4",
+            backgroundColor: isHovering ? "rgba(94, 234, 212, 0.7)" : "rgba(94, 234, 212, 0.6)",
+            boxShadow: "0 0 0 1px rgba(0,0,0,0.4)",
           }}
         />
       )}
@@ -103,7 +103,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(176,142,79,0.06)_0%,transparent_70%)] pointer-events-none z-0" />
         
         <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto px-4">
-          <p className="font-mono text-xs md:text-sm uppercase tracking-[0.2em] text-teal-accent mb-8">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-teal-accent font-bold mb-8">
             👋 HI, I'M MICHAEL, SENIOR PRODUCT MANAGER
           </p>
 
@@ -123,7 +123,7 @@ export default function Home() {
           </h1>
 
           <p className="text-xl md:text-2xl lg:text-3.5xl font-sans font-light text-text-secondary leading-snug tracking-tight max-w-3xl mb-12">
-            Building complex products from scratch, owning the end-to-end process to transform complex data into actionable insights.
+            I spent a decade breaking enterprise software before I built it. Now I apply that edge-case thinking to AI products where a missed alert costs a production run, and a wrong decision costs a customer.
           </p>
 
           <div className="flex gap-8 mb-14">
@@ -144,7 +144,7 @@ export default function Home() {
           <div className="w-full max-w-md border-t border-border-dark/60 mb-8" />
 
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
-            Shipped to: <span className="text-text-primary font-semibold">Baker Hughes · Thales · Elos Medtech · Oqton · Beehive</span>
+            Shipped to: <span className="text-text-primary font-semibold">Baker Hughes · Thales · Elos Medtech · Beehive</span>
           </p>
         </div>
       </section>
@@ -202,7 +202,7 @@ export default function Home() {
 
       {/* ── Footer ── */}
       <footer className="px-6 md:px-12 py-10 border-t border-border-dark bg-canvas">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 text-xs tracking-[0.2em] uppercase text-text-muted font-mono">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 text-[10px] tracking-[0.2em] uppercase text-text-muted font-mono">
           <span>© 2026 Michael Korenevsky</span>
           <div className="flex items-center gap-4">
             {time && <span>ISR {time}</span>}

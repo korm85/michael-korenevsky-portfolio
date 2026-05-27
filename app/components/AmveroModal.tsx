@@ -73,7 +73,7 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
                   PM CONTRIBUTION
                 </p>
                 <p className="text-xs leading-relaxed text-text-secondary">
-                  Owned the product backlog end-to-end: managed Scrum sprints to sign 5 enterprise customers (e.g. Baker Hughes, Thales) in 5 months. Defined warning thresholds and alerting logic to mitigate operator alarm fatigue, curating training data to improve model accuracy to 90%.
+                  The core alerting decision: condition-based multi-layer filtering instead of static severity thresholds. That trade-off eliminated false-positive noise and turned operator trust from a blocker into a selling point. I also defined the on-premise deployment as a first-class product variant, not a cloud port, which opened accounts requiring air-gapped environments. Five enterprise contracts in five months followed from those two decisions.
                 </p>
               </div>
 
@@ -119,6 +119,11 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
 
             {/* Right Column: Prototype Console (occupies 9 columns) */}
             <div className="lg:col-span-9 h-[700px] md:h-[750px] lg:h-full min-h-0 border border-border-dark rounded-xl flex flex-col">
+              <div className="px-4 pt-3 pb-2 border-b border-border-dark flex-shrink-0">
+                <p className="text-[10px] text-text-muted leading-relaxed">
+                  The core design problem: operators were receiving too many alerts to trust any of them. The prototype below is the solution I specified — condition-based rules that fire only when a defect crosses multiple thresholds across consecutive layers. Walk through the alert creation flow to see how the filtering logic works.
+                </p>
+              </div>
               <AmveroPrototype />
             </div>
           </div>

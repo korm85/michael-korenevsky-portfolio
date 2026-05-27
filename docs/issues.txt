@@ -1,0 +1,19 @@
+issues:
+
+**AMVero
+*you wrote shipped to Oqton - Oqton is the company building amvero ; 
+*go to market boxes hyperlinks are too shifted to the left, should align with metrices nicely  - both in 
+simulaiton and in amvero products ; 
+*roi calculator is for amvero, not for simulation - fix it; 
+*remove em dashes;
+* "
+Wrote the deployment playbook to compress enterprise onboarding, enabling five clients in five months without a dedicated customer success team." - don't mention the 5 customers here, it is about easy onboarding
+*"Defined on-premise as a product, not a cloud port — positioning it for aerospace and medical clients where data sovereignty was a hard requirement, not a preference." - AI jargon 'not a preference' there is no need to write that, they need air gapped environment so this is what i did.
+* write about moving to credit based from fixed price based pricing - connect it to the credit based roi simulator that shows how i found the optimal credit pricing.
+* makes sense to create a visual connection between the key decisions and the go to market as they are related for some of the items.
+**AMVero
+
+**simulation
+*"Coupled thermal and mechanical solvers into a single pre-deformed model rather than keeping them as separate tools — the architectural decision that eliminated interlayer wait times and made first-time-right printing viable at serial production scale." - this is domain specific - write about moving from two separate modules thermal and mechanical that did not speak in the same language to a coupled unified thermo-mechanical module covering the whole process - and here the numbers connect to first time right really well
+*"Ran a structured beta with Knauf — eight years of simulation experience, 180 tools per year — to validate against real production components before release, reducing launch risk and generating a credible customer story at launch." - where did the 180 tools per year come from, what value does this number bring in this context
+**simulation

@@ -3,7 +3,7 @@
 const CARDS = [
   {
     title: "Discovery & specs",
-    body: "Before I write a spec, I pull customer signals, Jira, and Slack into one place. I catch the conflicts and gaps early, so they don't turn into sprint rework.",
+    body: "I pulled customer support data and Jira history into a single view before writing the AMVero alerting spec — and caught a threshold conflict that would have shipped an alert operators couldn't act on.",
     icon: (
       <svg className="w-5 h-5 text-[#71717a] group-hover:text-[#5eead4] transition-colors mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <circle cx="11" cy="11" r="8" />
@@ -13,7 +13,7 @@ const CARDS = [
   },
   {
     title: "Prototyping",
-    body: "I build interactive prototypes and test them with customers before engineering starts. When I do, users get higher-value features in the first release.",
+    body: "I built the AMVero alert flow as an interactive prototype before engineering started. Operators flagged the rule-creation UX in testing — we shipped a cleaner design in release 1 instead of fixing it in release 3.",
     icon: (
       <svg className="w-5 h-5 text-[#71717a] group-hover:text-[#5eead4] transition-colors mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" />
@@ -24,7 +24,7 @@ const CARDS = [
   },
   {
     title: "Hermes PM agent",
-    body: "A peer AI agent keeps my competitive research current. I walk into strategy discussions with fresh context instead of a deck I put together last week.",
+    body: "A custom AI agent monitors competitor product updates and pricing moves weekly. When a competitor claimed predictive defect detection, I had a verified technical rebuttal ready before the sales team asked for one.",
     icon: (
       <svg className="w-5 h-5 text-[#71717a] group-hover:text-[#5eead4] transition-colors mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8V4H8" />
@@ -35,7 +35,7 @@ const CARDS = [
   },
   {
     title: "Support intelligence",
-    body: "I read across hundreds of support conversations at once to find the patterns. My roadmap stays grounded in what customers actually get stuck on.",
+    body: "Reading across hundreds of support tickets at once surfaced a pattern: operators weren't struggling with detection — they were struggling with alert fatigue. That finding repositioned the entire Smart Alerting roadmap.",
     icon: (
       <svg className="w-5 h-5 text-[#71717a] group-hover:text-[#5eead4] transition-colors mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
@@ -71,7 +71,7 @@ export default function HowIWork() {
           ))}
         </div>
 
-        <p className="text-base text-[#8a8580] mt-8 italic">
+        <p className="text-sm text-[#8a8580] mt-8 italic">
           The result: faster cycles from customer signal to validated prototype to shipped feature.
         </p>
       </div>

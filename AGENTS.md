@@ -55,7 +55,29 @@ Before writing copy, headlines, or tile content:
 
 Before referencing any Oqton product details, customer names, or metrics:
 - Invoke the `ip-handling` skill
+
+Before making any changes to settings.json (hooks, permissions, env vars):
+- Use the `update-config` skill — it reads, merges, and validates; direct Edit skips the merge step
 <!-- END:skill-loading -->
+
+<!-- BEGIN:copy-data-source -->
+# Authoritative data source
+
+`docs/product-case-studies.md` is the verified ground truth for all portfolio copy: metrics, customer names, case study outcomes, and product specs. Read it before writing or editing any metric, customer reference, or outcome claim.
+<!-- END:copy-data-source -->
+
+<!-- BEGIN:repo-identity -->
+# This is the DEVELOPMENT / EXPERIMENT repository
+
+**Official site repo:** `/home/michaek/ClaudeCode-portfolio` → deploys to `https://michael-korenevsky.vercel.app`
+**This repo:** `/home/michaek/ClaudeCode-portfolio-dev` → deploys to its own dev Vercel URL
+
+## Rules
+- All experimental work, redesigns, and feature exploration happen here.
+- NEVER run `npx vercel --prod --yes` targeting the official project from this repo.
+- Deploy this repo freely to its own Vercel project for review.
+- When Michael explicitly says "push to the official site", copy the relevant changes to `/home/michaek/ClaudeCode-portfolio` and deploy from there.
+<!-- END:repo-identity -->
 
 <!-- BEGIN:status-continuity -->
 # Project status and continuity
@@ -67,14 +89,16 @@ STATUS.md at the project root is the authoritative record of where work stands.
 - When STATUS.md content is not already in context from the SessionStart hook
 
 ## When to update it
-Update STATUS.md at the end of any session where meaningful work happened. Specifically:
+Use `/done` to close any session with meaningful changes — it updates STATUS.md, writes the next session starter, and deploys in one step.
+
+Manual checklist (if /done unavailable):
 - Move completed items into "Last completed" with today's date
 - Clear "In progress" if nothing is actively unfinished
 - Update "Next up" to reflect the current queue
 - Add any non-obvious decisions to "Decisions log"
 
 ## Deploy rule
-After updating STATUS.md, always run `npx vercel --prod --yes` so the dashboard at /dashboard reflects the new state immediately.
+After updating STATUS.md, run `npx vercel --prod --yes` to deploy to THIS repo's Vercel project only.
 
 ## Format rules
 - "Last completed": max 5 bullets, most recent first, always dated
