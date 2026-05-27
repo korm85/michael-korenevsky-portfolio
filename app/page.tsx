@@ -103,7 +103,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(176,142,79,0.06)_0%,transparent_70%)] pointer-events-none z-0" />
         
         <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto px-4">
-          <p className="font-sans text-[10px] md:text-xs uppercase tracking-[0.3em] text-teal-accent font-bold mb-8">
+          <p className="font-mono text-xs md:text-sm uppercase tracking-[0.2em] text-teal-accent mb-8">
             👋 HI, I'M MICHAEL, SENIOR PRODUCT MANAGER
           </p>
 
@@ -143,7 +143,7 @@ export default function Home() {
 
           <div className="w-full max-w-md border-t border-border-dark/60 mb-8" />
 
-          <p className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-text-muted">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
             Shipped to: <span className="text-text-primary font-semibold">Baker Hughes · Thales · Elos Medtech · Oqton · Beehive</span>
           </p>
         </div>
@@ -165,21 +165,21 @@ export default function Home() {
       <section id="about" className="px-6 md:px-12 py-32 border-t border-border-dark/40 bg-canvas">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
-            <span className="text-[10px] tracking-[0.4em] uppercase text-text-muted font-bold font-mono">About</span>
+            <span className="text-xs tracking-[0.2em] uppercase text-teal-accent font-mono">About</span>
             <h2 className="text-3xl md:text-5xl font-extralight text-white mt-2">
               Background
             </h2>
           </div>
           <div className="grid md:grid-cols-2 gap-16">
             <div className="bg-surface border border-border-dark p-8 rounded-xl">
-              <h3 className="text-[10px] md:text-xs tracking-[0.3em] uppercase text-teal-accent mb-4 font-bold font-mono">Education</h3>
+              <h3 className="text-xs tracking-[0.2em] uppercase text-teal-accent mb-4 font-mono">Education</h3>
               <p className="text-lg font-light text-white">B.Sc. Mechanical Engineering</p>
               <p className="text-sm text-text-muted mt-1">
                 Ben-Gurion University of the Negev · 2008–2012
               </p>
             </div>
             <div className="bg-surface border border-border-dark p-8 rounded-xl">
-              <h3 className="text-[10px] md:text-xs tracking-[0.3em] uppercase text-teal-accent mb-4 font-bold font-mono">Languages</h3>
+              <h3 className="text-xs tracking-[0.2em] uppercase text-teal-accent mb-4 font-mono">Languages</h3>
               <div className="space-y-3">
                 {[
                   ["Hebrew", "Native"],
@@ -202,7 +202,7 @@ export default function Home() {
 
       {/* ── Footer ── */}
       <footer className="px-6 md:px-12 py-10 border-t border-border-dark bg-canvas">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 text-[10px] tracking-[0.2em] uppercase text-text-muted font-mono">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 text-xs tracking-[0.2em] uppercase text-text-muted font-mono">
           <span>© 2026 Michael Korenevsky</span>
           <div className="flex items-center gap-4">
             {time && <span>ISR {time}</span>}
