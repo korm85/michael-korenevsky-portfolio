@@ -80,14 +80,14 @@ export default function Home() {
       {/* Custom Follower Cursor */}
       {isVisible && (
         <div
-          className="hidden md:block pointer-events-none fixed z-[9999] rounded-full border transition-all duration-75 -translate-x-1/2 -translate-y-1/2 mix-blend-screen"
+          className="hidden md:block pointer-events-none fixed z-[9999] rounded-full transition-[width,height,background-color] duration-100 -translate-x-1/2 -translate-y-1/2"
           style={{
             left: cursorPos.x,
             top: cursorPos.y,
             width: isHovering ? "48px" : "24px",
             height: isHovering ? "48px" : "24px",
-            backgroundColor: isHovering ? "rgba(94, 234, 212, 0.15)" : "transparent",
-            borderColor: "#5eead4",
+            backgroundColor: isHovering ? "rgba(94, 234, 212, 0.7)" : "rgba(94, 234, 212, 0.6)",
+            boxShadow: "0 0 0 1px rgba(0,0,0,0.4)",
           }}
         />
       )}

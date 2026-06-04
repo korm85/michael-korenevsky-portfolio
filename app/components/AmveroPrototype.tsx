@@ -128,12 +128,14 @@ export default function AmveroPrototype() {
           if (job.status === "printing") {
             const nextProgress = job.progress >= 99 ? 0 : job.progress + 1;
             const nextLayer = Math.round((nextProgress / 100) * job.totalLayers);
-            // Simulate random active alerts based on rules
+            // Simulate random active alerts based on rules (cap at 3, no duplicates)
             let activeAlerts = [...job.activeAlerts];
-            if (nextProgress === 25 && job.id === "j2") {
-              activeAlerts.push("Spatter threshold exceeded on layer 250");
-            } else if (nextProgress === 85 && job.id === "j3") {
-              activeAlerts.push("Thermal deviation warning on layer 850");
+            const newAlert =
+              nextProgress === 25 && job.id === "j2" ? "Spatter threshold exceeded on layer 250" :
+              nextProgress === 85 && job.id === "j3" ? "Thermal deviation warning on layer 850" :
+              null;
+            if (newAlert && !activeAlerts.includes(newAlert)) {
+              activeAlerts = [...activeAlerts, newAlert].slice(-3);
             }
             return {
               ...job,
@@ -185,7 +187,7 @@ export default function AmveroPrototype() {
             activeAlerts: [
               ...job.activeAlerts,
               `Rule Triggered: "${newRuleName}" detected at layer ${job.currentLayer}`
-            ]
+            ].slice(-3)
           };
         }
         return job;
@@ -309,19 +311,19 @@ export default function AmveroPrototype() {
 
                   {/* Print layer graphic in non-compact mode */}
                   {!isCompact && job.status !== "idle" && (
-                    <div className="grid grid-cols-2 gap-2 h-20 bg-black/40 border border-border-dark rounded p-1.5">
-                      <div className="flex flex-col gap-1 overflow-hidden">
+                    <div className="grid grid-cols-2 gap-2 bg-black/40 border border-border-dark rounded p-1.5">
+                      <div className="flex flex-col gap-1 min-w-0">
                         <span className="text-[7px] text-text-muted uppercase tracking-widest font-mono font-bold">Pre-Recoat Camera</span>
-                        <div className="flex-1 bg-black rounded overflow-hidden flex items-center justify-center relative">
-                          <img src="/ad85b8a1b7ae678f0364407f6e76752a9c3fa60a.png" className="w-full h-full object-cover" alt="pre-recoat feed" />
-                          <div className="absolute inset-0 bg-teal-accent/5" />
+                        <div className="relative w-full" style={{ paddingBottom: "100%" }}>
+                          <img src="/ad85b8a1b7ae678f0364407f6e76752a9c3fa60a.png" className="absolute inset-0 w-full h-full object-cover rounded" alt="pre-recoat feed" />
+                          <div className="absolute inset-0 bg-teal-accent/5 rounded" />
                         </div>
                       </div>
-                      <div className="flex flex-col gap-1 overflow-hidden">
+                      <div className="flex flex-col gap-1 min-w-0">
                         <span className="text-[7px] text-text-muted uppercase tracking-widest font-mono font-bold">Post-Recoat Camera</span>
-                        <div className="flex-1 bg-black rounded overflow-hidden flex items-center justify-center relative">
-                          <img src="/ca0f1faccbe56083dad5a77684dd3de5485d8199.png" className="w-full h-full object-cover" alt="post-recoat feed" />
-                          <div className="absolute inset-0 bg-teal-accent/5" />
+                        <div className="relative w-full" style={{ paddingBottom: "100%" }}>
+                          <img src="/ca0f1faccbe56083dad5a77684dd3de5485d8199.png" className="absolute inset-0 w-full h-full object-cover rounded" alt="post-recoat feed" />
+                          <div className="absolute inset-0 bg-teal-accent/5 rounded" />
                         </div>
                       </div>
                     </div>
