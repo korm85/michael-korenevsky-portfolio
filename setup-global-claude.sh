@@ -40,6 +40,16 @@ EOF
 chmod +x "${CLAUDE_DIR}/hooks/global-session-start.sh"
 echo "✓ ${CLAUDE_DIR}/hooks/global-session-start.sh"
 
+# 2b. Global token-check hook
+cp "${SCRIPT_DIR}/.claude/hooks/token-check.sh" "${CLAUDE_DIR}/hooks/token-check.sh"
+chmod +x "${CLAUDE_DIR}/hooks/token-check.sh"
+echo "✓ ${CLAUDE_DIR}/hooks/token-check.sh"
+
+# 2c. Global read-tracker hook
+cp "${SCRIPT_DIR}/.claude/hooks/read-tracker.sh" "${CLAUDE_DIR}/hooks/read-tracker.sh"
+chmod +x "${CLAUDE_DIR}/hooks/read-tracker.sh"
+echo "✓ ${CLAUDE_DIR}/hooks/read-tracker.sh"
+
 # 3. Global settings.json — merge hooks in, preserve existing keys
 SETTINGS="${CLAUDE_DIR}/settings.json"
 if [ ! -f "$SETTINGS" ]; then
@@ -56,9 +66,23 @@ NEW_SETTINGS=$(jq '. * {
   "agentPushNotifEnabled": true,
   "hooks": {
     "SessionStart": [
-      { "matcher": "startup", "hooks": [{ "type": "command", "command": "${HOME}/.claude/hooks/global-session-start.sh", "timeout": 10 }] },
-      { "matcher": "resume",  "hooks": [{ "type": "command", "command": "${HOME}/.claude/hooks/global-session-start.sh", "timeout": 10 }] },
-      { "matcher": "compact", "hooks": [{ "type": "command", "command": "${HOME}/.claude/hooks/global-session-start.sh", "timeout": 10 }] }
+      { "matcher": "startup", "hooks": [
+        { "type": "command", "command": "${HOME}/.claude/hooks/global-session-start.sh", "timeout": 10 },
+        { "type": "command", "command": "${HOME}/.claude/hooks/token-check.sh", "timeout": 10, "statusMessage": "Checking token budget..." }
+      ]},
+      { "matcher": "resume",  "hooks": [
+        { "type": "command", "command": "${HOME}/.claude/hooks/global-session-start.sh", "timeout": 10 },
+        { "type": "command", "command": "${HOME}/.claude/hooks/token-check.sh", "timeout": 10, "statusMessage": "Checking token budget..." }
+      ]},
+      { "matcher": "compact", "hooks": [
+        { "type": "command", "command": "${HOME}/.claude/hooks/global-session-start.sh", "timeout": 10 },
+        { "type": "command", "command": "${HOME}/.claude/hooks/token-check.sh", "timeout": 10, "statusMessage": "Checking token budget..." }
+      ]}
+    ],
+    "PostToolUse": [
+      { "matcher": "Read", "hooks": [
+        { "type": "command", "command": "${HOME}/.claude/hooks/read-tracker.sh", "timeout": 5 }
+      ]}
     ]
   }
 }' "$SETTINGS")
