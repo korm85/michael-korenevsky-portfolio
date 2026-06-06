@@ -47,11 +47,11 @@ function TimelineEntry({ entry }: { entry: (typeof TIMELINE)[0] }) {
       <div className="flex-1">
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1">
           <span className="text-xs text-[#5eead4] font-medium tracking-wider">{entry.years}</span>
-          <span className="text-sm text-[#fafafa] font-light">{entry.company}</span>
-          <span className="text-xs text-[#71717a]">·</span>
-          <span className="text-sm text-[#71717a]">{entry.role}</span>
+          <span className="text-base text-[#f0ede8]">{entry.company}</span>
+          <span className="text-xs text-[#8a8580]">·</span>
+          <span className="text-base text-[#8a8580]">{entry.role}</span>
         </div>
-        <p className="text-sm text-[#71717a]/60">{entry.line}</p>
+        <p className="text-base text-[#8a8580]">{entry.line}</p>
       </div>
     </div>
   );
@@ -62,7 +62,7 @@ export default function CareerTimeline() {
     <section id="career" className="px-6 md:px-12 py-32 border-t border-[#27272a]/30">
       <div className="max-w-5xl mx-auto">
         <div className="mb-16">
-          <span className="text-[10px] tracking-[0.4em] uppercase text-[#71717a]">Career</span>
+          <span className="text-xs tracking-[0.2em] uppercase text-[#5eead4] font-mono">Career</span>
           <h2 className="text-4xl md:text-5xl font-extralight text-[#fafafa] mt-2">
             10+ years in industrial B2B software
           </h2>
@@ -77,7 +77,7 @@ export default function CareerTimeline() {
           </div>
         </div>
 
-        <p className="text-sm text-[#71717a]/60 mt-12 italic border-l border-[#5eead4]/30 pl-4">
+        <p className="text-base text-[#8a8580] mt-12 italic border-l border-[#5eead4]/30 pl-4">
           A decade of QA engineering before PM. Edge-case thinking is the foundation of how I make AI product decisions.
         </p>
       </div>

@@ -36,7 +36,7 @@ export default function Header() {
     >
       <div className="flex items-center justify-center px-6 md:px-12 py-5 relative max-w-7xl mx-auto">
         {/* Desktop nav centered */}
-        <nav className="hidden md:flex justify-center gap-10 text-text-secondary text-[11px] tracking-[0.25em] uppercase font-mono">
+        <nav className="hidden md:flex justify-center gap-10 text-text-secondary text-sm tracking-[0.08em] uppercase font-mono">
           {NAV_ITEMS.map((item) => (
             <a
               key={item.id}
@@ -51,7 +51,7 @@ export default function Header() {
 
         {/* Mobile toggle (centered or on right) */}
         <button
-          className="md:hidden text-text-secondary text-[11px] tracking-[0.25em] uppercase font-mono hover:text-teal-accent transition-colors"
+          className="md:hidden text-text-secondary text-sm tracking-[0.08em] uppercase font-mono hover:text-teal-accent transition-colors"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
         >

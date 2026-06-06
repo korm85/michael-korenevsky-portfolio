@@ -49,11 +49,11 @@ export default function HowIWork() {
     <section id="how-i-work" className="px-6 md:px-12 py-32 border-t border-[#27272a]/30">
       <div className="max-w-5xl mx-auto">
         <div className="mb-16">
-          <span className="text-[10px] tracking-[0.4em] uppercase text-[#71717a]">How I Work</span>
+          <span className="text-xs tracking-[0.2em] uppercase text-[#5eead4] font-mono">How I Work</span>
           <h2 className="text-4xl md:text-5xl font-extralight text-[#fafafa] mt-2 mb-6">
             An AI-native PM practice
           </h2>
-          <p className="text-sm text-[#71717a] max-w-2xl leading-relaxed">
+          <p className="text-base text-[#8a8580] max-w-2xl leading-relaxed">
             I run a multi-agent workspace that compresses the time from customer signal to shipped feature. Specialized AI tools handle discovery, spec drafting, prototyping, and competitive research in parallel.
           </p>
         </div>
@@ -66,12 +66,12 @@ export default function HowIWork() {
             >
               {card.icon}
               <h3 className="text-lg font-light text-[#fafafa] mb-3">{card.title}</h3>
-              <p className="text-sm text-[#71717a] leading-relaxed">{card.body}</p>
+              <p className="text-base text-[#8a8580] leading-relaxed">{card.body}</p>
             </div>
           ))}
         </div>
 
-        <p className="text-sm text-[#71717a]/60 mt-8 italic">
+        <p className="text-base text-[#8a8580] mt-8 italic">
           The result: faster cycles from customer signal to validated prototype to shipped feature.
         </p>
       </div>

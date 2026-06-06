@@ -39,7 +39,7 @@ function WorkCard({
     <div ref={ref} className="relative">
       {/* Eyebrow */}
       <div className="mb-4">
-        <span className="text-[10px] tracking-[0.4em] uppercase text-[#5eead4] font-medium">
+        <span className="text-xs tracking-[0.2em] uppercase text-[#5eead4] font-mono">
           {eyebrow}
         </span>
       </div>
@@ -62,9 +62,9 @@ function WorkCard({
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <h3 className="text-xl md:text-2xl font-light text-[#fafafa] leading-snug mb-4">{title}</h3>
-          <p className="text-sm text-[#71717a] leading-relaxed mb-4">{description}</p>
-          <p className="text-xs text-[#71717a]/60 mb-6">
-            <span className="text-[#71717a]">Customers:</span> {customerLine}
+          <p className="text-base text-[#8a8580] leading-relaxed mb-4">{description}</p>
+          <p className="text-xs text-[#8a8580] mb-6">
+            <span className="text-[#8a8580]">Customers:</span> {customerLine}
           </p>
           <button
             onClick={onCta}
@@ -80,7 +80,7 @@ function WorkCard({
             {metrics.map((m, i) => (
               <div key={i} className="text-center">
                 <div className="text-2xl md:text-3xl font-light text-[#5eead4]">{m.value}</div>
-                <div className="text-xs text-[#71717a] mt-1 max-w-[140px] mx-auto leading-snug">
+                <div className="text-xs text-[#8a8580] mt-1 max-w-[140px] mx-auto leading-snug">
                   {m.label}
                 </div>
               </div>
@@ -95,7 +95,7 @@ function WorkCard({
                 href={doc.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-[#71717a] hover:text-[#5eead4] transition-colors border border-[#27272a]/50 rounded px-2.5 py-1"
+                className="inline-flex items-center gap-1 text-xs text-[#8a8580] hover:text-[#5eead4] transition-colors border border-[#27272a]/50 rounded px-2.5 py-1"
               >
                 {doc.name}
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -111,12 +111,12 @@ function WorkCard({
       {quote && (
         <div className="mt-10 border-t border-[#27272a]/40 pt-8">
           <blockquote className="border-l-2 border-[#5eead4]/40 pl-5">
-            <p className="text-sm text-[#fafafa]/80 font-light leading-relaxed italic">
+            <p className="text-base text-[#f0ede8]/80 font-light leading-relaxed italic">
               &ldquo;{quote.text}&rdquo;
             </p>
             <footer className="mt-3 flex items-center gap-2">
               <span className="w-4 h-px bg-[#5eead4]/40" />
-              <span className="text-[10px] font-mono tracking-wider text-[#71717a] uppercase">
+              <span className="text-xs font-mono tracking-wider text-[#8a8580] uppercase">
                 {quote.author} &middot; {quote.role}
               </span>
             </footer>
@@ -137,7 +137,7 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
     <section id="work" className="px-6 md:px-12 py-32 border-t border-[#27272a]/30">
       <div className="max-w-5xl mx-auto">
         <div className="mb-20">
-          <span className="text-[10px] tracking-[0.4em] uppercase text-[#71717a]">Selected Work</span>
+          <span className="text-xs tracking-[0.2em] uppercase text-[#5eead4] font-mono">Selected Work</span>
           <h2 className="text-4xl md:text-5xl font-extralight text-[#fafafa] mt-2">
             Featured Products
           </h2>
