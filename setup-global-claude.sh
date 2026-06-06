@@ -5,6 +5,7 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLAUDE_DIR="${HOME}/.claude"
 mkdir -p "${CLAUDE_DIR}/hooks"
 
@@ -78,6 +79,19 @@ cat > "${CLAUDE_DIR}/settings.local.json" << 'EOF'
 EOF
 echo "✓ ${CLAUDE_DIR}/settings.local.json"
 
+# 5. Global skills — available in every project, not just this repo
+for SKILL in save bootstrap; do
+  SRC="${SCRIPT_DIR}/.claude/skills/${SKILL}/SKILL.md"
+  DEST="${CLAUDE_DIR}/skills/${SKILL}"
+  if [ -f "$SRC" ]; then
+    mkdir -p "$DEST"
+    cp "$SRC" "$DEST/SKILL.md"
+    echo "✓ ${DEST}/SKILL.md"
+  else
+    echo "⚠ Skill not found: ${SRC} (skipping)"
+  fi
+done
+
 echo ""
 echo "Done. Restart Claude Code for changes to take effect."
-echo "Global config is now active across all projects on this machine."
+echo "Global config and skills (save, bootstrap) are now active across all projects on this machine."
