@@ -4,17 +4,17 @@
 Portfolio site redesigned and transformed into a premium dark gold visual style matching emilybeal.com (black canvas, surface card elements, thin dark borders, and gold accents). Features custom cursor tracking, dual-column timeline structure with year indexes, structured values/background grid, testimonials outcomes metrics, and reskinned interactive modals/calculators.
 
 ## Last completed
+- 2026-06-06: Added autonomous token-check hook (fires every session start, reports budget and flags redundancy) and read-tracker hook (detects repeated file reads across a session). Removed ~1,147t/session waste from session-start hook that was double-loading the design system skill.
+- 2026-06-06: Built save and bootstrap skills; made them globally available across all projects via setup-global-claude.sh. Setup script is now the single source of truth for all global Claude config (CLAUDE.md, hooks, settings, skills).
+- 2026-06-06: Migrated from Ubuntu to Windows 11. Replicated full Claude Code environment: global config, hooks, MCP servers, plugins, project skills. Fixed colon-path git conflict from Ubuntu backup using git plumbing (merge-tree + commit-tree).
 - 2026-05-24: Fixed custom follower cursor layer bug by raising z-index to z-[9999] so it renders on top of modals, and extended interactive hover states to range sliders, selects, labels, and textareas.
-- 2026-05-24: Refactored project cards to horizontal full-width stacked layouts on desktop, widening metric boxes and preventing text wrap clipping.
-- 2026-05-24: Reduced hero tagline text size to restore visual balance and prevent it from looking out of place.
 - 2026-05-24: Transformed portfolio to Emily Beal visual style (black canvas, surface cards, thin dark borders, gold accent `#b08e4f`, custom following mouse cursor, serif/sans font pairs).
-- 2026-05-24: Reskinned AMVero prototype console, ROI savings calculator, and case study modals in unified dark gold themes.
 
 ## In progress
 Nothing. Clean state.
 
 ## Next up (in order)
-Nothing. All current milestones completed.
+- Enable VT-x in HP EliteBook BIOS (F10 at boot → Security → Virtualization Technology → Enable), then run C:\Users\korm8\wsl2-setup.ps1 as Administrator to complete WSL2 migration.
 
 ## Decisions log
 - **Custom Follower Z-Index**: Raised z-index to `z-[9999]` and updated desktop interactive hover selectors to include form controls (`INPUT`, `SELECT`, `LABEL`, `TEXTAREA`) ensuring correct tracking and visibility inside modals.

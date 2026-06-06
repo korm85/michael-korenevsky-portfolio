@@ -86,24 +86,11 @@ If the push is rejected due to remote changes ahead, run `git pull --rebase orig
 
 ---
 
-## Step 6: Deploy
-
-Per project rules, after updating STATUS.md always deploy so the live dashboard reflects the new state:
-
-```bash
-npx vercel --prod --yes
-```
-
-Wait for the deployment URL to confirm success.
-
----
-
-## Step 7: Confirm
+## Step 6: Confirm
 
 Output a short summary:
 - What was committed (1-2 sentences)
 - The commit hash
 - Confirmation that push succeeded
-- The Vercel deployment URL
 
 The work is now safe. You can close the machine.
