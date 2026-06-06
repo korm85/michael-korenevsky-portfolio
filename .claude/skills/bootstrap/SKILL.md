@@ -5,114 +5,29 @@ It sets up all global and project-local config so the experience is identical to
 
 ---
 
-## Step 1: Detect platform
+## Step 1: Run the global config script
 
-Run `echo $HOME` and `uname -s` to determine platform (Linux vs Windows/Cygwin).
-Set `HOME_DIR` to the result of `echo $HOME`.
+The repo contains `setup-global-claude.sh` at the project root. It is the single source of truth for global Claude config across all projects on any machine.
 
----
-
-## Step 2: Write global CLAUDE.md
-
-Write the following to `${HOME_DIR}/.claude/CLAUDE.md` (create or overwrite):
-
-```
-# Global Claude Code Instructions
-
-## Model Tag
-Every response MUST begin with [Model: Haiku], [Model: Sonnet], or [Model: Opus].
-
-## Subagent Routing
-| Task | Model |
-|---|---|
-| Search / read / grep / glob | Haiku |
-| Code writing / editing (default) | Sonnet |
-| Architecture / planning / design | Opus |
-
-Model IDs: haiku=claude-haiku-4-5-20251001, sonnet=claude-sonnet-4-6, opus=claude-opus-4-8
-
-## Agent Announcements
-Before every Agent call output: "Spawning [type] on [Model] — [task]"
-```
-
----
-
-## Step 3: Create global session hook
-
-Create `${HOME_DIR}/.claude/hooks/` if it doesn't exist.
-
-Write the following to `${HOME_DIR}/.claude/hooks/global-session-start.sh`:
-
+Run it:
 ```bash
-#!/usr/bin/env bash
-jq -n '{"hookSpecificOutput":{"additionalContext":"GLOBAL: Start every response with [Model: Haiku/Sonnet/Opus]. Route subagents: Haiku=search/reads, Sonnet=code (default), Opus=architecture. Announce every Agent spawn."}}'
+bash setup-global-claude.sh
 ```
 
-Make it executable: `chmod +x ${HOME_DIR}/.claude/hooks/global-session-start.sh`
+This script handles everything global in one shot:
+- `~/.claude/CLAUDE.md` (model routing rules, applies to ALL projects)
+- `~/.claude/hooks/global-session-start.sh` (session hook, applies to ALL projects)
+- `~/.claude/settings.json` (theme, permissions, hook wiring — merged, preserves existing keys)
+- `~/.claude/settings.local.json` (pre-allowed MCP permissions)
 
----
-
-## Step 4: Merge global settings.json
-
-Read `${HOME_DIR}/.claude/settings.json`. If it doesn't exist, start from `{}`.
-
-Merge in these settings (do not remove existing keys, only add/update):
-
+**Windows (Cygwin/native) only:** after running the script, also add this to `~/.claude/settings.json`:
 ```json
-{
-  "autoUpdatesChannel": "stable",
-  "tui": "fullscreen",
-  "skipDangerousModePermissionPrompt": true,
-  "permissions": {
-    "defaultMode": "bypassPermissions"
-  },
-  "theme": "dark",
-  "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true,
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "startup",
-        "hooks": [{ "type": "command", "command": "${HOME}/.claude/hooks/global-session-start.sh", "timeout": 10 }]
-      },
-      {
-        "matcher": "resume",
-        "hooks": [{ "type": "command", "command": "${HOME}/.claude/hooks/global-session-start.sh", "timeout": 10 }]
-      },
-      {
-        "matcher": "compact",
-        "hooks": [{ "type": "command", "command": "${HOME}/.claude/hooks/global-session-start.sh", "timeout": 10 }]
-      }
-    ]
-  }
-}
-```
-
-**Windows only:** also merge `"env": { "CLAUDE_CODE_USE_POWERSHELL_TOOL": "1" }`.
-
-Use `jq` to merge: `jq -s '.[0] * .[1]' existing.json new.json > merged.json && mv merged.json settings.json`
-
----
-
-## Step 5: Write global settings.local.json
-
-Write the following to `${HOME_DIR}/.claude/settings.local.json` (create or overwrite):
-
-```json
-{
-  "permissions": {
-    "allow": [
-      "mcp__claude_ai_Google_Drive__get_file_metadata",
-      "mcp__claude_ai_Google_Drive__download_file_content",
-      "Skill(update-config)"
-    ]
-  }
-}
+"env": { "CLAUDE_CODE_USE_POWERSHELL_TOOL": "1" }
 ```
 
 ---
 
-## Step 6: Verify project-local config
+## Step 2: Verify project-local config
 
 Check that the following exist relative to the project root. Report any that are missing:
 
@@ -125,15 +40,16 @@ Check that the following exist relative to the project root. Report any that are
 - `.claude/skills/portfolio-deploy/`
 - `.claude/skills/portfolio-design-system/`
 - `.claude/skills/bootstrap/` (this skill itself)
+- `.claude/skills/save/`
 - `CLAUDE.md`
 - `AGENTS.md`
 - `STATUS.md`
 
 ---
 
-## Step 7: Report what needs manual action
+## Step 3: Report what needs manual action
 
-After completing the above, output a checklist of items that require manual steps:
+Output a checklist of items that require manual steps:
 
 ### MCP Servers (connect at claude.ai → Settings → Integrations)
 These are account-level and not repo-based. Authenticate each one:
