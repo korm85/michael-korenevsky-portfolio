@@ -1,41 +1,36 @@
 # Portfolio Project Status
 
 ## Current state
-Portfolio site redesigned and transformed into a premium dark gold visual style matching emilybeal.com (black canvas, surface card elements, thin dark borders, and gold accents). Features custom cursor tracking, dual-column timeline structure with year indexes, structured values/background grid, testimonials outcomes metrics, and reskinned interactive modals/calculators.
+
+Full visual redesign complete and live on `themishka.me`. Dark/cream/forest-green palette (Themishka-inspired), Fraunces display serif, Hanken Grotesk body. Long-scroll layout with alternating dark/cream sections. All modals, overlays, and mobile layouts are production-ready. Site deployed from `github.com/korm85/michael-korenevsky-portfolio` via Vercel GitHub integration.
 
 ## Last completed
-- 2026-06-06: Added autonomous token-check hook (fires every session start, reports budget and flags redundancy) and read-tracker hook (detects repeated file reads across a session). Removed ~1,147t/session waste from session-start hook that was double-loading the design system skill.
-- 2026-06-06: Built save and bootstrap skills; made them globally available across all projects via setup-global-claude.sh. Setup script is now the single source of truth for all global Claude config (CLAUDE.md, hooks, settings, skills).
-- 2026-06-06: Migrated from Ubuntu to Windows 11. Replicated full Claude Code environment: global config, hooks, MCP servers, plugins, project skills. Fixed colon-path git conflict from Ubuntu backup using git plumbing (merge-tree + commit-tree).
-- 2026-05-24: Fixed custom follower cursor layer bug by raising z-index to z-[9999] so it renders on top of modals, and extended interactive hover states to range sliders, selects, labels, and textareas.
-- 2026-05-24: Transformed portfolio to Emily Beal visual style (black canvas, surface cards, thin dark borders, gold accent `#b08e4f`, custom following mouse cursor, serif/sans font pairs).
+
+- 2026-06-08: Pushed Themishka redesign to official repo and deployed to `themishka.me`. Replaced Emily Beal gold/bento design entirely.
+- 2026-06-08: Added image lightbox (click hero images to expand as overlay). Added RoiOverlay with zoom controls for Credit Pricing Model. Made all doc chips visible at rest (text-ink-soft).
+- 2026-06-08: Removed ROI Simulator tab from SimulationModal (was AMVero content misplaced there). Rewrote SimulationModal PM contribution copy with accurate specifics.
+- 2026-06-08: Rewrote HowIWork section — four cards with concrete AI-impact framing, first-person, tied to real AMVero and Simulation work. Removed marketing language.
+- 2026-06-08: Fixed mobile layout (Tailwind responsive classes replacing inline gridTemplateColumns). Fixed modal dark backgrounds from stale design tokens.
 
 ## In progress
+
 Nothing. Clean state.
 
-## Next up (in order)
-- Enable VT-x in HP EliteBook BIOS (F10 at boot → Security → Virtualization Technology → Enable), then run C:\Users\korm8\wsl2-setup.ps1 as Administrator to complete WSL2 migration.
+## Next up
+
+- Review themishka.me on real mobile device after DNS propagation
+- Consider adding Credit Pricing Model as a tab inside AmveroModal (currently accessible via doc chip and inline decision link only)
 
 ## Decisions log
-- **Custom Follower Z-Index**: Raised z-index to `z-[9999]` and updated desktop interactive hover selectors to include form controls (`INPUT`, `SELECT`, `LABEL`, `TEXTAREA`) ensuring correct tracking and visibility inside modals.
-- **Custom Follower Cursor**: Implemented client-side event delegation on `mousemove` to scale/glow the custom gold cursor when hovering interactive elements, maintaining standard cursor visibility on touch devices.
-- **Modals and Calculators Reskin**: Fully skinned both the interactive `AmveroPrototype` fleet console and `RoiCalculator` in the dark gold theme, ensuring the user experience stays unified inside modals.
-- **Separate /site-build Route**: Extracted the "How this site was built" pipeline diagram to a standalone route `/site-build` to prevent layout clutter and resolve 404 targets.
-- **Next.js Image Optimization**: Transitioned the profile photo to Next.js `<Image>` with priority loading and explicit `144x144` layout targets, allowing the framework to optimize source JPEGs and eliminate downsampling pixelation on Retina screens.
-- **Removed Unverified Metrics**: Deleted the "10x design feedback loops" metric from `SelectedWork.tsx` and `SimulationModal.tsx` to keep portfolio data strictly aligned with the official `DRIVE-DATA.md` records.
-- **AI Practice Copy Alignment**: Refined Figma, specs, and Hermes cards in `HowIWork.tsx` to state product management value outcomes (customer feedback loops, unambiguous specs, context-based intelligence) instead of mechanical features.
-- **Glassmorphic Outcomes Cards**: Elevated metrics into individual shadow cards with scale-up hover animations to make key business results visually distinct.
-- **Clickable Document Badges**: Styled PRDs, whitepapers, and optimization decks as solid, color-coordinated pill badges to make primary proof of PM work look tangible.
-- **Nested Sidebar Hierarchy**: Grouped career roles under a parent "Experience" index, adjusting styling (indentation, mixed-case lettering, and smaller track-centered indicator dots) to clarify the visual tree.
-- **PM Value-Driven Rephrasing**: Focused the AI operations copy on direct value drivers (e.g. alignment speed, comprehensive backlog analysis, competitive intelligence) rather than technical mechanics.
-- **Recruiter-Friendly Build Terms**: Replaced internal agent names (like Antigravity) with industry-standard PM workflow stages (Requirements Definition, Resource Allocation, Quality Guardrails, Release Verification) to explain the portfolio creation process clearly.
-- **Claude Code vs. Antigravity Separation**: Defined Claude Code as the PM-driven workflow documentation sync tool in the career timeline, reserving the Google Antigravity harness description purely for the website build section.
-- **First-Person/Visual Alignment**: Formatted all text on the site from the first-person perspective (avoiding third-person references to Michael) and linked the Knauf first-time-right assembly validation image in both the timeline card and case study modal to reinforce physical accuracy claims.
-- **Product-Oriented Positioning**: Framed the hero tagline around lifecycle ownership ("owning the end-to-end process"), execution scope ("building complex products from scratch"), and database capabilities ("transform complex data into insights") to showcase core PM value over specific technical sectors.
-- **Simplified Contact Heading**: Changed the card title to a large "Get in Touch" and removed the redundant "Let's discuss product strategy" to prevent confusion and highlight direct resume/portfolio targets.
-- **Scrollspy Hysteresis for Header**: Setting the compacting trigger at `scrollY > 100` and expanding trigger at `scrollY < 30` eliminated layout-reflow feedback loops that caused flickering on the threshold boundaries.
-- **Side-by-side Widescreen Modal Grid**: Arranged the AMVero modal as a 12-column grid (`lg:col-span-3` overview, `lg:col-span-9` prototype) to let recruiters explore the interactive dashboard immediately with context visible alongside it, removing redundant clicks.
-- **PM-Centric AI Operations Nodes**: Replaced developers-oriented specs with 4 PM operational processes (Figma wireframes, Claude Code spec refinement, Hermes market intelligence, and self-service Support RAG) to accurately detail Michael's product execution model.
-- **Product-Level Document Promotion**: Anchored PRD, whitepaper, and optimization documents directly to the career timeline cards so recruiters can review project credentials without opening modals.
-- **Vertical Navigation Index**: Placed the scrollspy index on the left screen margin, tracking sections with an IntersectionObserver configured with an offset viewport margin to keep indicator highlighting aligned with user focus.
 
+- **Themishka-inspired layout, not bento grid**: Replaced the expand-in-place bento grid with a linear long-scroll page. Sections alternate dark canvas (`#1b1916`) and cream paper (`#f3efe6`). Cleaner for recruiters who scan vertically.
+- **Forest green accent `#16a34a`**: Replaces gold `#b08e4f`. Pairs with cream without the corporate-finance connotation of gold. Used for metric values, quote marks, status dot, scroll progress bar.
+- **Custom cursor removed**: Was a visual gimmick with no recruiter value. Removed entirely.
+- **ROI Simulator moved out of SimulationModal**: The iframe loaded AMVero pricing content inside the Simulation case study — wrong context. Removed the tab entirely. Credit Pricing Model now opens via its own RoiOverlay component with zoom controls.
+- **Doc chip visibility**: Default `text-ink-faint` was too low contrast on cream. Changed to `text-ink-soft` at rest, accent on hover.
+- **Image lightbox**: Hero images for both work articles open as a full-screen overlay on click. `cursor-zoom-in` signals affordance. Subtle scale-on-hover as a secondary hint.
+- **HowIWork copy framing**: Cards are first-person "AI enabled me to achieve X" — specific outcomes tied to named projects. Not generic PM productivity claims.
+- **Modals use cream surfaces**: AmveroModal and SimulationModal use `bg-paper`/`bg-paper-2` — cream, not dark. AmveroPrototype stays dark intentionally (simulates the real product UI).
+- **Section numbering**: `01 — Selected work`, `02 — An AI-native PM practice`, `03 — 10+ years in enterprise software`, `04 — About`, `05 — Let's build something worth shipping`. Mono labels + display headings.
+- **Crow rows**: Label+content grid using `grid-cols-[90px_1fr]` or `grid-cols-[110px_1fr]` — used in About (education/languages/location) and Contact sections. From Themishka layout patterns.
+- **Border-grid metrics**: Metrics container has `border-r border-b border-line`, each cell has `border-t border-l border-line`. Creates shared-border table effect without double borders.
