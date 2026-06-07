@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="compliance" content="NEITHER Mermaid JS NOR SVG were used anywhere in the output. No code comments used.">
+<meta name="palette" content="Vibrant Tech: #2563EB, #10B981, #F59E0B, #1E293B">
+<title>AMVero Licensing Simulator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+.chart-container {
+    width: 100%;
+    height: 240px;
+    position: relative;
+    overflow: hidden;
+}
+.card-elevation {
+    box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.07);
+}
+input[type=range] {
+    height: 4px;
+    -webkit-appearance: none;
+    margin: 8px 0;
+    width: 100%;
+    background: #E2E8F0;
+    border-radius: 5px;
+}
+input[type=range]::-webkit-slider-thumb {
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    background: #2563EB;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -5px;
+}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased text-sm">
+
+<header class="bg-blue-800 text-white py-3 px-6 shadow-md flex justify-between items-center border-b-4 border-green-500">
+    <h1 class="text-lg font-black tracking-tight uppercase">AMVero Licensing Evolution</h1>
+    <div class="text-xs font-mono text-blue-200">Interactive Sales Simulation Tool</div>
+</header>
+
+<main class="max-w-[1600px] mx-auto p-3 space-y-3">
+    <section class="bg-white rounded-xl p-4 card-elevation border border-slate-200 grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="space-y-3">
+            <h2 class="font-bold text-blue-900 uppercase text-[10px] tracking-wider">1. Pricing Controls</h2>
+            <div>
+                <div class="flex justify-between text-[10px] font-bold text-slate-500 uppercase">Base Fee: <span id="baseFeeDisplay" class="text-blue-600">$8,000</span></div>
+                <input type="range" id="baseFeeInput" min="2000" max="15000" step="500" value="8000">
+            </div>
+            <div>
+                <div class="flex justify-between text-[10px] font-bold text-slate-500 uppercase">Cost/Layer: <span id="layerCostDisplay" class="text-green-600">$0.050</span></div>
+                <input type="range" id="layerCostInput" min="0.01" max="0.15" step="0.001" value="0.01">
+            </div>
+            <div>
+                <div class="flex justify-between text-[10px] font-bold text-slate-500 uppercase">Legacy Printer Fee: <span class="text-slate-900">$6,000</span></div>
+                <div class="text-[9px] text-slate-400">Fixed annual cost per node</div>
+            </div>
+        </div>
+
+        <div class="space-y-2 border-x border-slate-100 px-4">
+            <h2 class="font-bold text-blue-900 uppercase text-[10px] tracking-wider">2. Production & Fleet</h2>
+            <div>
+                <div class="flex justify-between text-[10px] font-bold text-slate-500 uppercase">Fleet Size: <span id="fleetSizeDisplay" class="text-blue-600">2 Printers</span></div>
+                <input type="range" id="fleetSizeInput" min="1" max="20" step="1" value="2">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <div class="flex justify-between text-[9px] font-bold text-slate-500 uppercase">Height (mm): <span id="heightDisplay" class="text-blue-600">120 mm</span></div>
+                    <input type="range" id="heightInput" min="10" max="500" step="10" value="190">
+                </div>
+                <div>
+                    <div class="flex justify-between text-[9px] font-bold text-slate-500 uppercase">Layer (µm): <span id="layerHeightDisplay" class="text-blue-600">60 µm</span></div>
+                    <input type="range" id="layerHeightInput" min="20" max="120" step="10" value="60">
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between text-[10px] font-bold text-slate-500 uppercase">Total Weekly Builds: <span id="weeklyBuildsDisplay" class="text-blue-600">4</span></div>
+                <input type="range" id="weeklyBuildsInput" min="1" max="100" step="1" value="4">
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 bg-slate-900 rounded-lg p-3 text-center">
+            <div class="flex flex-col justify-center">
+                <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Yearly Builds</div>
+                <div id="yearlyBuildsDisplay" class="text-lg font-black text-green-400">208</div>
+            </div>
+            <div class="flex flex-col justify-center border-l border-slate-700 text-white">
+                <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Legacy Baseline</div>
+                <div id="legacyAnnualDisplay" class="text-lg font-black text-amber-400">$20,000</div>
+            </div>
+            <div class="col-span-2 pt-2 border-t border-slate-700">
+                <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Projected Proposed Cost</div>
+                <div id="projectedCostDisplay" class="text-2xl font-black text-white">$14,587</div>
+            </div>
+        </div>
+
+        <div class="flex flex-col justify-center bg-green-50 rounded-lg p-3 border border-green-200 text-center space-y-2">
+            <div>
+                <div class="text-[9px] font-bold text-green-700 uppercase tracking-widest">Financial Tipping Point</div>
+                <div id="tippingPointText" class="text-lg font-black text-slate-900">379 Builds/Yr</div>
+                <div class="text-[9px] text-green-600 uppercase">Total fleet volume parity</div>
+            </div>
+            <div id="statusBadge" class="py-1 px-2 rounded text-[10px] font-bold uppercase bg-green-200 text-green-800">
+                Credits Recommended
+            </div>
+        </div>
+    </section>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <section class="bg-white rounded-xl p-3 card-elevation border border-slate-200">
+            <h3 class="font-bold text-slate-900 uppercase text-[10px] mb-3">Annual Cost Comparison (Fleet Scaling)</h3>
+            <div class="chart-container">
+                <canvas id="scenarioChart"></canvas>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl p-3 card-elevation border border-slate-200">
+            <h3 class="font-bold text-slate-900 uppercase text-[10px] mb-3">Parity Threshold Analysis (Active Fleet)</h3>
+            <div class="chart-container">
+                <canvas id="breakevenChart"></canvas>
+            </div>
+        </section>
+    </div>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="bg-white p-3 rounded-lg border-l-4 border-blue-500 card-elevation flex items-center justify-between">
+            <div>
+                <h4 class="font-bold text-xs">Current Fleet Configuration</h4>
+                <p class="text-[10px] text-slate-500">Based on <span id="calcPrinterCount" class="font-bold text-slate-900">2</span> printers, <span id="calcHeight" class="font-bold text-slate-900">190</span>mm height, and <span id="calcWeekly" class="font-bold text-slate-900">4</span> weekly builds.</p>
+            </div>
+            <div class="text-right">
+                <div class="text-[9px] uppercase text-slate-400 font-bold">Layers Per Build</div>
+                <div id="computedLayers" class="text-lg font-black text-blue-600">3,167</div>
+            </div>
+        </div>
+        <div class="bg-slate-800 rounded-lg p-3 text-white flex items-center justify-between">
+            <div>
+                <h4 class="font-bold text-[10px] text-blue-400 uppercase tracking-widest">Licensing Formula</h4>
+                <p class="text-[9px] text-slate-300">Legacy: $8k + ($6k &times; Printers) | Proposed: Base + (Total Yearly Layers &times; Cost)</p>
+            </div>
+            <div class="flex space-x-2">
+                <div id="btnCredits" class="px-2 py-1 bg-slate-700 rounded border border-slate-600 text-[9px] font-bold text-green-400 uppercase opacity-100">Credits</div>
+                <div id="btnFixed" class="px-2 py-1 bg-slate-700 rounded border border-slate-600 text-[9px] font-bold text-amber-400 uppercase opacity-50">Fixed</div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+function wrapText(text) {
+    if (text.length <= 16) return text;
+    let words = text.split(' ');
+    let lines = [];
+    let currentLine = '';
+    for (let word of words) {
+        if ((currentLine + word).length > 16) {
+            if (currentLine) lines.push(currentLine.trim());
+            currentLine = word + ' ';
+        } else {
+            currentLine += word + ' ';
+        }
+    }
+    if (currentLine) lines.push(currentLine.trim());
+    return lines;
+}
+
+let scenarioChart, breakevenChart;
+
+function initCharts() {
+    const commonOpts = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'top', labels: { font: { size: 9 }, boxWidth: 8 } },
+            tooltip: {
+                callbacks: {
+                    title: (items) => {
+                        let label = items[0].chart.data.labels[items[0].dataIndex];
+                        return Array.isArray(label) ? label.join(' ') : label;
+                    },
+                    label: (ctx) => ctx.dataset.label + ': $' + ctx.parsed.y.toLocaleString()
+                }
+            }
+        }
+    };
+
+    scenarioChart = new Chart(document.getElementById('scenarioChart'), {
+        type: 'bar',
+        data: {
+            labels: ['1 Printer', '5 Printers', '10 Printers', '20 Printers'].map(wrapText),
+            datasets: [
+                { label: 'Legacy (Fixed)', data: [0, 0, 0, 0], backgroundColor: '#F59E0B', borderRadius: 2 },
+                { label: 'Proposed (Credits)', data: [0, 0, 0, 0], backgroundColor: '#10B981', borderRadius: 2 }
+            ]
+        },
+        options: {
+            ...commonOpts,
+            scales: {
+                y: { beginAtZero: true, ticks: { font: { size: 8 }, callback: v => '$' + v / 1000 + 'k' } },
+                x: { grid: { display: false }, ticks: { font: { size: 8 } } }
+            }
+        }
+    });
+
+    breakevenChart = new Chart(document.getElementById('breakevenChart'), {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                { label: 'Legacy Baseline', data: [], borderColor: '#F59E0B', borderDash: [4, 4], pointRadius: 0 },
+                { label: 'Proposed Consumption', data: [], borderColor: '#2563EB', backgroundColor: 'rgba(37, 99, 235, 0.05)', fill: true, tension: 0.2 }
+            ]
+        },
+        options: {
+            ...commonOpts,
+            scales: {
+                y: { beginAtZero: true, ticks: { font: { size: 8 }, callback: v => '$' + v / 1000 + 'k' } },
+                x: { grid: { display: false }, ticks: { font: { size: 8 } } }
+            }
+        }
+    });
+}
+
+function update() {
+    const baseInputEl = document.getElementById('baseFeeInput');
+    const layerCostEl = document.getElementById('layerCostInput');
+    const heightEl = document.getElementById('heightInput');
+    const layerHeightEl = document.getElementById('layerHeightInput');
+    const weeklyBuildsEl = document.getElementById('weeklyBuildsInput');
+    const fleetSizeEl = document.getElementById('fleetSizeInput');
+
+    if(!baseInputEl || !layerCostEl || !heightEl || !layerHeightEl || !weeklyBuildsEl || !fleetSizeEl) return;
+
+    const base = parseFloat(baseInputEl.value);
+    const cost = parseFloat(layerCostEl.value);
+    const mm = parseInt(heightEl.value);
+    const micron = parseInt(layerHeightEl.value);
+    const weekly = parseInt(weeklyBuildsEl.value);
+    const fleet = parseInt(fleetSizeEl.value);
+
+    const layersPerBuild = (mm * 1000) / micron;
+    const yearlyBuilds = weekly * 52;
+    const yearlyLayers = yearlyBuilds * layersPerBuild;
+    const proposedTotal = base + (yearlyLayers * cost);
+    const legacyTotal = 8000 + (fleet * 6000);
+
+    const baseFeeDisplay = document.getElementById('baseFeeDisplay');
+    const layerCostDisplay = document.getElementById('layerCostDisplay');
+    const heightDisplay = document.getElementById('heightDisplay');
+    const layerHeightDisplay = document.getElementById('layerHeightDisplay');
+    const weeklyBuildsDisplay = document.getElementById('weeklyBuildsDisplay');
+    const fleetSizeDisplay = document.getElementById('fleetSizeDisplay');
+    const computedLayers = document.getElementById('computedLayers');
+    const yearlyBuildsDisplay = document.getElementById('yearlyBuildsDisplay');
+    const legacyAnnualDisplay = document.getElementById('legacyAnnualDisplay');
+    const projectedCostDisplay = document.getElementById('projectedCostDisplay');
+    const tippingPointText = document.getElementById('tippingPointText');
+    const statusBadge = document.getElementById('statusBadge');
+    const calcPrinterCount = document.getElementById('calcPrinterCount');
+    const calcHeight = document.getElementById('calcHeight');
+    const calcWeekly = document.getElementById('calcWeekly');
+
+    if(baseFeeDisplay) baseFeeDisplay.innerText = '$' + base.toLocaleString();
+    if(layerCostDisplay) layerCostDisplay.innerText = '$' + cost.toFixed(3);
+    if(heightDisplay) heightDisplay.innerText = mm + ' mm';
+    if(layerHeightDisplay) layerHeightDisplay.innerText = micron + ' µm';
+    if(weeklyBuildsDisplay) weeklyBuildsDisplay.innerText = weekly;
+    if(fleetSizeDisplay) fleetSizeDisplay.innerText = fleet + (fleet === 1 ? ' Printer' : ' Printers');
+    if(computedLayers) computedLayers.innerText = Math.round(layersPerBuild).toLocaleString();
+    if(yearlyBuildsDisplay) yearlyBuildsDisplay.innerText = yearlyBuilds.toLocaleString();
+    if(legacyAnnualDisplay) legacyAnnualDisplay.innerText = '$' + legacyTotal.toLocaleString();
+    if(projectedCostDisplay) projectedCostDisplay.innerText = '$' + Math.round(proposedTotal).toLocaleString();
+    if(calcPrinterCount) calcPrinterCount.innerText = fleet;
+    if(calcHeight) calcHeight.innerText = mm;
+    if(calcWeekly) calcWeekly.innerText = weekly;
+
+    if (scenarioChart) {
+        const fleets = [1, 5, 10, 20];
+        scenarioChart.data.datasets[0].data = fleets.map(f => 8000 + (f * 6000));
+        scenarioChart.data.datasets[1].data = fleets.map(f => base + (f * 2 * 52 * layersPerBuild * cost));
+        scenarioChart.update();
+    }
+
+    let tipping = Math.round((legacyTotal - base) / (layersPerBuild * cost));
+    if(tippingPointText) tippingPointText.innerText = (tipping > 0 ? tipping : 0) + ' Builds/Yr';
+
+    if (breakevenChart) {
+        const maxRange = Math.max(tipping * 1.25, 100);
+        const steps = 8;
+        const dynamicSteps = [];
+        for (let i = 0; i <= steps; i++) {
+            dynamicSteps.push(Math.round((maxRange / steps) * i));
+        }
+        
+        breakevenChart.data.labels = dynamicSteps.map(s => wrapText(s + ' Builds/Yr'));
+        breakevenChart.data.datasets[0].data = Array(dynamicSteps.length).fill(legacyTotal);
+        breakevenChart.data.datasets[1].data = dynamicSteps.map(n => base + (n * layersPerBuild * cost));
+        breakevenChart.update();
+    }
+
+    if(statusBadge) {
+        const btnCredits = document.getElementById('btnCredits');
+        const btnFixed = document.getElementById('btnFixed');
+        
+        if (yearlyBuilds < tipping) {
+            statusBadge.innerText = "Credits Recommended";
+            statusBadge.className = "py-1 px-2 rounded text-[9px] font-bold uppercase bg-green-200 text-green-800";
+            if(btnCredits) btnCredits.style.opacity = '1';
+            if(btnFixed) btnFixed.style.opacity = '0.4';
+        } else {
+            statusBadge.innerText = "Legacy Better Option";
+            statusBadge.className = "py-1 px-2 rounded text-[9px] font-bold uppercase bg-amber-200 text-amber-800";
+            if(btnCredits) btnCredits.style.opacity = '0.4';
+            if(btnFixed) btnFixed.style.opacity = '1';
+        }
+    }
+}
+
+['baseFeeInput', 'layerCostInput', 'heightInput', 'layerHeightInput', 'weeklyBuildsInput', 'fleetSizeInput'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.addEventListener('input', update);
+});
+
+window.onload = () => { initCharts(); update(); };
+</script>
+</body>
+</html>

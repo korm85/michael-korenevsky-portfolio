@@ -15,50 +15,6 @@ export default function Home() {
   const [simulationOpen, setSimulationOpen] = useState(false);
   const [time, setTime] = useState("");
 
-  // Custom Cursor Tracker State
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    // Add cursor-none body override class on mount
-    document.body.classList.add("custom-cursor-body");
-
-    const handleMouseMove = (e: MouseEvent) => {
-      setCursorPos({ x: e.clientX, y: e.clientY });
-      if (!isVisible) setIsVisible(true);
-
-      const target = e.target as HTMLElement | null;
-      if (target) {
-        const isInteractive =
-          target.closest("a") ||
-          target.closest("button") ||
-          target.closest('[role="button"]') ||
-          target.classList.contains("cursor-zoom-in") ||
-          target.classList.contains("cursor-zoom-out") ||
-          target.closest(".interactive-card") ||
-          target.tagName === "INPUT" ||
-          target.tagName === "SELECT" ||
-          target.tagName === "LABEL" ||
-          target.tagName === "TEXTAREA";
-        setIsHovering(!!isInteractive);
-      }
-    };
-
-    const handleMouseLeave = () => {
-      setIsVisible(false);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      document.body.classList.remove("custom-cursor-body");
-      window.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, [isVisible]);
-
   useEffect(() => {
     const update = () => {
       setTime(
@@ -76,121 +32,195 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex flex-col min-h-screen bg-canvas text-text-primary overflow-x-hidden relative">
-      {/* Custom Follower Cursor */}
-      {isVisible && (
-        <div
-          className="hidden md:block pointer-events-none fixed z-[9999] rounded-full border transition-all duration-75 -translate-x-1/2 -translate-y-1/2 mix-blend-screen"
-          style={{
-            left: cursorPos.x,
-            top: cursorPos.y,
-            width: isHovering ? "48px" : "24px",
-            height: isHovering ? "48px" : "24px",
-            backgroundColor: isHovering ? "rgba(94, 234, 212, 0.15)" : "transparent",
-            borderColor: "#5eead4",
-          }}
-        />
-      )}
-
+    <main className="flex flex-col min-h-screen overflow-x-hidden">
       <Header />
 
       {/* ── Hero ── */}
       <section
         id="hero"
-        className="relative min-h-screen flex flex-col items-center justify-center px-6 py-32 border-b border-border-dark/40 overflow-hidden"
+        className="relative min-h-screen flex flex-col justify-center items-center bg-canvas text-on-dark px-6 overflow-hidden"
       >
-        {/* Subtle background radial glow */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(176,142,79,0.06)_0%,transparent_70%)] pointer-events-none z-0" />
-        
-        <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto px-4">
-          <p className="font-sans text-[10px] md:text-xs uppercase tracking-[0.3em] text-teal-accent font-bold mb-8">
-            👋 HI, I'M MICHAEL, SENIOR PRODUCT MANAGER
-          </p>
+        {/* Subtle grid pattern */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            opacity: 0.035,
+            backgroundImage:
+              "linear-gradient(#f0ebe0 1px, transparent 1px), linear-gradient(to right, #f0ebe0 1px, transparent 1px)",
+            backgroundSize: "64px 64px",
+          }}
+        />
+        {/* Radial vignette over grid */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 60% at 50% 50%, transparent 20%, #1b1916 100%)",
+          }}
+        />
 
-          <div className="mb-10 rounded-full p-[3px] bg-teal-accent-dim border border-teal-accent/20 hover:border-teal-accent/50 transition-colors duration-500 shadow-2xl">
-            <Image
-              src="/profile.jpeg"
-              alt="Michael Korenevsky"
-              width={220}
-              height={220}
-              priority
-              className="h-44 w-44 md:h-52 md:w-52 rounded-full object-cover object-top p-0.5"
-            />
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          {/* Status eyebrow */}
+          <div className="flex items-center justify-center gap-2.5 mb-12">
+            <div className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+            </div>
+            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-on-dark-soft">
+              Senior Product Manager · Open to roles
+            </span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extralight text-white tracking-tight mb-8 hidden">
+          {/* Name */}
+          <h1
+            className="font-display font-light text-on-dark leading-[0.93] tracking-[-0.01em] mb-8"
+            style={{ fontSize: "clamp(3.4rem, 11.5vw, 9.5rem)" }}
+          >
             Michael Korenevsky
           </h1>
 
-          <p className="text-xl md:text-2xl lg:text-3.5xl font-sans font-light text-text-secondary leading-snug tracking-tight max-w-3xl mb-12">
-            Building complex products from scratch, owning the end-to-end process to transform complex data into actionable insights.
+          {/* Lead */}
+          <p
+            className="text-on-dark-soft leading-relaxed max-w-xl mx-auto mb-12"
+            style={{ fontSize: "clamp(1rem, 2.2vw, 1.4rem)" }}
+          >
+            Building enterprise AI and predictive tools for high-stakes industries.
           </p>
 
-          <div className="flex gap-8 mb-14">
+          {/* CTAs */}
+          <div className="flex items-center justify-center gap-4 mb-16">
             <a
               href="#work"
-              className="text-teal-accent text-xs font-mono uppercase tracking-wider hover:text-white transition-colors border border-border-dark bg-surface px-5 py-2.5 rounded-sm hover:border-teal-accent/40"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("work")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.06em] bg-on-dark text-canvas px-5 py-3 rounded-sm border border-on-dark hover:bg-accent hover:border-accent hover:text-white transition-all duration-300"
+              style={{ transform: "translateY(0)" }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
             >
               View Work
             </a>
             <a
               href="#contact"
-              className="text-teal-accent text-xs font-mono uppercase tracking-wider hover:text-white transition-colors border border-border-dark bg-surface px-5 py-2.5 rounded-sm hover:border-teal-accent/40"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.06em] bg-transparent text-on-dark px-5 py-3 rounded-sm border border-on-dark/40 hover:bg-on-dark hover:text-canvas hover:border-on-dark transition-all duration-300"
+              style={{ transform: "translateY(0)" }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
             >
               Get in Touch
             </a>
           </div>
 
-          <div className="w-full max-w-md border-t border-border-dark/60 mb-8" />
-
-          <p className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-text-muted">
-            Shipped to: <span className="text-text-primary font-semibold">Baker Hughes · Thales · Elos Medtech · Oqton · Beehive</span>
-          </p>
+          {/* Company logos */}
+          <div>
+            <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-on-dark-faint mb-2">
+              Shipped to
+            </p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-on-dark-soft">
+              Baker Hughes · Thales · Elos Medtech · 3D Systems · Beehive
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* ── Selected Work ── */}
+      {/* ── Work ── */}
       <SelectedWork
         onOpenAmvero={() => setAmveroOpen(true)}
         onOpenSimulation={() => setSimulationOpen(true)}
       />
 
-      {/* ── How I Work ── */}
+      {/* ── Practice ── */}
       <HowIWork />
 
       {/* ── Career ── */}
       <CareerTimeline />
 
       {/* ── About ── */}
-      <section id="about" className="px-6 md:px-12 py-32 border-t border-border-dark/40 bg-canvas">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-16">
-            <span className="text-[10px] tracking-[0.4em] uppercase text-text-muted font-bold font-mono">About</span>
-            <h2 className="text-3xl md:text-5xl font-extralight text-white mt-2">
-              Background
+      <section id="about" className="bg-paper-2 px-6 py-14 md:py-24 xl:py-32">
+        <div className="max-w-[1180px] mx-auto">
+          {/* Section header */}
+          <div className="flex items-baseline gap-4 border-b border-line pb-6 mb-16">
+            <span className="font-mono text-[11px] text-accent font-medium tracking-[0.1em]">04</span>
+            <h2
+              className="font-display font-light text-ink leading-tight"
+              style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.8rem)" }}
+            >
+              Mechanical engineer by training, product manager by craft
             </h2>
           </div>
-          <div className="grid md:grid-cols-2 gap-16">
-            <div className="bg-surface border border-border-dark p-8 rounded-xl">
-              <h3 className="text-[10px] md:text-xs tracking-[0.3em] uppercase text-teal-accent mb-4 font-bold font-mono">Education</h3>
-              <p className="text-lg font-light text-white">B.Sc. Mechanical Engineering</p>
-              <p className="text-sm text-text-muted mt-1">
-                Ben-Gurion University of the Negev · 2008–2012
-              </p>
+
+          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
+            {/* Profile photo */}
+            <div>
+              <div className="overflow-hidden rounded-sm" style={{ maxWidth: 340 }}>
+                <Image
+                  src="/profile.jpeg"
+                  alt="Michael Korenevsky"
+                  width={340}
+                  height={425}
+                  priority
+                  className="w-full object-cover object-top"
+                  style={{ aspectRatio: "4/5" }}
+                />
+              </div>
             </div>
-            <div className="bg-surface border border-border-dark p-8 rounded-xl">
-              <h3 className="text-[10px] md:text-xs tracking-[0.3em] uppercase text-teal-accent mb-4 font-bold font-mono">Languages</h3>
-              <div className="space-y-3">
-                {[
-                  ["Hebrew", "Native"],
-                  ["English", "Professional"],
-                  ["Russian", "Fluent"],
-                ].map(([lang, level]) => (
-                  <div key={lang} className="flex items-center justify-between border-b border-border-dark pb-2 last:border-0 last:pb-0">
-                    <span className="text-sm font-light text-text-secondary">{lang}</span>
-                    <span className="text-xs text-text-muted font-mono">{level}</span>
-                  </div>
-                ))}
+
+            {/* Bio + details */}
+            <div>
+              <p
+                className="text-ink-soft leading-relaxed mb-10"
+                style={{ fontSize: "clamp(1rem, 1.8vw, 1.1rem)" }}
+              >
+                Ten years building and certifying industrial software before moving into
+                product management. The QA years weren&apos;t a detour — they taught me
+                to find failure modes before users do, which turns out to be exactly
+                what enterprise AI products need.
+              </p>
+
+              {/* Education — crow */}
+              <div className="grid grid-cols-[90px_1fr] sm:grid-cols-[110px_1fr] gap-4 items-baseline py-5 border-b border-line">
+                <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-faint">
+                  Education
+                </span>
+                <div>
+                  <p className="text-ink font-medium text-sm">B.Sc. Mechanical Engineering</p>
+                  <p className="text-ink-faint text-sm mt-0.5">Ben-Gurion University · 2008–2012</p>
+                </div>
+              </div>
+
+              {/* Languages — crow */}
+              <div className="grid grid-cols-[90px_1fr] sm:grid-cols-[110px_1fr] gap-4 items-baseline py-5 border-b border-line">
+                <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-faint">
+                  Languages
+                </span>
+                <div className="flex flex-wrap gap-x-6 gap-y-1">
+                  {[
+                    ["Hebrew", "Native"],
+                    ["English", "Professional"],
+                    ["Russian", "Fluent"],
+                  ].map(([lang, level]) => (
+                    <div key={lang} className="flex items-baseline gap-1.5">
+                      <span className="text-ink text-sm font-medium">{lang}</span>
+                      <span className="text-ink-faint text-xs">{level}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Location — crow */}
+              <div className="grid grid-cols-[110px_1fr] gap-6 items-baseline py-5">
+                <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-faint">
+                  Location
+                </span>
+                <p className="text-ink-soft text-sm">
+                  Israel · Open to remote and hybrid roles
+                </p>
               </div>
             </div>
           </div>
@@ -201,14 +231,14 @@ export default function Home() {
       <ContactSection />
 
       {/* ── Footer ── */}
-      <footer className="px-6 md:px-12 py-10 border-t border-border-dark bg-canvas">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 text-[10px] tracking-[0.2em] uppercase text-text-muted font-mono">
+      <footer className="bg-canvas border-t border-line-dark px-6 py-8">
+        <div className="max-w-[1180px] mx-auto flex flex-wrap items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[0.15em] text-on-dark-faint">
           <span>© 2026 Michael Korenevsky</span>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             {time && <span>ISR {time}</span>}
             <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-teal-accent animate-pulse" />
-              Neural Link Active
+              <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+              Available
             </span>
           </div>
         </div>
