@@ -17,6 +17,6 @@ def get_docx_text(path):
 
 print("--- SELECTED RESUME TEXT ---")
 try:
-    print(get_docx_text('/home/michaek/portfolio-proj-antigravity/scratch/resumes/Michael_Korenevsky_Selected_Resume.docx'))
+    print(get_docx_text('/home/korm85/projects/ClaudeCode-portfolio-dev/scratch/resumes/Michael_Korenevsky_Selected_Resume.docx'))
 except Exception as e:
     print("Failed to parse:", e)

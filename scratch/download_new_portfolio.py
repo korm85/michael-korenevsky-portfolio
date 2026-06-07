@@ -2,7 +2,7 @@ import gdown
 import os
 
 url = "https://drive.google.com/file/d/1rP3LCConPL7ruGlyzQSfeEeYnY42HJxd/view?usp=sharing"
-output_path = "/home/michaek/portfolio-proj-antigravity/scratch/new_portfolio_asset"
+output_path = "/home/korm85/projects/ClaudeCode-portfolio-dev/scratch/new_portfolio_asset"
 
 # Extract file ID from URL
 # https://drive.google.com/file/d/1rP3LCConPL7ruGlyzQSfeEeYnY42HJxd/view?usp=sharing
