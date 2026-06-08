@@ -160,7 +160,7 @@ export default function Home() {
             <div>
               <div className="overflow-hidden rounded-sm" style={{ maxWidth: 340 }}>
                 <Image
-                  src="/profile.jpeg"
+                  src="/OfficialProfile.jpg"
                   alt="Michael Korenevsky"
                   width={340}
                   height={425}
