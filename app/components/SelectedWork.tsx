@@ -391,7 +391,7 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
             description="I took AMVero from first enterprise pilot to five paying clients in five months, writing the GTM narrative, designing the smart alerting system that eliminated operator alert fatigue, and authoring the deployment playbook that got regulated manufacturers live without disrupting production."
             decisions={[
               {
-                text: "Chose condition-based multi-layer filtering over severity thresholds — turned AMVero from a noise source into a trusted monitoring tool operators actually relied on.",
+                text: "Chose condition-based multi-layer filtering over severity thresholds. Turned AMVero from a noise source into a trusted monitoring tool operators actually relied on.",
                 docLabel: "Alerts PRD",
                 docUrl: "/artifacts/amvero-smart-alerting-prd.html",
               },
@@ -406,7 +406,7 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
             image="/amvero-product.png"
             imageAlt="AMVero AI monitoring dashboard"
             metrics={[
-              { value: "98%", label: "Reduction in active monitoring time — Baker Hughes deployment" },
+              { value: "98%", label: "Reduction in active monitoring time, Baker Hughes" },
               { value: "18%", label: "Scrap cost reduction via mid-run failure detection" },
               { value: "136h", label: "Saved per printer per year" },
               { value: "5", label: "Enterprise clients in 5 months" },
@@ -436,10 +436,10 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
             eyebrow="Predictive Simulation · Oqton · 2022–2025"
             roleTag="Product Manager, Simulation"
             title="Shipped three simulation modules, culminating in the thermo-mechanical solver that made first-time-right manufacturing achievable"
-            description="I built out the Simulation Suite over three years, shipping a Thermal module, a Mechanical module, and then the Thermo-mechanical module that combined both into a single pass — the step that eliminated inter-stage wait times and made serial production with first-time-right accuracy viable."
+            description="I built out the Simulation Suite over three years, shipping a Thermal module, a Mechanical module, and then the Thermo-mechanical module that combined both into a single pass, eliminating inter-stage wait times and making serial production with first-time-right accuracy viable."
             decisions={[
-              "Shipped Thermal and Mechanical as separate modules, then unified them into a single coupled thermo-mechanical pass — eliminating inter-stage wait times and making first-time-right accuracy viable in serial production.",
-              "Validated on standard engineering workstations, not servers — deliberately expanding the addressable market to any manufacturer running 3DXpert.",
+              "Shipped Thermal and Mechanical as separate modules, then unified them into a single coupled thermo-mechanical pass, eliminating inter-stage wait times and making first-time-right accuracy viable in serial production.",
+              "Validated on standard engineering workstations, not servers. Expanded the addressable market to any manufacturer running 3DXpert.",
               "Ran a structured beta with Knauf before release, reducing launch risk and generating a credible customer story at release.",
             ]}
             image="/simulation-knauf-fit.png"

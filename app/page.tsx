@@ -178,7 +178,7 @@ export default function Home() {
                 style={{ fontSize: "clamp(1rem, 1.8vw, 1.1rem)" }}
               >
                 Ten years building and certifying industrial software before moving into
-                product management. The QA years weren&apos;t a detour — they taught me
+                product management. The QA years weren&apos;t a detour. They taught me
                 to find failure modes before users do, which turns out to be exactly
                 what enterprise AI products need.
               </p>

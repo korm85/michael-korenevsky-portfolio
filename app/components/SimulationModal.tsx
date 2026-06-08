@@ -62,7 +62,7 @@ export default function SimulationModal({ isOpen, onClose }: SimulationModalProp
                   Simulation software that predicts thermal stress, shrink, and warp before manufacturing, enabling clients to achieve first-time-right production and eliminate expensive physical trials.
                 </p>
                 <p className="text-xs md:text-sm text-ink-faint leading-relaxed mt-2">
-                  Transforms complex thermo-mechanical physics equations into simple, automated tooling workflows that eliminate manufacturing defects on standard local workstation hardware.
+                  Packages thermo-mechanical physics into single-click workflows any manufacturing engineer can run on a standard workstation.
                 </p>
               </div>
 
@@ -71,7 +71,7 @@ export default function SimulationModal({ isOpen, onClose }: SimulationModalProp
                   PM CONTRIBUTION
                 </p>
                 <p className="text-xs md:text-sm leading-relaxed text-ink-soft">
-                  Defined the three-phase roadmap: Thermal module, Mechanical module, then the coupled Thermo-mechanical pass that eliminated the wait between stages. Worked with physics researchers to package complex finite element solvers into single-click workflows any manufacturing engineer could run on a standard workstation — no physics expertise required. Ran the structured Knauf beta that validated accuracy before launch and produced the customer story we shipped with.
+                  Defined the three-phase roadmap: Thermal module, Mechanical module, then the coupled Thermo-mechanical pass that eliminated the wait between stages. Worked with physics researchers to package complex finite element solvers into single-click workflows any manufacturing engineer could run on a standard workstation. No physics expertise required. Ran the structured Knauf beta that validated accuracy before launch and produced the customer story we shipped with.
                 </p>
               </div>
 

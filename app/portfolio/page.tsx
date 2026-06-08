@@ -42,7 +42,7 @@ const PRACTICE_CARDS = [
   {
     num: "01",
     title: "Discovery & specs",
-    body: "AI synthesized support tickets, Jira history, and customer feedback before writing the AMVero alerting spec — surfaced a threshold conflict that would have shipped a broken alert.",
+    body: "AI synthesized support tickets, Jira history, and customer feedback before writing the AMVero alerting spec. It surfaced a threshold conflict that would have shipped a broken alert.",
   },
   {
     num: "02",
@@ -52,7 +52,7 @@ const PRACTICE_CARDS = [
   {
     num: "03",
     title: "Market intelligence",
-    body: "Scheduled agent tracks AMVero's regulatory environment, competitor pricing, and new entrants weekly. Flagged competitor pricing shift — data used to propose the move to token-based billing.",
+    body: "Scheduled agent tracks AMVero's regulatory environment, competitor pricing, and new entrants weekly. Flagged a competitor pricing shift. That data drove the proposal to move to token-based billing.",
   },
   {
     num: "04",
@@ -165,7 +165,7 @@ export default function PortfolioPage() {
                 Took an AI monitoring tool from pilot to five enterprise contracts in five months
               </h3>
               <p className="text-ink-soft text-sm leading-relaxed mb-8 max-w-3xl">
-                Took AMVero from first enterprise pilot to five paying clients in five months — writing the GTM narrative, designing the smart alerting system that eliminated operator alert fatigue, and authoring the deployment playbook that got regulated manufacturers live without disrupting production.
+                Took AMVero from first enterprise pilot to five paying clients in five months. Wrote the GTM narrative, designed the smart alerting system that eliminated operator alert fatigue, and authored the deployment playbook that got regulated manufacturers live without disrupting production.
               </p>
 
               {/* Metrics */}
@@ -218,7 +218,7 @@ export default function PortfolioPage() {
                 Shipped three simulation modules, culminating in the thermo-mechanical solver that made first-time-right manufacturing achievable
               </h3>
               <p className="text-ink-soft text-sm leading-relaxed mb-8 max-w-3xl">
-                Built out the Simulation Suite over three years — Thermal, Mechanical, then the coupled Thermo-mechanical pass that eliminated inter-stage wait times and made first-time-right accuracy viable in serial production. Validated on standard workstations, not servers.
+                Built out the Simulation Suite over three years: Thermal, Mechanical, then the coupled Thermo-mechanical pass that eliminated inter-stage wait times and made first-time-right accuracy viable in serial production. Validated on standard workstations, not servers.
               </p>
 
               {/* Metrics */}
@@ -263,7 +263,7 @@ export default function PortfolioPage() {
           <div className="flex items-baseline gap-4 border-b border-line-dark pb-6 mb-14">
             <span className="font-mono text-[11px] text-accent font-medium tracking-[0.1em]">02</span>
             <h2 className="font-display font-light text-on-dark" style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.6rem)" }}>
-              An AI-native PM practice
+              How I use AI as a PM
             </h2>
           </div>
 

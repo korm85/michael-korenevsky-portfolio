@@ -38,7 +38,7 @@ export default function HowIWork() {
             className="font-display font-light text-on-dark leading-tight"
             style={{ fontSize: "clamp(2rem, 5.4vw, 3.6rem)" }}
           >
-            An AI-native PM practice
+            How I use AI as a PM
           </h2>
         </div>
 
