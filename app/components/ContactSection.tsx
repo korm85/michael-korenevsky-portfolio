@@ -12,9 +12,9 @@ const CONTACTS = [
     href: "https://linkedin.com/in/michael-korenevsky",
   },
   {
-    label: "Portfolio PDF",
-    value: "Google Drive",
-    href: "https://drive.google.com/file/d/1rP3LCConPL7ruGlyzQSfeEeYnY42HJxd/view?usp=sharing",
+    label: "Portfolio",
+    value: "View portfolio overview",
+    href: "/portfolio",
   },
 ];
 
