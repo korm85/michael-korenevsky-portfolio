@@ -57,6 +57,30 @@ Before referencing any Oqton product details, customer names, or metrics:
 - Invoke the `ip-handling` skill
 <!-- END:skill-loading -->
 
+<!-- BEGIN:repo-workflow -->
+# Repository workflow
+
+This is the SINGLE source of truth for the portfolio site at themishka.me.
+
+## Branch strategy
+- `main` — production. Every push auto-deploys to `themishka.me` via Vercel GitHub integration.
+- Feature/experiment branches — Vercel auto-creates a preview URL for every branch push. Use these to review before merging to `main`.
+
+## How to work
+1. Create a branch: `git checkout -b feat/description`
+2. Make changes, push branch → get preview URL from Vercel
+3. Review preview → merge to `main` → auto-deploys to production
+
+## Deploy rule
+Never run `npx vercel --prod --yes` manually — production deploys happen automatically via GitHub push to `main`.
+For preview deploys, push the branch; Vercel handles the rest.
+
+## Vercel project
+- Project ID: `prj_XAbUcYvE8XsmhuNzvOV8F4I0K39w`
+- Project name: `michael-korenevsky`
+- Production domain: `themishka.me`
+<!-- END:repo-workflow -->
+
 <!-- BEGIN:status-continuity -->
 # Project status and continuity
 
@@ -72,9 +96,6 @@ Update STATUS.md at the end of any session where meaningful work happened. Speci
 - Clear "In progress" if nothing is actively unfinished
 - Update "Next up" to reflect the current queue
 - Add any non-obvious decisions to "Decisions log"
-
-## Deploy rule
-After updating STATUS.md, always run `npx vercel --prod --yes` so the dashboard at /dashboard reflects the new state immediately.
 
 ## Format rules
 - "Last completed": max 5 bullets, most recent first, always dated
