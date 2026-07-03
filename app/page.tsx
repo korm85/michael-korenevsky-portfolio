@@ -8,6 +8,7 @@ import SelectedWork from "./components/SelectedWork";
 import HowIWork from "./components/HowIWork";
 import CareerTimeline from "./components/CareerTimeline";
 import ContactSection from "./components/ContactSection";
+import ActionPanel from "./components/ActionPanel";
 
 const AmveroModal = dynamic(() => import("./components/AmveroModal"), { ssr: false });
 const SimulationModal = dynamic(() => import("./components/SimulationModal"), { ssr: false });
@@ -277,6 +278,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* ── Always-available quick actions ── */}
+      <ActionPanel />
 
       {/* ── Modals ── */}
       <AmveroModal isOpen={amveroOpen} onClose={closeCase} />

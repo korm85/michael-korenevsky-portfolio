@@ -53,6 +53,7 @@ interface WorkArticleProps {
   customerLine: string;
   ctaLabel: string;
   onCta: () => void;
+  secondaryCta?: { label: string; onClick: () => void };
   docs: Doc[];
   quote?: Quote;
   prdQuote?: PrdQuote;
@@ -197,6 +198,7 @@ function WorkArticle({
   metrics,
   ctaLabel,
   onCta,
+  secondaryCta,
   docs,
   quote,
   imageLeft = true,
@@ -294,19 +296,35 @@ function WorkArticle({
             </ul>
           )}
 
-          {/* CTA */}
-          <button
-            onClick={onCta}
-            className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.06em] border border-ink text-ink px-4 py-2.5 rounded-sm hover:bg-ink hover:text-paper transition-all duration-300 group"
-            style={{ transform: "translateY(0)" }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
-          >
-            {ctaLabel}
-            <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
-              <ArrowIcon />
-            </span>
-          </button>
+          {/* CTAs */}
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={onCta}
+              className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.06em] bg-ink text-paper border border-ink px-4 py-2.5 rounded-sm hover:bg-accent-deep hover:border-accent-deep transition-all duration-300 group"
+              style={{ transform: "translateY(0)" }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            >
+              {ctaLabel}
+              <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                <ArrowIcon />
+              </span>
+            </button>
+            {secondaryCta && (
+              <button
+                onClick={secondaryCta.onClick}
+                className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.06em] border border-accent-deep/50 text-accent-deep px-4 py-2.5 rounded-sm hover:bg-accent-deep hover:text-paper transition-all duration-300 group"
+                style={{ transform: "translateY(0)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
+                onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+              >
+                {secondaryCta.label}
+                <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                  <ArrowIcon />
+                </span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -393,6 +411,13 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
   const [roiUrl, setRoiUrl] = useState<string | null>(null);
   const [overlayImage, setOverlayImage] = useState<{ src: string; alt: string } | null>(null);
 
+  // Lets the site-wide action panel open the pricing overlay from anywhere
+  useEffect(() => {
+    const open = () => setRoiUrl("/tools/amvero-roi-optimizer.html");
+    window.addEventListener("open-pricing-model", open);
+    return () => window.removeEventListener("open-pricing-model", open);
+  }, []);
+
   return (
     <section id="work" className="bg-paper px-6 py-14 md:py-24 xl:py-32">
       <div className="max-w-[1180px] mx-auto">
@@ -438,6 +463,10 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
             customerLine="Baker Hughes · Thales · Elos Medtech · 3D Systems · Beehive"
             ctaLabel="Try interactive prototype"
             onCta={onOpenAmvero}
+            secondaryCta={{
+              label: "Explore credit pricing model",
+              onClick: () => setRoiUrl("/tools/amvero-roi-optimizer.html"),
+            }}
             onOverlayOpen={setRoiUrl}
             onImageClick={(src, alt) => setOverlayImage({ src, alt })}
             docs={[
