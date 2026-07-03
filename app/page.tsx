@@ -111,17 +111,18 @@ export default function Home() {
             className="text-on-dark leading-snug max-w-2xl mx-auto mb-3"
             style={{ fontSize: "clamp(1.05rem, 2.1vw, 1.35rem)", textWrap: "balance" }}
           >
-            I own products end to end — from the GTM narrative to the alerting
-            logic to the deployment playbook that gets regulated manufacturers
-            live without disrupting production.
+            I own products end to end: the go-to-market narrative, the call on
+            which alerts are worth an operator&apos;s attention, and the
+            deployment playbook that gets regulated manufacturers live without
+            disrupting production.
           </p>
           <p
             className="text-on-dark-soft leading-relaxed max-w-xl mx-auto mb-10"
             style={{ fontSize: "clamp(0.95rem, 1.6vw, 1.05rem)" }}
           >
-            Two products, two different technical bets — AI-powered monitoring and
-            physics-based predictive simulation — for manufacturers where a defect
-            costs real money.
+            Two products, two different technical bets: AI-powered monitoring
+            and physics-based predictive simulation. Both for manufacturers
+            where a defect costs real money.
           </p>
 
           {/* CTAs */}

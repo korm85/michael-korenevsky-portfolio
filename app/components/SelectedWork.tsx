@@ -298,7 +298,7 @@ function WorkArticle({
                 return (
                   <li key={i} className="text-sm text-ink-soft leading-relaxed">
                     <div className="flex gap-3">
-                      <span className="text-accent-deep shrink-0 mt-0.5 font-light">—</span>
+                      <span className="text-accent-deep shrink-0 mt-0.5 font-light">–</span>
                       <span>{text}</span>
                     </div>
                     {links && links.length > 0 && (
