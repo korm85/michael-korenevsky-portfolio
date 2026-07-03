@@ -34,3 +34,6 @@ Nothing. Clean state.
 - **Section numbering**: `01 — Selected work`, `02 — An AI-native PM practice`, `03 — 10+ years in enterprise software`, `04 — About`, `05 — Let's build something worth shipping`. Mono labels + display headings.
 - **Crow rows**: Label+content grid using `grid-cols-[90px_1fr]` or `grid-cols-[110px_1fr]` — used in About (education/languages/location) and Contact sections. From Themishka layout patterns.
 - **Border-grid metrics**: Metrics container has `border-r border-b border-line`, each cell has `border-t border-l border-line`. Creates shared-border table effect without double borders.
+- **IP on the portfolio is approved (2026-07-03)**: Naming AMVero, Simulation Suite, customers, and attributed quotes is a non-issue per Michael. The `ip-handling` skill carries a superseding status note. Still off-limits: revenue/contract figures, internal architecture, roadmap items.
+- **No resume file on the site (2026-07-03)**: Deliberate. Michael tailors resume files per role; a single generic PDF would interfere with role fit. Do not re-add or re-flag.
+- **/dashboard removed from production (2026-07-03)**: It rendered internal STATUS.md publicly. Status lives in the repo only.
