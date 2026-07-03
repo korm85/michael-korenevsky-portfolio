@@ -94,7 +94,20 @@ function DocOverlay({ doc, onClose }: { doc: DocRef; onClose: () => void }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const isPdf = doc.url.toLowerCase().endsWith(".pdf");
 
+  // The modal container animates in with a CSS transform (animate-scale-in).
+  // Chromium's native PDF viewer can start rendering mid-transform and then
+  // fail to repaint until something forces a reflow — the "needs a second
+  // click" symptom. Mounting the iframe only after the entrance animation
+  // settles avoids that: the PDF plugin always initializes in stable,
+  // untransformed layout.
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setReady(true), 260);
+    return () => clearTimeout(t);
+  }, []);
+
   const applyZoom = (z: number) => {
+    if (isPdf) return;
     try {
       const body = iframeRef.current?.contentWindow?.document?.body;
       if (body) body.style.zoom = String(z);
@@ -179,17 +192,25 @@ function DocOverlay({ doc, onClose }: { doc: DocRef; onClose: () => void }) {
 
         {/* iframe */}
         <div className="flex-1 overflow-auto bg-paper">
-          {/* No sandbox: these are all first-party artifacts under /artifacts
-              and /tools. Sandboxing blocks Chromium's built-in PDF viewer, and
-              the HTML zoom hook needs same-origin document access. */}
-          <iframe
-            ref={iframeRef}
-            src={doc.url}
-            className="w-full border-0"
-            style={{ minHeight: "100%", height: "100%" }}
-            onLoad={() => applyZoom(zoom)}
-            title={doc.title}
-          />
+          {ready ? (
+            // No sandbox: these are all first-party artifacts under /artifacts
+            // and /tools. Sandboxing blocks Chromium's built-in PDF viewer, and
+            // the HTML zoom hook needs same-origin document access.
+            <iframe
+              ref={iframeRef}
+              src={doc.url}
+              className="w-full border-0"
+              style={{ minHeight: "100%", height: "100%" }}
+              onLoad={() => applyZoom(zoom)}
+              title={doc.title}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-ink-faint">
+                Loading…
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
