@@ -67,24 +67,27 @@ export default function Home() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
             </div>
             <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-on-dark-soft">
-              Senior Product Manager · Open to roles
+              Michael Korenevsky · Senior Product Manager · Open to roles
             </span>
           </div>
 
-          {/* Name */}
+          {/* Positioning headline */}
           <h1
-            className="font-display font-light text-on-dark leading-[0.93] tracking-[-0.01em] mb-8"
-            style={{ fontSize: "clamp(3.4rem, 11.5vw, 9.5rem)" }}
+            className="font-display font-light text-on-dark leading-[1.05] tracking-[-0.01em] mb-8 max-w-3xl mx-auto"
+            style={{ fontSize: "clamp(2.4rem, 6vw, 4.8rem)" }}
           >
-            Michael Korenevsky
+            Enterprise AI and predictive tools for{" "}
+            <span className="text-accent">high-stakes industries</span>
           </h1>
 
           {/* Lead */}
           <p
-            className="text-on-dark-soft leading-relaxed max-w-xl mx-auto mb-12"
-            style={{ fontSize: "clamp(1rem, 2.2vw, 1.4rem)" }}
+            className="text-on-dark-soft leading-relaxed max-w-2xl mx-auto mb-12"
+            style={{ fontSize: "clamp(1rem, 2vw, 1.25rem)" }}
           >
-            Building enterprise AI and predictive tools for high-stakes industries.
+            Five enterprise contracts in five months for an AI monitoring product.
+            I build AI-powered production monitoring and physics-based predictive
+            simulation for manufacturers where a defect costs real money.
           </p>
 
           {/* CTAs */}
@@ -119,10 +122,10 @@ export default function Home() {
 
           {/* Company logos */}
           <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-on-dark-faint mb-2">
+            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-on-dark-faint mb-2">
               Shipped to
             </p>
-            <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-on-dark-soft">
+            <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-on-dark">
               Baker Hughes · Thales · Elos Medtech · 3D Systems · Beehive
             </p>
           </div>

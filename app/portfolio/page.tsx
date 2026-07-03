@@ -19,7 +19,7 @@ const AMVERO_METRICS = [
 
 const SIM_METRICS = [
   { value: "80%", label: "Fewer dimensional errors" },
-  { value: "99%+", label: "Dimensional accuracy" },
+  { value: "~100%", label: "Distortion compensated" },
   { value: "<150µm", label: "Max measured deviation" },
 ];
 
