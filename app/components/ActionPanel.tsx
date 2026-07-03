@@ -7,7 +7,18 @@ interface Action {
   hint: string;
   keywords: string;
   run: () => void;
+  sectionId?: string;
 }
+
+// Scrollspy targets, in page order. The label is what the pill displays.
+const SECTIONS: [id: string, label: string][] = [
+  ["hero", "Intro"],
+  ["work", "Selected work"],
+  ["how-i-work", "AI practice"],
+  ["career", "Career"],
+  ["about", "About"],
+  ["contact", "Contact"],
+];
 
 interface ActionGroup {
   category: string;
@@ -72,12 +83,6 @@ const GROUPS: ActionGroup[] = [
         keywords: "gtm go to market narrative launch strategy positioning document",
         run: () => window.open("/artifacts/amvero-go-to-market-narrative.pdf", "_blank", "noopener,noreferrer"),
       },
-      {
-        label: "One-page summary",
-        hint: "Quick overview",
-        keywords: "summary overview one page condensed print recruiter resume cv",
-        run: () => { window.location.href = "/portfolio"; },
-      },
     ],
   },
   {
@@ -88,24 +93,28 @@ const GROUPS: ActionGroup[] = [
         hint: "Section",
         keywords: "work projects portfolio case studies section",
         run: () => scrollToSection("work"),
+        sectionId: "work",
       },
       {
         label: "How I use AI as a PM",
         hint: "Section",
         keywords: "ai practice workflow process discovery prototyping native section",
         run: () => scrollToSection("how-i-work"),
+        sectionId: "how-i-work",
       },
       {
         label: "Career timeline",
         hint: "Section",
         keywords: "career experience history timeline qa oqton 3d systems section",
         run: () => scrollToSection("career"),
+        sectionId: "career",
       },
       {
         label: "About Michael",
         hint: "Section",
         keywords: "about bio education languages location background engineer section",
         run: () => scrollToSection("about"),
+        sectionId: "about",
       },
     ],
   },
@@ -139,8 +148,29 @@ export default function ActionPanel() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(0);
+  const [activeSection, setActiveSection] = useState("hero");
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+
+  // Scrollspy: the last section whose top has passed the upper 40% of the
+  // viewport is the one the reader is in.
+  useEffect(() => {
+    const onScroll = () => {
+      let current = SECTIONS[0][0];
+      for (const [id] of SECTIONS) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.4) {
+          current = id;
+        }
+      }
+      setActiveSection(current);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const activeLabel = SECTIONS.find(([id]) => id === activeSection)?.[1] ?? "Intro";
 
   const groups = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -261,20 +291,25 @@ export default function ActionPanel() {
                 {g.actions.map((a) => {
                   flatIndex += 1;
                   const i = flatIndex;
+                  const isCurrent = a.sectionId != null && a.sectionId === activeSection;
                   return (
                     <button
                       key={a.label}
                       role="option"
                       aria-selected={i === selected}
+                      aria-current={isCurrent ? "true" : undefined}
                       onClick={() => runAction(a)}
                       onMouseEnter={() => setSelected(i)}
                       className={`w-full text-left px-4 py-2 flex items-baseline justify-between gap-3 transition-colors ${
                         i === selected ? "bg-ink/5" : ""
                       }`}
                     >
-                      <span className="text-sm text-ink">{a.label}</span>
+                      <span className={`text-sm flex items-center gap-2 ${isCurrent ? "text-accent-deep" : "text-ink"}`}>
+                        {isCurrent && <span className="w-1.5 h-1.5 rounded-full bg-accent-deep shrink-0" />}
+                        {a.label}
+                      </span>
                       <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-faint shrink-0">
-                        {a.hint}
+                        {isCurrent ? "You are here" : a.hint}
                       </span>
                     </button>
                   );
@@ -289,23 +324,31 @@ export default function ActionPanel() {
         </div>
       )}
 
-      {/* Pill */}
+      {/* Pill: current section indicator + find-anything trigger */}
       <button
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="dialog"
-        className="flex items-center gap-2.5 border border-line text-ink-soft hover:text-ink hover:border-accent-deep/60 rounded-full pl-4 pr-3 py-2.5 shadow-xl transition-all duration-200"
+        className="flex items-center border border-line text-ink-soft hover:text-ink hover:border-accent-deep/60 rounded-full py-2.5 shadow-xl transition-all duration-200"
         style={glass}
       >
-        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <circle cx="11" cy="11" r="7" />
-          <path strokeLinecap="round" d="m20 20-3.5-3.5" />
-        </svg>
-        <span className="font-mono text-[11px] uppercase tracking-[0.1em]">
-          {open ? "Close" : "Find anything"}
+        <span className="flex items-center gap-2 pl-4 pr-3 border-r border-line">
+          <span className="w-1.5 h-1.5 rounded-full bg-accent-deep shrink-0" />
+          <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-ink whitespace-nowrap">
+            {activeLabel}
+          </span>
         </span>
-        <span className="hidden md:inline font-mono text-[9px] text-ink-faint border border-line rounded-sm px-1.5 py-0.5">
-          ⌘K
+        <span className="flex items-center gap-2 pl-3 pr-3.5">
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <circle cx="11" cy="11" r="7" />
+            <path strokeLinecap="round" d="m20 20-3.5-3.5" />
+          </svg>
+          <span className="font-mono text-[11px] uppercase tracking-[0.1em]">
+            {open ? "Close" : "Find anything"}
+          </span>
+          <span className="hidden md:inline font-mono text-[9px] text-ink-faint border border-line rounded-sm px-1.5 py-0.5">
+            ⌘K
+          </span>
         </span>
       </button>
     </div>

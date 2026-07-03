@@ -11,11 +11,6 @@ const CONTACTS = [
     value: "michael-korenevsky",
     href: "https://linkedin.com/in/michael-korenevsky",
   },
-  {
-    label: "Summary",
-    value: "One-page summary",
-    href: "/portfolio",
-  },
 ];
 
 export default function ContactSection() {
