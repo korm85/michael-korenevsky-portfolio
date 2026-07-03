@@ -52,6 +52,13 @@
   * {
     scroll-margin-top: 24px;
   }
+
+  /* Pin Fraunces' optical size and turn WONK off. Left on "auto", high opsz
+     at display sizes produces a swashy, distracting lowercase "f"/"g"; a
+     moderate fixed opsz keeps the terminals calm while staying a display serif. */
+  .font-display {
+    font-variation-settings: "opsz" 30, "SOFT" 0, "WONK" 0;
+  }
 }
 
 /* ── Reduced motion ── */

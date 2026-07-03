@@ -96,28 +96,32 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Positioning headline */}
+          {/* Positioning headline — the PM's signature move, not a product line */}
           <h1
             className="font-display font-light text-on-dark leading-[1.05] tracking-[-0.01em] mb-5 max-w-3xl mx-auto"
             style={{ fontSize: "clamp(2.4rem, 6vw, 4.8rem)" }}
           >
-            Enterprise AI and predictive tools for{" "}
-            <span className="text-accent">high-stakes industries</span>
+            Taking enterprise AI from{" "}
+            <span className="text-accent">pilot to production</span> in
+            high-stakes industries
           </h1>
 
-          {/* Lead — same content, two tiers: proof line bright, descriptor dim */}
+          {/* Lead — two tiers: what I own (bright), the range I own it across (dim) */}
           <p
             className="text-on-dark leading-snug max-w-2xl mx-auto mb-3"
             style={{ fontSize: "clamp(1.05rem, 2.1vw, 1.35rem)", textWrap: "balance" }}
           >
-            Five enterprise contracts in five months for an AI monitoring product.
+            I own products end to end — from the GTM narrative to the alerting
+            logic to the deployment playbook that gets regulated manufacturers
+            live without disrupting production.
           </p>
           <p
             className="text-on-dark-soft leading-relaxed max-w-xl mx-auto mb-10"
             style={{ fontSize: "clamp(0.95rem, 1.6vw, 1.05rem)" }}
           >
-            AI-powered production monitoring and physics-based predictive
-            simulation for manufacturers where a defect costs real money.
+            Two products, two different technical bets — AI-powered monitoring and
+            physics-based predictive simulation — for manufacturers where a defect
+            costs real money.
           </p>
 
           {/* CTAs */}

@@ -22,9 +22,7 @@ function useDialogBehavior(onClose: () => void) {
 interface Doc {
   name: string;
   url: string;
-  suffix?: string;
-  category?: string;
-  overlay?: boolean;
+  subtitle?: string;
 }
 
 interface Quote {
@@ -42,7 +40,7 @@ interface PrdQuote {
 interface DecisionLink {
   label: string;
   url?: string;
-  overlay?: boolean;
+  subtitle?: string;
   onClick?: () => void;
 }
 
@@ -64,7 +62,7 @@ interface WorkArticleProps {
   quote?: Quote;
   prdQuote?: PrdQuote;
   imageLeft?: boolean;
-  onOverlayOpen?: (url: string) => void;
+  onOverlayOpen?: (doc: DocRef) => void;
   onImageClick?: (src: string, alt: string) => void;
 }
 
@@ -82,9 +80,19 @@ function ArrowIcon() {
   );
 }
 
-function RoiOverlay({ url, onClose }: { url: string; onClose: () => void }) {
+interface DocRef {
+  url: string;
+  title: string;
+  subtitle?: string;
+}
+
+// Generic in-site document viewer. Any same-origin artifact — HTML page, PDF,
+// or interactive tool — opens here in an iframe so the visitor never leaves the
+// site. Zoom applies to HTML docs; PDFs use the browser viewer's own controls.
+function DocOverlay({ doc, onClose }: { doc: DocRef; onClose: () => void }) {
   const [zoom, setZoom] = useState(1);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const isPdf = doc.url.toLowerCase().endsWith(".pdf");
 
   const applyZoom = (z: number) => {
     try {
@@ -109,40 +117,54 @@ function RoiOverlay({ url, onClose }: { url: string; onClose: () => void }) {
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label="Credit-based Pricing Model"
+      aria-label={doc.title}
     >
       <div
         className="w-full max-w-5xl h-[90dvh] bg-paper border border-line rounded-sm flex flex-col overflow-hidden animate-scale-in shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex justify-between items-center px-6 py-4 border-b border-line bg-paper-2 flex-shrink-0">
-          <div>
+        <div className="flex justify-between items-center gap-4 px-6 py-4 border-b border-line bg-paper-2 flex-shrink-0">
+          <div className="min-w-0">
             <p className="font-mono text-[10px] uppercase tracking-widest text-accent-deep font-medium">
-              AMVero · Pricing
+              {doc.subtitle ?? "Document"}
             </p>
-            <h3 className="text-base font-display font-light text-ink mt-0.5">
-              Credit-based Pricing Model
+            <h3 className="text-base font-display font-light text-ink mt-0.5 truncate">
+              {doc.title}
             </h3>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center border border-line rounded-sm overflow-hidden">
-              <button
-                onClick={() => handleZoom(-0.25)}
-                className="px-3 py-1.5 font-mono text-sm text-ink-soft hover:text-ink hover:bg-line/30 transition-colors border-r border-line"
-              >
-                −
-              </button>
-              <span className="font-mono text-[10px] text-ink-soft w-12 text-center">
-                {Math.round(zoom * 100)}%
-              </span>
-              <button
-                onClick={() => handleZoom(0.25)}
-                className="px-3 py-1.5 font-mono text-sm text-ink-soft hover:text-ink hover:bg-line/30 transition-colors border-l border-line"
-              >
-                +
-              </button>
-            </div>
+          <div className="flex items-center gap-3 shrink-0">
+            {!isPdf && (
+              <div className="flex items-center border border-line rounded-sm overflow-hidden">
+                <button
+                  onClick={() => handleZoom(-0.25)}
+                  className="px-3 py-1.5 font-mono text-sm text-ink-soft hover:text-ink hover:bg-line/30 transition-colors border-r border-line"
+                  aria-label="Zoom out"
+                >
+                  −
+                </button>
+                <span className="font-mono text-[10px] text-ink-soft w-12 text-center">
+                  {Math.round(zoom * 100)}%
+                </span>
+                <button
+                  onClick={() => handleZoom(0.25)}
+                  className="px-3 py-1.5 font-mono text-sm text-ink-soft hover:text-ink hover:bg-line/30 transition-colors border-l border-line"
+                  aria-label="Zoom in"
+                >
+                  +
+                </button>
+              </div>
+            )}
+            <a
+              href={doc.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.06em] text-ink-soft hover:text-accent-deep transition-colors"
+              aria-label="Open in a new tab"
+            >
+              New tab
+              <ArrowIcon />
+            </a>
             <button
               onClick={onClose}
               className="p-1 rounded-sm text-ink-faint hover:text-ink hover:bg-line/40 border border-transparent hover:border-line transition-all"
@@ -156,15 +178,17 @@ function RoiOverlay({ url, onClose }: { url: string; onClose: () => void }) {
         </div>
 
         {/* iframe */}
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 overflow-auto bg-paper">
+          {/* No sandbox: these are all first-party artifacts under /artifacts
+              and /tools. Sandboxing blocks Chromium's built-in PDF viewer, and
+              the HTML zoom hook needs same-origin document access. */}
           <iframe
             ref={iframeRef}
-            src={url}
+            src={doc.url}
             className="w-full border-0"
             style={{ minHeight: "100%", height: "100%" }}
             onLoad={() => applyZoom(zoom)}
-            sandbox="allow-scripts allow-forms allow-popups allow-same-origin"
-            title="Credit-based Pricing Model"
+            title={doc.title}
           />
         </div>
       </div>
@@ -284,21 +308,17 @@ function WorkArticle({
                             <button key={link.label} onClick={link.onClick} className={chip}>
                               {link.label} ↗
                             </button>
-                          ) : link.overlay && onOverlayOpen && link.url ? (
-                            <button key={link.label} onClick={() => onOverlayOpen(link.url!)} className={chip}>
-                              {link.label} ↗
-                            </button>
-                          ) : (
-                            <a
+                          ) : link.url && onOverlayOpen ? (
+                            <button
                               key={link.label}
-                              href={link.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                              onClick={() =>
+                                onOverlayOpen({ url: link.url!, title: link.label, subtitle: link.subtitle })
+                              }
                               className={chip}
                             >
                               {link.label} ↗
-                            </a>
-                          )
+                            </button>
+                          ) : null
                         )}
                       </div>
                     )}
@@ -364,36 +384,23 @@ function WorkArticle({
         </figure>
       )}
 
-      {/* Doc chips */}
+      {/* Doc chips — every artifact opens in-site via the doc overlay */}
       {docs.length > 0 && (
         <div className="flex flex-wrap gap-2">
-          {docs.map((doc, i) =>
-            doc.overlay && onOverlayOpen ? (
-              <button
-                key={i}
-                onClick={() => onOverlayOpen(doc.url)}
-                className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent-deep rounded-sm px-2.5 py-1.5 transition-all duration-200 group"
-              >
-                {doc.name}
-                <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
-                  <ArrowIcon />
-                </span>
-              </button>
-            ) : (
-              <a
-                key={i}
-                href={doc.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-ink hover:text-ink rounded-sm px-2.5 py-1.5 transition-all duration-200 group"
-              >
-                {doc.name}
-                <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
-                  <ArrowIcon />
-                </span>
-              </a>
-            )
-          )}
+          {docs.map((doc, i) => (
+            <button
+              key={i}
+              onClick={() =>
+                onOverlayOpen?.({ url: doc.url, title: doc.name, subtitle: doc.subtitle })
+              }
+              className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent-deep rounded-sm px-2.5 py-1.5 transition-all duration-200 group"
+            >
+              {doc.name}
+              <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                <ArrowIcon />
+              </span>
+            </button>
+          ))}
         </div>
       )}
     </article>
@@ -405,15 +412,30 @@ interface SelectedWorkProps {
   onOpenSimulation: () => void;
 }
 
+const PRICING_DOC: DocRef = {
+  url: "/tools/amvero-roi-optimizer.html",
+  title: "Credit-based Pricing Model",
+  subtitle: "Interactive pricing tool",
+};
+
 export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: SelectedWorkProps) {
-  const [roiUrl, setRoiUrl] = useState<string | null>(null);
+  const [doc, setDoc] = useState<DocRef | null>(null);
   const [overlayImage, setOverlayImage] = useState<{ src: string; alt: string } | null>(null);
 
-  // Lets the site-wide action panel open the pricing overlay from anywhere
+  // Site-wide entry points: the action panel and any other component can open
+  // the pricing tool or an arbitrary in-site document via window events.
   useEffect(() => {
-    const open = () => setRoiUrl("/tools/amvero-roi-optimizer.html");
-    window.addEventListener("open-pricing-model", open);
-    return () => window.removeEventListener("open-pricing-model", open);
+    const openPricing = () => setDoc(PRICING_DOC);
+    const openDoc = (e: Event) => {
+      const d = (e as CustomEvent<DocRef>).detail;
+      if (d?.url) setDoc({ url: d.url, title: d.title ?? "Document", subtitle: d.subtitle });
+    };
+    window.addEventListener("open-pricing-model", openPricing);
+    window.addEventListener("open-doc-overlay", openDoc as EventListener);
+    return () => {
+      window.removeEventListener("open-pricing-model", openPricing);
+      window.removeEventListener("open-doc-overlay", openDoc as EventListener);
+    };
   }, []);
 
   return (
@@ -441,14 +463,18 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
                 text: "Chose condition-based multi-layer filtering over severity thresholds. Turned AMVero from a noise source into a trusted monitoring tool operators actually relied on.",
                 links: [
                   { label: "Smart Alerts Prototype", onClick: onOpenAmvero },
-                  { label: "Alerts PRD", url: "/artifacts/amvero-smart-alerting-prd.html" },
+                  { label: "Alerts PRD", url: "/artifacts/amvero-smart-alerting-prd.html", subtitle: "Product spec" },
                 ],
               },
               "Defined on-premise as a product, not a cloud port, for aerospace and defense clients who required air-gapped environments.",
               {
                 text: "Moved pricing from flat per-seat to consumption-based credits, aligning costs with customer production volume.",
                 links: [
-                  { label: "Credit Pricing Model", url: "/tools/amvero-roi-optimizer.html", overlay: true },
+                  {
+                    label: "Credit Pricing Model",
+                    url: "/tools/amvero-roi-optimizer.html",
+                    subtitle: "Interactive pricing tool",
+                  },
                 ],
               },
             ]}
@@ -461,13 +487,13 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
               { value: "5", label: "Enterprise clients in 5 months" },
             ]}
             customerLine="Baker Hughes · Thales · Elos Medtech · 3D Systems · Beehive"
-            onOverlayOpen={setRoiUrl}
+            onOverlayOpen={setDoc}
             onImageClick={(src, alt) => setOverlayImage({ src, alt })}
             docs={[
-              { name: "Go-to-Market Narrative", url: "/artifacts/amvero-go-to-market-narrative.pdf" },
-              { name: "Launch Announcement", url: "/artifacts/amvero-launch-announcement.html" },
-              { name: "Deployment Playbook", url: "/artifacts/amvero-enterprise-deployment-playbook.pdf" },
-              { name: "Traceability Record", url: "/artifacts/amvero-end-to-end-traceability-record.pdf" },
+              { name: "Go-to-Market Narrative", url: "/artifacts/amvero-go-to-market-narrative.pdf", subtitle: "GTM document" },
+              { name: "Launch Announcement", url: "/artifacts/amvero-launch-announcement.html", subtitle: "Announcement" },
+              { name: "Deployment Playbook", url: "/artifacts/amvero-enterprise-deployment-playbook.pdf", subtitle: "Playbook" },
+              { name: "Traceability Record", url: "/artifacts/amvero-end-to-end-traceability-record.pdf", subtitle: "Compliance record" },
             ]}
             quote={{
               text: "We've seen a 98% reduction in engineering review time per build, allowing our team to focus on more critical tasks. This, combined with an 18% reduction in scrap costs, has delivered a powerful return on investment.",
@@ -497,11 +523,12 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
             customerLine="Knauf and tooling manufacturers across Europe"
             ctaLabel="Explore case study"
             onCta={onOpenSimulation}
+            onOverlayOpen={setDoc}
             onImageClick={(src, alt) => setOverlayImage({ src, alt })}
             docs={[
-              { name: "Thermal Whitepaper", url: "/artifacts/simulation-thermal-whitepaper.html" },
-              { name: "Customer Story: Tooling", url: "/artifacts/simulation-customer-story-tooling.html" },
-              { name: "Customer Story: Large Parts", url: "/artifacts/simulation-customer-story-large-parts.html" },
+              { name: "Thermal Whitepaper", url: "/artifacts/simulation-thermal-whitepaper.html", subtitle: "Whitepaper" },
+              { name: "Customer Story: Tooling", url: "/artifacts/simulation-customer-story-tooling.html", subtitle: "Customer story" },
+              { name: "Customer Story: Large Parts", url: "/artifacts/simulation-customer-story-large-parts.html", subtitle: "Customer story" },
             ]}
             quote={{
               text: "We have achieved a lightweight component we would have never imagined creating before this project. This application creates new sparks for more AM applications in the marine industry.",
@@ -513,7 +540,7 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
         </div>
       </div>
 
-      {roiUrl && <RoiOverlay url={roiUrl} onClose={() => setRoiUrl(null)} />}
+      {doc && <DocOverlay doc={doc} onClose={() => setDoc(null)} />}
       {overlayImage && <ImageOverlay src={overlayImage.src} alt={overlayImage.alt} onClose={() => setOverlayImage(null)} />}
     </section>
   );

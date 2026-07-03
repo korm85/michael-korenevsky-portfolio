@@ -38,6 +38,12 @@ function openHash(hash: string) {
   window.dispatchEvent(new PopStateEvent("popstate"));
 }
 
+// Opens a same-origin artifact in the in-site document overlay (owned by
+// SelectedWork) so the visitor never leaves the page for a new tab.
+function openDoc(url: string, title: string, subtitle?: string) {
+  window.dispatchEvent(new CustomEvent("open-doc-overlay", { detail: { url, title, subtitle } }));
+}
+
 const GROUPS: ActionGroup[] = [
   {
     category: "Proof of work",
@@ -75,13 +81,13 @@ const GROUPS: ActionGroup[] = [
         label: "Smart Alerting PRD",
         hint: "Product spec",
         keywords: "prd spec requirements document alerting writing",
-        run: () => window.open("/artifacts/amvero-smart-alerting-prd.html", "_blank", "noopener,noreferrer"),
+        run: () => openDoc("/artifacts/amvero-smart-alerting-prd.html", "Smart Alerting PRD", "Product spec"),
       },
       {
         label: "Go-to-Market narrative",
         hint: "GTM doc",
         keywords: "gtm go to market narrative launch strategy positioning document",
-        run: () => window.open("/artifacts/amvero-go-to-market-narrative.pdf", "_blank", "noopener,noreferrer"),
+        run: () => openDoc("/artifacts/amvero-go-to-market-narrative.pdf", "Go-to-Market Narrative", "GTM document"),
       },
     ],
   },
