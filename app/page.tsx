@@ -1,19 +1,51 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import Header from "./components/Header";
 import SelectedWork from "./components/SelectedWork";
 import HowIWork from "./components/HowIWork";
 import CareerTimeline from "./components/CareerTimeline";
 import ContactSection from "./components/ContactSection";
-import AmveroModal from "./components/AmveroModal";
-import SimulationModal from "./components/SimulationModal";
+
+const AmveroModal = dynamic(() => import("./components/AmveroModal"), { ssr: false });
+const SimulationModal = dynamic(() => import("./components/SimulationModal"), { ssr: false });
+
+const CASE_HASHES = ["#case-amvero", "#case-simulation"];
 
 export default function Home() {
   const [amveroOpen, setAmveroOpen] = useState(false);
   const [simulationOpen, setSimulationOpen] = useState(false);
   const [time, setTime] = useState("");
+
+  // Case study modals are synced to the URL hash so they are deep-linkable
+  // and the browser Back button closes them instead of leaving the site.
+  const syncFromHash = useCallback(() => {
+    const h = window.location.hash;
+    setAmveroOpen(h === "#case-amvero");
+    setSimulationOpen(h === "#case-simulation");
+  }, []);
+
+  useEffect(() => {
+    syncFromHash();
+    window.addEventListener("popstate", syncFromHash);
+    return () => window.removeEventListener("popstate", syncFromHash);
+  }, [syncFromHash]);
+
+  const openCase = (hash: string) => {
+    window.history.pushState(null, "", hash);
+    syncFromHash();
+  };
+
+  const closeCase = useCallback(() => {
+    if (CASE_HASHES.includes(window.location.hash)) {
+      window.history.back();
+    } else {
+      setAmveroOpen(false);
+      setSimulationOpen(false);
+    }
+  }, []);
 
   useEffect(() => {
     const update = () => {
@@ -131,8 +163,8 @@ export default function Home() {
 
       {/* ── Work ── */}
       <SelectedWork
-        onOpenAmvero={() => setAmveroOpen(true)}
-        onOpenSimulation={() => setSimulationOpen(true)}
+        onOpenAmvero={() => openCase("#case-amvero")}
+        onOpenSimulation={() => openCase("#case-simulation")}
       />
 
       {/* ── Practice ── */}
@@ -164,7 +196,6 @@ export default function Home() {
                   alt="Michael Korenevsky"
                   width={340}
                   height={425}
-                  priority
                   className="w-full object-cover object-top"
                   style={{ aspectRatio: "4/5" }}
                 />
@@ -245,8 +276,8 @@ export default function Home() {
       </footer>
 
       {/* ── Modals ── */}
-      <AmveroModal isOpen={amveroOpen} onClose={() => setAmveroOpen(false)} />
-      <SimulationModal isOpen={simulationOpen} onClose={() => setSimulationOpen(false)} />
+      <AmveroModal isOpen={amveroOpen} onClose={closeCase} />
+      <SimulationModal isOpen={simulationOpen} onClose={closeCase} />
     </main>
   );
 }

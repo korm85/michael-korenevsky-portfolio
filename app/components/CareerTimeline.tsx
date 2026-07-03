@@ -39,7 +39,7 @@ export default function CareerTimeline() {
       <div className="max-w-[1180px] mx-auto">
         {/* Section header */}
         <div className="flex items-baseline gap-4 border-b border-line pb-6 mb-16">
-          <span className="font-mono text-[11px] text-accent font-medium tracking-[0.1em]">03</span>
+          <span className="font-mono text-[11px] text-accent-deep font-medium tracking-[0.1em]">03</span>
           <h2
             className="font-display font-light text-ink leading-tight"
             style={{ fontSize: "clamp(2rem, 5.4vw, 3.6rem)" }}
@@ -55,7 +55,7 @@ export default function CareerTimeline() {
               key={i}
               className="grid grid-cols-1 sm:grid-cols-[110px_1fr] gap-1 sm:gap-6 py-6 border-b border-line last:border-0 items-baseline transition-all duration-200 hover:pl-1"
             >
-              <span className="font-mono text-[10px] text-accent tracking-[0.06em] pt-0.5">
+              <span className="font-mono text-[10px] text-accent-deep tracking-[0.06em] pt-0.5">
                 {entry.years}
               </span>
               <div>

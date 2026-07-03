@@ -1,7 +1,23 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { useScrollReveal } from "../hooks/useScrollReveal";
+
+function useDialogBehavior(onClose: () => void) {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handler);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handler);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [onClose]);
+}
 
 interface Doc {
   name: string;
@@ -78,16 +94,15 @@ function RoiOverlay({ url, onClose }: { url: string; onClose: () => void }) {
     });
   };
 
-  useState(() => {
-    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  });
+  useDialogBehavior(onClose);
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-md animate-fade-in"
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Credit-based Pricing Model"
     >
       <div
         className="w-full max-w-5xl h-[90dvh] bg-paper border border-line rounded-sm flex flex-col overflow-hidden animate-scale-in shadow-2xl"
@@ -96,7 +111,7 @@ function RoiOverlay({ url, onClose }: { url: string; onClose: () => void }) {
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-4 border-b border-line bg-paper-2 flex-shrink-0">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-widest text-accent font-medium">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-accent-deep font-medium">
               AMVero · Pricing
             </p>
             <h3 className="text-base font-display font-light text-ink mt-0.5">
@@ -151,16 +166,15 @@ function RoiOverlay({ url, onClose }: { url: string; onClose: () => void }) {
 }
 
 function ImageOverlay({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
-  useState(() => {
-    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  });
+  useDialogBehavior(onClose);
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-8 bg-ink/85 backdrop-blur-sm animate-fade-in cursor-zoom-out"
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={alt}
     >
       <img
         src={src}
@@ -195,7 +209,7 @@ function WorkArticle({
   return (
     <article ref={ref} className="pb-16 border-b border-line last:border-0 last:pb-0">
       {/* Eyebrow */}
-      <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent mb-8">
+      <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-deep mb-8">
         {eyebrow}
       </p>
 
@@ -203,17 +217,27 @@ function WorkArticle({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start mb-12">
         {/* Image — always first in DOM so it leads on mobile */}
         <div
-          className={`relative overflow-hidden rounded-sm ${!imageLeft ? "md:order-last" : ""} ${onImageClick ? "cursor-zoom-in" : ""}`}
+          className={`relative aspect-[4/3] overflow-hidden rounded-sm ${!imageLeft ? "md:order-last" : ""} ${onImageClick ? "cursor-zoom-in" : ""}`}
           onClick={() => onImageClick?.(image, imageAlt)}
+          role={onImageClick ? "button" : undefined}
+          tabIndex={onImageClick ? 0 : undefined}
+          aria-label={onImageClick ? `Enlarge image: ${imageAlt}` : undefined}
+          onKeyDown={(e) => {
+            if (onImageClick && (e.key === "Enter" || e.key === " ")) {
+              e.preventDefault();
+              onImageClick(image, imageAlt);
+            }
+          }}
         >
-          <img
+          <Image
             src={image}
             alt={imageAlt}
-            className="w-full object-cover transition-transform duration-500 hover:scale-[1.02]"
-            style={{ aspectRatio: "4/3" }}
+            fill
+            sizes="(min-width: 768px) 560px, 100vw"
+            className="object-cover transition-transform duration-500 hover:scale-[1.02]"
           />
           <div className="absolute top-3 left-3">
-            <span className="font-mono text-[9px] uppercase tracking-[0.1em] bg-paper/90 backdrop-blur-sm text-ink-soft border border-line px-2.5 py-1.5 rounded-sm">
+            <span className="font-mono text-[10px] uppercase tracking-[0.1em] bg-paper/90 backdrop-blur-sm text-ink-soft border border-line px-2.5 py-1.5 rounded-sm">
               {roleTag}
             </span>
           </div>
@@ -241,14 +265,14 @@ function WorkArticle({
                 const docOverlay = typeof d !== "string" ? d.docOverlay : undefined;
                 return (
                   <li key={i} className="flex gap-3 text-sm text-ink-soft leading-relaxed">
-                    <span className="text-accent shrink-0 mt-0.5 font-light">—</span>
+                    <span className="text-accent-deep shrink-0 mt-0.5 font-light">—</span>
                     <span>
                       {text}
                       {docLabel && docUrl && (
                         docOverlay && onOverlayOpen ? (
                           <button
                             onClick={() => onOverlayOpen(docUrl)}
-                            className="ml-2 font-mono text-[9px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent transition-all rounded-sm px-1.5 py-0.5"
+                            className="ml-2 font-mono text-[10px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent-deep transition-all rounded-sm px-1.5 py-0.5"
                           >
                             {docLabel} ↗
                           </button>
@@ -257,7 +281,7 @@ function WorkArticle({
                             href={docUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="ml-2 font-mono text-[9px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent transition-all rounded-sm px-1.5 py-0.5"
+                            className="ml-2 font-mono text-[10px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent-deep transition-all rounded-sm px-1.5 py-0.5"
                           >
                             {docLabel} ↗
                           </a>
@@ -295,12 +319,12 @@ function WorkArticle({
         {metrics.map((m, i) => (
           <div key={i} className="border-t border-l border-line p-5 md:p-6">
             <div
-              className="font-display text-accent font-light leading-none mb-2"
+              className="font-display text-accent-deep font-light leading-none mb-2"
               style={{ fontSize: "clamp(2rem, 4.5vw, 3.2rem)" }}
             >
               {m.value}
             </div>
-            <div className="font-mono text-[9px] uppercase tracking-[0.1em] text-ink-faint leading-relaxed">
+            <div className="font-mono text-[11px] uppercase tracking-[0.1em] text-ink-faint leading-relaxed">
               {m.label}
             </div>
           </div>
@@ -314,9 +338,9 @@ function WorkArticle({
             className="font-display font-light italic text-ink-soft leading-snug mb-4"
             style={{ fontSize: "clamp(1.15rem, 2.2vw, 1.55rem)" }}
           >
-            <span className="text-accent not-italic">&ldquo;</span>
+            <span className="text-accent-deep not-italic">&ldquo;</span>
             {quote.text}
-            <span className="text-accent not-italic">&rdquo;</span>
+            <span className="text-accent-deep not-italic">&rdquo;</span>
           </blockquote>
           <figcaption className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-faint text-right">
             {quote.author} · {quote.role}
@@ -332,7 +356,7 @@ function WorkArticle({
               <button
                 key={i}
                 onClick={() => onOverlayOpen(doc.url)}
-                className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent rounded-sm px-2.5 py-1.5 transition-all duration-200 group"
+                className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent-deep rounded-sm px-2.5 py-1.5 transition-all duration-200 group"
               >
                 {doc.name}
                 <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
@@ -345,7 +369,7 @@ function WorkArticle({
                 href={doc.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-ink hover:text-ink rounded-sm px-2.5 py-1.5 transition-all duration-200 group"
+                className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-ink hover:text-ink rounded-sm px-2.5 py-1.5 transition-all duration-200 group"
               >
                 {doc.name}
                 <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
@@ -374,7 +398,7 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
       <div className="max-w-[1180px] mx-auto">
         {/* Section header */}
         <div className="flex items-baseline gap-4 border-b border-line pb-6 mb-16">
-          <span className="font-mono text-[11px] text-accent font-medium tracking-[0.1em]">01</span>
+          <span className="font-mono text-[11px] text-accent-deep font-medium tracking-[0.1em]">01</span>
           <h2
             className="font-display font-light text-ink leading-tight"
             style={{ fontSize: "clamp(2rem, 5.4vw, 3.6rem)" }}

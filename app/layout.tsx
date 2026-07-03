@@ -22,9 +22,36 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.themishka.me"),
   title: "Michael Korenevsky | Senior Product Manager",
   description:
     "Senior Product Manager building enterprise AI and predictive tools for high-stakes industries.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Michael Korenevsky | Senior Product Manager",
+    description:
+      "Senior Product Manager building enterprise AI and predictive tools for high-stakes industries.",
+    url: "/",
+    siteName: "Michael Korenevsky",
+    type: "website",
+    images: [
+      {
+        url: "/OfficialProfile.jpg",
+        width: 340,
+        height: 425,
+        alt: "Michael Korenevsky",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "Michael Korenevsky | Senior Product Manager",
+    description:
+      "Senior Product Manager building enterprise AI and predictive tools for high-stakes industries.",
+    images: ["/OfficialProfile.jpg"],
+  },
 };
 
 export default function RootLayout({

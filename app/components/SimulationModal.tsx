@@ -14,7 +14,12 @@ export default function SimulationModal({ isOpen, onClose }: SimulationModalProp
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -23,6 +28,9 @@ export default function SimulationModal({ isOpen, onClose }: SimulationModalProp
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-md animate-fade-in"
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Physics-based simulation case study"
     >
       <div
         className="w-full max-w-[94vw] xl:max-w-7xl h-[90dvh] md:h-[82vh] bg-paper border border-line rounded-sm flex flex-col overflow-hidden animate-scale-in text-left select-text shadow-2xl"
@@ -31,7 +39,7 @@ export default function SimulationModal({ isOpen, onClose }: SimulationModalProp
         {/* Modal Header */}
         <div className="flex justify-between items-center px-6 py-4 border-b border-line bg-paper-2 flex-shrink-0">
           <div>
-            <p className="font-mono text-[9px] md:text-[10px] uppercase tracking-widest text-accent font-medium">
+            <p className="font-mono text-[9px] md:text-[10px] uppercase tracking-widest text-accent-deep font-medium">
               PREDICTIVE SOLVER CASE STUDY
             </p>
             <h3 className="text-base md:text-xl font-display font-light text-ink mt-0.5">
@@ -55,7 +63,7 @@ export default function SimulationModal({ isOpen, onClose }: SimulationModalProp
             {/* Left: Scope & Docs */}
             <div className="md:col-span-7 space-y-6">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent font-medium mb-1.5">
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent-deep font-medium mb-1.5">
                   THE PRODUCT & MISSION
                 </p>
                 <p className="text-sm md:text-xl font-display font-light text-ink leading-snug">
@@ -67,7 +75,7 @@ export default function SimulationModal({ isOpen, onClose }: SimulationModalProp
               </div>
 
               <div className="border-t border-line pt-4">
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent font-medium mb-1.5">
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent-deep font-medium mb-1.5">
                   PM CONTRIBUTION
                 </p>
                 <p className="text-xs md:text-sm leading-relaxed text-ink-soft">
@@ -127,7 +135,7 @@ export default function SimulationModal({ isOpen, onClose }: SimulationModalProp
                     className="bg-paper-2 rounded-sm p-4 border border-line hover:border-accent/40 transition-all duration-300 flex flex-col justify-between"
                   >
                     <p
-                      className="font-display font-light text-accent leading-none mb-1"
+                      className="font-display font-light text-accent-deep leading-none mb-1"
                       style={{ fontSize: "clamp(1.4rem, 4vw, 2.2rem)" }}
                     >
                       {m.value}

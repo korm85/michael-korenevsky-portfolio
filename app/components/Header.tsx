@@ -84,6 +84,8 @@ export default function Header() {
             className="md:hidden font-mono text-[11px] uppercase tracking-[0.08em] transition-colors hover:text-accent"
             style={{ color: scrolled ? "#514c42" : "#b3ab9b" }}
             onClick={() => setMenuOpen(!menuOpen)}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
           >
             {menuOpen ? "Close" : "Menu"}
           </button>
@@ -91,7 +93,7 @@ export default function Header() {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <div className="md:hidden bg-paper border-t border-line px-6 py-5 flex flex-col gap-4">
+          <div id="mobile-menu" className="md:hidden bg-paper border-t border-line px-6 py-5 flex flex-col gap-4">
             {NAV_ITEMS.map((item) => (
               <a
                 key={item.id}
