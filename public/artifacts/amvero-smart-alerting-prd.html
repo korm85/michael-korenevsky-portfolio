@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Alerting PRD — AMVero</title>
+  <title>Smart Alerting PRD · AMVero</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -275,7 +275,7 @@
   </a>
 
   <div class="doc-header">
-    <div class="doc-eyebrow">Feature PRD &mdash; AMVero</div>
+    <div class="doc-eyebrow">Feature PRD · AMVero</div>
     <h1>Smart Alerting</h1>
     <div class="meta">
       <span><strong>Author</strong> Michael Korenevsky</span>
@@ -303,12 +303,12 @@
     <h2>Users</h2>
     <ul>
       <li>
-        <strong>Operators</strong> — watching live builds. Need only actionable alerts. By combining
+        <strong>Operators</strong>, watching live builds. Need only actionable alerts. By combining
         multiple conditions with historical layer data, the system filters out noise and notifies
         only when the build is genuinely at risk.
       </li>
       <li>
-        <strong>Process / QA Engineers</strong> — reviewing builds after the fact. The defined alert
+        <strong>Process / QA Engineers</strong>, reviewing builds after the fact. The defined alert
         conditions give engineers an exact, reproducible record of what triggered each alert,
         enabling them to identify trends and improve parameters for future builds.
       </li>
@@ -319,8 +319,8 @@
     <h2>Goal</h2>
     <p>
       Add a second filtering layer on top of Critical/Moderate classification. Users define
-      conditions based on aggregated, multi-layer anomaly data — volume, growth rate, spatial
-      properties — so an alert fires only when the combined conditions justify it.
+      conditions based on aggregated, multi-layer anomaly data (volume, growth rate, spatial
+      properties) so an alert fires only when the combined conditions justify it.
     </p>
     <p>
       Smart Alerting gives users the ability to define alerts based on the measurable
@@ -438,7 +438,7 @@
       <span class="operator-pill">==</span>
     </div>
     <p style="font-size:0.875rem; color:var(--muted)">
-      Note: <code>intersect_with</code> is binary only &mdash; no operator or value required.
+      Note: <code>intersect_with</code> is binary only; no operator or value required.
     </p>
   </section>
 
@@ -452,7 +452,7 @@
         aggregated anomaly. Preserves the existing alerting policy.</p>
       </div>
       <div class="toggle-card active">
-        <div class="toggle-label">On — Recurrent</div>
+        <div class="toggle-label">On, Recurrent</div>
         <p>Re-evaluates on each new layer and fires again every time conditions are met for the
         same anomaly. Intended for properties that fluctuate layer to layer, such as Growth Rate
         or current layer 2D Area.</p>
@@ -464,7 +464,7 @@
     <h2>Delivery</h2>
     <div class="delivery">
       <span class="version">26.2.1</span>
-      Email + In-app Dashboard &mdash; real-time only
+      Email + In-app Dashboard, real-time only
     </div>
   </section>
 
