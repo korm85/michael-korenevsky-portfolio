@@ -432,7 +432,7 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
             metrics={[
               { value: "98%", label: "Reduction in active monitoring time, Baker Hughes" },
               { value: "18%", label: "Scrap cost reduction via mid-run failure detection" },
-              { value: "136h", label: "Saved per printer per year" },
+              { value: "136h", label: "Saved per printer per year vs. manual layer review" },
               { value: "5", label: "Enterprise clients in 5 months" },
             ]}
             customerLine="Baker Hughes · Thales · Elos Medtech · 3D Systems · Beehive"
@@ -463,15 +463,15 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
             description="I built out the Simulation Suite over three years, shipping a Thermal module, a Mechanical module, and then the Thermo-mechanical module that combined both into a single pass, eliminating inter-stage wait times and making serial production with first-time-right accuracy viable."
             decisions={[
               "Shipped Thermal and Mechanical as separate modules, then unified them into a single coupled thermo-mechanical pass, eliminating inter-stage wait times and making first-time-right accuracy viable in serial production.",
-              "Validated on standard engineering workstations, not servers. Expanded the addressable market to any manufacturer running 3DXpert.",
+              "Validated on standard engineering workstations, not servers. Expanded the addressable market to manufacturers without specialized compute infrastructure.",
               "Ran a structured beta with Knauf before release, reducing launch risk and generating a credible customer story at release.",
             ]}
             image="/simulation-knauf-fit.png"
             imageAlt="Predictive simulation structural fit validation"
             metrics={[
-              { value: "80%", label: "Fewer dimensional errors once thermal and mechanical ran as a single coupled pass" },
-              { value: "99%+", label: "Dimensional accuracy via predictive compensation" },
-              { value: "<150µm", label: "Maximum measured dimensional deviation" },
+              { value: "80%", label: "Fewer dimensional errors on a large-format industrial part, 20+ hour production run" },
+              { value: "~100%", label: "Of dimensional distortion compensated by predictive pre-deformation" },
+              { value: "<150µm", label: "Maximum measured deviation on the same large-format part" },
             ]}
             customerLine="Knauf and tooling manufacturers across Europe"
             ctaLabel="Explore case study"

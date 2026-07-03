@@ -128,7 +128,7 @@ export default function SimulationModal({ isOpen, onClose }: SimulationModalProp
                 {[
                   { value: "80%", label: "Reduction in manufacturing errors" },
                   { value: "<150µm", label: "Maximum measured distortion limit met" },
-                  { value: "99%+", label: "Accuracy via digital shrink compensation" },
+                  { value: "~100%", label: "Distortion compensated via predictive pre-deformation" },
                 ].map((m) => (
                   <div
                     key={m.value}

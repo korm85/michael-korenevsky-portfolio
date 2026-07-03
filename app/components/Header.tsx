@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 const NAV_ITEMS = [
   { label: "Work", id: "work" },
-  { label: "Practice", id: "how-i-work" },
+  { label: "AI Practice", id: "how-i-work" },
   { label: "Career", id: "career" },
   { label: "About", id: "about" },
   { label: "Contact", id: "contact" },

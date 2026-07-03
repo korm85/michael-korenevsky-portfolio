@@ -69,7 +69,7 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
                   THE PRODUCT & MISSION
                 </p>
                 <p className="text-xs font-medium text-ink leading-snug">
-                  B2B industrial AI platform running real-time computer vision pipelines at the edge to automate quality control and flag structural defects on manufacturing floors.
+                  B2B industrial AI product running real-time inspection pipelines at the edge to automate quality control and flag structural defects on manufacturing floors.
                 </p>
                 <p className="text-xs text-ink-faint leading-relaxed mt-2">
                   Reduces operational labor and material scrap costs for aerospace and defense clients by terminating defective print runs early, built under strict defense-grade ITAR compliance.
@@ -109,9 +109,9 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
                 <div className="grid grid-cols-2 gap-2">
                   {[
                     { value: "18%", label: "Scrap cost cut" },
-                    { value: "90%", label: "Model accuracy" },
-                    { value: "136h", label: "Hours saved" },
-                    { value: "98%", label: "Workload cut" },
+                    { value: "~50%", label: "Machine time recovered per rejected part" },
+                    { value: "136h", label: "Saved per printer / year" },
+                    { value: "98%", label: "Active monitoring time cut" },
                   ].map((m) => (
                     <div
                       key={m.value}

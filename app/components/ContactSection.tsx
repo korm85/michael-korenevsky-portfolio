@@ -12,8 +12,8 @@ const CONTACTS = [
     href: "https://linkedin.com/in/michael-korenevsky",
   },
   {
-    label: "Portfolio",
-    value: "View portfolio overview",
+    label: "Summary",
+    value: "One-page summary",
     href: "/portfolio",
   },
 ];
