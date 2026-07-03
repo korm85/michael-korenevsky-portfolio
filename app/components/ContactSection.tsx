@@ -8,7 +8,7 @@ const CONTACTS = [
   },
   {
     label: "LinkedIn",
-    value: "michael-korenevsky",
+    value: "Michael Korenevsky",
     href: "https://linkedin.com/in/michael-korenevsky",
   },
 ];

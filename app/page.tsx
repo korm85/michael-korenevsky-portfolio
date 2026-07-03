@@ -18,7 +18,6 @@ const CASE_HASHES = ["#case-amvero", "#case-simulation"];
 export default function Home() {
   const [amveroOpen, setAmveroOpen] = useState(false);
   const [simulationOpen, setSimulationOpen] = useState(false);
-  const [time, setTime] = useState("");
 
   // Case study modals are synced to the URL hash so they are deep-linkable
   // and the browser Back button closes them instead of leaving the site.
@@ -46,22 +45,6 @@ export default function Home() {
       setAmveroOpen(false);
       setSimulationOpen(false);
     }
-  }, []);
-
-  useEffect(() => {
-    const update = () => {
-      setTime(
-        new Date().toLocaleTimeString("en-US", {
-          timeZone: "Asia/Jerusalem",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        })
-      );
-    };
-    update();
-    const id = setInterval(update, 30000);
-    return () => clearInterval(id);
   }, []);
 
   return (
@@ -291,15 +274,8 @@ export default function Home() {
       {/* ── Footer ── */}
       {/* Extra bottom padding keeps the floating action pill clear of content */}
       <footer className="bg-canvas border-t border-line-dark px-6 pt-8 pb-24">
-        <div className="max-w-[1180px] mx-auto flex flex-wrap items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[0.15em] text-on-dark-faint">
+        <div className="max-w-[1180px] mx-auto font-mono text-[10px] uppercase tracking-[0.15em] text-on-dark-faint">
           <span>© 2026 Michael Korenevsky</span>
-          <div className="flex items-center gap-5">
-            {time && <span>ISR {time}</span>}
-            <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-              Available
-            </span>
-          </div>
         </div>
       </footer>
 
