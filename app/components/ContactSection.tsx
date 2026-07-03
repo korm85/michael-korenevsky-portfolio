@@ -20,10 +20,10 @@ const CONTACTS = [
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="bg-canvas px-6 py-14 md:py-24 xl:py-32">
+    <section id="contact" className="bg-canvas px-6 py-12 md:py-20 xl:py-24">
       <div className="max-w-[1180px] mx-auto">
         {/* Section header */}
-        <div className="flex items-baseline gap-4 border-b border-line-dark pb-6 mb-16">
+        <div className="flex items-baseline gap-4 border-b border-line-dark pb-5 mb-10">
           <span className="font-mono text-[11px] text-accent font-medium tracking-[0.1em]">05</span>
           <h2
             className="font-display font-light text-on-dark leading-tight"
@@ -34,7 +34,7 @@ export default function ContactSection() {
         </div>
 
         <p
-          className="text-on-dark-soft mb-14"
+          className="text-on-dark-soft mb-10"
           style={{ fontSize: "clamp(1rem, 1.8vw, 1.15rem)" }}
         >
           Based in Israel. Open to remote and hybrid roles.

@@ -39,7 +39,14 @@ interface PrdQuote {
   linkUrl: string;
 }
 
-type Decision = string | { text: string; docLabel?: string; docUrl?: string; docOverlay?: boolean };
+interface DecisionLink {
+  label: string;
+  url?: string;
+  overlay?: boolean;
+  onClick?: () => void;
+}
+
+type Decision = string | { text: string; links?: DecisionLink[] };
 
 interface WorkArticleProps {
   eyebrow: string;
@@ -51,9 +58,8 @@ interface WorkArticleProps {
   imageAlt: string;
   metrics: { value: string; label: string }[];
   customerLine: string;
-  ctaLabel: string;
-  onCta: () => void;
-  secondaryCta?: { label: string; onClick: () => void };
+  ctaLabel?: string;
+  onCta?: () => void;
   docs: Doc[];
   quote?: Quote;
   prdQuote?: PrdQuote;
@@ -198,7 +204,6 @@ function WorkArticle({
   metrics,
   ctaLabel,
   onCta,
-  secondaryCta,
   docs,
   quote,
   imageLeft = true,
@@ -209,14 +214,14 @@ function WorkArticle({
   const cols = metrics.length >= 4 ? 4 : metrics.length;
 
   return (
-    <article ref={ref} className="pb-16 border-b border-line last:border-0 last:pb-0">
+    <article ref={ref} className="pb-12 border-b border-line last:border-0 last:pb-0">
       {/* Eyebrow */}
-      <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-deep mb-8">
+      <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-deep mb-5">
         {eyebrow}
       </p>
 
       {/* 2-col: image + content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start mb-10">
         {/* Image — always first in DOM so it leads on mobile */}
         <div
           className={`relative aspect-[4/3] overflow-hidden rounded-sm ${!imageLeft ? "md:order-last" : ""} ${onImageClick ? "cursor-zoom-in" : ""}`}
@@ -257,35 +262,37 @@ function WorkArticle({
             {description}
           </p>
 
-          {/* Key decisions */}
+          {/* Key decisions — each carries its own proof links inline */}
           {decisions && decisions.length > 0 && (
-            <ul className="space-y-3 mb-8">
+            <ul className="space-y-3 mb-6">
               {decisions.slice(0, 3).map((d, i) => {
                 const text = typeof d === "string" ? d : d.text;
-                const docLabel = typeof d !== "string" ? d.docLabel : undefined;
-                const docUrl = typeof d !== "string" ? d.docUrl : undefined;
-                const docOverlay = typeof d !== "string" ? d.docOverlay : undefined;
+                const links = typeof d !== "string" ? d.links : undefined;
+                const chip =
+                  "ml-2 font-mono text-[10px] uppercase tracking-[0.06em] border border-accent-deep/40 text-accent-deep hover:bg-accent-deep hover:text-paper transition-all rounded-sm px-1.5 py-0.5 whitespace-nowrap";
                 return (
                   <li key={i} className="flex gap-3 text-sm text-ink-soft leading-relaxed">
                     <span className="text-accent-deep shrink-0 mt-0.5 font-light">—</span>
                     <span>
                       {text}
-                      {docLabel && docUrl && (
-                        docOverlay && onOverlayOpen ? (
-                          <button
-                            onClick={() => onOverlayOpen(docUrl)}
-                            className="ml-2 font-mono text-[10px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent-deep transition-all rounded-sm px-1.5 py-0.5"
-                          >
-                            {docLabel} ↗
+                      {links?.map((link) =>
+                        link.onClick ? (
+                          <button key={link.label} onClick={link.onClick} className={chip}>
+                            {link.label} ↗
+                          </button>
+                        ) : link.overlay && onOverlayOpen && link.url ? (
+                          <button key={link.label} onClick={() => onOverlayOpen(link.url!)} className={chip}>
+                            {link.label} ↗
                           </button>
                         ) : (
                           <a
-                            href={docUrl}
+                            key={link.label}
+                            href={link.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="ml-2 font-mono text-[10px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent-deep transition-all rounded-sm px-1.5 py-0.5"
+                            className={chip}
                           >
-                            {docLabel} ↗
+                            {link.label} ↗
                           </a>
                         )
                       )}
@@ -296,8 +303,8 @@ function WorkArticle({
             </ul>
           )}
 
-          {/* CTAs */}
-          <div className="flex flex-wrap items-center gap-3">
+          {/* CTA (only when the article has no inline entry point) */}
+          {ctaLabel && onCta && (
             <button
               onClick={onCta}
               className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.06em] bg-ink text-paper border border-ink px-4 py-2.5 rounded-sm hover:bg-accent-deep hover:border-accent-deep transition-all duration-300 group"
@@ -310,27 +317,13 @@ function WorkArticle({
                 <ArrowIcon />
               </span>
             </button>
-            {secondaryCta && (
-              <button
-                onClick={secondaryCta.onClick}
-                className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.06em] border border-accent-deep/50 text-accent-deep px-4 py-2.5 rounded-sm hover:bg-accent-deep hover:text-paper transition-all duration-300 group"
-                style={{ transform: "translateY(0)" }}
-                onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
-                onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
-              >
-                {secondaryCta.label}
-                <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
-                  <ArrowIcon />
-                </span>
-              </button>
-            )}
-          </div>
+          )}
         </div>
       </div>
 
       {/* Metrics grid */}
       <div
-        className={`grid border-r border-b border-line mb-12 grid-cols-2 ${
+        className={`grid border-r border-b border-line mb-10 grid-cols-2 ${
           cols === 4 ? "md:grid-cols-4" : "md:grid-cols-3"
         }`}
       >
@@ -351,7 +344,7 @@ function WorkArticle({
 
       {/* Pullquote */}
       {quote && (
-        <figure className="mb-10">
+        <figure className="mb-8">
           <blockquote
             className="font-display font-light italic text-ink-soft leading-snug mb-4"
             style={{ fontSize: "clamp(1.15rem, 2.2vw, 1.55rem)" }}
@@ -419,10 +412,10 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
   }, []);
 
   return (
-    <section id="work" className="bg-paper px-6 py-14 md:py-24 xl:py-32">
+    <section id="work" className="bg-paper px-6 py-12 md:py-20 xl:py-24">
       <div className="max-w-[1180px] mx-auto">
         {/* Section header */}
-        <div className="flex items-baseline gap-4 border-b border-line pb-6 mb-16">
+        <div className="flex items-baseline gap-4 border-b border-line pb-5 mb-10">
           <span className="font-mono text-[11px] text-accent-deep font-medium tracking-[0.1em]">01</span>
           <h2
             className="font-display font-light text-ink leading-tight"
@@ -432,7 +425,7 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
           </h2>
         </div>
 
-        <div className="space-y-14 md:space-y-20">
+        <div className="space-y-12 md:space-y-16">
           <WorkArticle
             eyebrow="AI Platform · Oqton · 2025–Present"
             roleTag="Senior PM, AI Platform"
@@ -441,15 +434,17 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
             decisions={[
               {
                 text: "Chose condition-based multi-layer filtering over severity thresholds. Turned AMVero from a noise source into a trusted monitoring tool operators actually relied on.",
-                docLabel: "Alerts PRD",
-                docUrl: "/artifacts/amvero-smart-alerting-prd.html",
+                links: [
+                  { label: "Smart Alerts Prototype", onClick: onOpenAmvero },
+                  { label: "Alerts PRD", url: "/artifacts/amvero-smart-alerting-prd.html" },
+                ],
               },
               "Defined on-premise as a product, not a cloud port, for aerospace and defense clients who required air-gapped environments.",
               {
                 text: "Moved pricing from flat per-seat to consumption-based credits, aligning costs with customer production volume.",
-                docLabel: "Credit Pricing Model",
-                docUrl: "/tools/amvero-roi-optimizer.html",
-                docOverlay: true,
+                links: [
+                  { label: "Credit Pricing Model", url: "/tools/amvero-roi-optimizer.html", overlay: true },
+                ],
               },
             ]}
             image="/amvero-product.png"
@@ -461,19 +456,11 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
               { value: "5", label: "Enterprise clients in 5 months" },
             ]}
             customerLine="Baker Hughes · Thales · Elos Medtech · 3D Systems · Beehive"
-            ctaLabel="Try interactive prototype"
-            onCta={onOpenAmvero}
-            secondaryCta={{
-              label: "Explore credit pricing model",
-              onClick: () => setRoiUrl("/tools/amvero-roi-optimizer.html"),
-            }}
             onOverlayOpen={setRoiUrl}
             onImageClick={(src, alt) => setOverlayImage({ src, alt })}
             docs={[
               { name: "Go-to-Market Narrative", url: "/artifacts/amvero-go-to-market-narrative.pdf" },
               { name: "Launch Announcement", url: "/artifacts/amvero-launch-announcement.html" },
-              { name: "Alerts PRD", url: "/artifacts/amvero-smart-alerting-prd.html" },
-              { name: "Credit Pricing Model", url: "/tools/amvero-roi-optimizer.html", overlay: true },
               { name: "Deployment Playbook", url: "/artifacts/amvero-enterprise-deployment-playbook.pdf" },
               { name: "Traceability Record", url: "/artifacts/amvero-end-to-end-traceability-record.pdf" },
             ]}

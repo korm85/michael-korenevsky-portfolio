@@ -94,7 +94,7 @@ export default function Home() {
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           {/* Status eyebrow */}
-          <div className="flex items-center justify-center gap-2.5 mb-12">
+          <div className="flex items-center justify-center gap-2.5 mb-8">
             <div className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
@@ -106,7 +106,7 @@ export default function Home() {
 
           {/* Positioning headline */}
           <h1
-            className="font-display font-light text-on-dark leading-[1.05] tracking-[-0.01em] mb-8 max-w-3xl mx-auto"
+            className="font-display font-light text-on-dark leading-[1.05] tracking-[-0.01em] mb-6 max-w-3xl mx-auto"
             style={{ fontSize: "clamp(2.4rem, 6vw, 4.8rem)" }}
           >
             Enterprise AI and predictive tools for{" "}
@@ -115,7 +115,7 @@ export default function Home() {
 
           {/* Lead */}
           <p
-            className="text-on-dark-soft leading-relaxed max-w-2xl mx-auto mb-12"
+            className="text-on-dark-soft leading-relaxed max-w-2xl mx-auto mb-10"
             style={{ fontSize: "clamp(1rem, 2vw, 1.25rem)" }}
           >
             Five enterprise contracts in five months for an AI monitoring product.
@@ -124,7 +124,7 @@ export default function Home() {
           </p>
 
           {/* CTAs */}
-          <div className="flex items-center justify-center gap-4 mb-16">
+          <div className="flex items-center justify-center gap-4 mb-12">
             <a
               href="#work"
               onClick={(e) => {
@@ -178,11 +178,11 @@ export default function Home() {
       <CareerTimeline />
 
       {/* ── About ── */}
-      <section id="about" className="bg-paper-2 px-6 py-14 md:py-24 xl:py-32">
+      <section id="about" className="bg-paper-2 px-6 py-12 md:py-20 xl:py-24">
         <div className="max-w-[1180px] mx-auto">
           {/* Section header */}
-          <div className="flex items-baseline gap-4 border-b border-line pb-6 mb-16">
-            <span className="font-mono text-[11px] text-accent font-medium tracking-[0.1em]">04</span>
+          <div className="flex items-baseline gap-4 border-b border-line pb-5 mb-10">
+            <span className="font-mono text-[11px] text-accent-deep font-medium tracking-[0.1em]">04</span>
             <h2
               className="font-display font-light text-ink leading-tight"
               style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.8rem)" }}
@@ -191,7 +191,7 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
+          <div className="grid md:grid-cols-2 gap-10 md:gap-12 items-start">
             {/* Profile photo */}
             <div>
               <div className="overflow-hidden rounded-sm" style={{ maxWidth: 340 }}>
@@ -209,7 +209,7 @@ export default function Home() {
             {/* Bio + details */}
             <div>
               <p
-                className="text-ink-soft leading-relaxed mb-10"
+                className="text-ink-soft leading-relaxed mb-8"
                 style={{ fontSize: "clamp(1rem, 1.8vw, 1.1rem)" }}
               >
                 Ten years building and certifying industrial software before moving into

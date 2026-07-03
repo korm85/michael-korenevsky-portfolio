@@ -29,10 +29,10 @@ export default function HowIWork() {
   const ref = useScrollReveal();
 
   return (
-    <section id="how-i-work" className="bg-canvas px-6 py-14 md:py-24 xl:py-32">
+    <section id="how-i-work" className="bg-canvas px-6 py-12 md:py-20 xl:py-24">
       <div className="max-w-[1180px] mx-auto">
         {/* Section header */}
-        <div className="flex items-baseline gap-4 border-b border-line-dark pb-6 mb-16">
+        <div className="flex items-baseline gap-4 border-b border-line-dark pb-5 mb-10">
           <span className="font-mono text-[11px] text-accent font-medium tracking-[0.1em]">02</span>
           <h2
             className="font-display font-light text-on-dark leading-tight"
@@ -43,7 +43,7 @@ export default function HowIWork() {
         </div>
 
         <p
-          className="text-on-dark-soft leading-relaxed max-w-2xl mb-14"
+          className="text-on-dark-soft leading-relaxed max-w-2xl mb-10"
           style={{ fontSize: "clamp(1rem, 1.8vw, 1.15rem)" }}
         >
           AI lets me cover more ground in less time and build working prototypes without

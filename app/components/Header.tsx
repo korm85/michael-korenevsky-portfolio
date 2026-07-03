@@ -13,20 +13,20 @@ const NAV_ITEMS = [
 function scrollTo(id: string) {
   const el = document.getElementById(id);
   if (el) {
-    const y = el.getBoundingClientRect().top + window.scrollY - 80;
+    const y = el.getBoundingClientRect().top + window.scrollY - 24;
     window.scrollTo({ top: y, behavior: "smooth" });
   }
 }
 
+// Non-persistent header: sits at the top of the hero and scrolls away with
+// the page. Ongoing navigation is handled by the bottom action panel.
 export default function Header() {
-  const [scrolled, setScrolled] = useState(false);
   const [progress, setProgress] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
       const sy = window.scrollY;
-      setScrolled(sy > 40);
       const total = document.documentElement.scrollHeight - window.innerHeight;
       setProgress(total > 0 ? (sy / total) * 100 : 0);
     };
@@ -42,21 +42,12 @@ export default function Header() {
         style={{ width: `${progress}%`, transition: "width 0.1s linear" }}
       />
 
-      <header
-        className="fixed top-0 left-0 right-0 z-50"
-        style={{
-          backdropFilter: scrolled ? "blur(14px) saturate(1.4)" : "none",
-          backgroundColor: scrolled ? "rgba(243,239,230,0.88)" : "transparent",
-          borderBottom: scrolled ? "1px solid #cdc7be" : "1px solid transparent",
-          transition: "background 0.4s, border-color 0.4s, backdrop-filter 0.4s",
-        }}
-      >
+      <header className="absolute top-0 left-0 right-0 z-50">
         <div className="flex items-center justify-between px-6 md:px-10 h-[68px] max-w-[1180px] mx-auto">
           {/* Monogram */}
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="font-mono text-[11px] tracking-[0.15em] transition-colors duration-300 hover:text-accent"
-            style={{ color: scrolled ? "#8b8478" : "#75705f" }}
+            className="font-mono text-[11px] tracking-[0.15em] text-on-dark-faint transition-colors duration-300 hover:text-accent"
           >
             MK
           </button>
@@ -71,8 +62,7 @@ export default function Header() {
                   e.preventDefault();
                   scrollTo(item.id);
                 }}
-                className="font-mono text-[11px] uppercase tracking-[0.08em] transition-colors duration-200 hover:text-accent"
-                style={{ color: scrolled ? "#514c42" : "#b3ab9b" }}
+                className="font-mono text-[11px] uppercase tracking-[0.08em] text-on-dark-soft transition-colors duration-200 hover:text-accent"
               >
                 {item.label}
               </a>
@@ -81,8 +71,7 @@ export default function Header() {
 
           {/* Mobile toggle */}
           <button
-            className="md:hidden font-mono text-[11px] uppercase tracking-[0.08em] transition-colors hover:text-accent"
-            style={{ color: scrolled ? "#514c42" : "#b3ab9b" }}
+            className="md:hidden font-mono text-[11px] uppercase tracking-[0.08em] text-on-dark-soft transition-colors hover:text-accent"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
