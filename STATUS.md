@@ -6,20 +6,22 @@ Full visual redesign complete and live on `themishka.me`. Dark/cream/forest-gree
 
 ## Last completed
 
+- 2026-07-03: Full UX/positioning/engineering audit written to AUDIT.md (PR #3). Key findings: IP-policy conflict between site content and ip-handling skill, non-linkable case study modals, missing resume, public /dashboard, contrast failures, leaked-listener React bug.
+- 2026-07-03: Two comparison variations implemented as preview branches. PR #4 `feat/content-improvements` (copy only: positioning-led hero, metric defensibility fixes, jargon removal). PR #5 `feat/ux-improvements` (behavior only: hash-synced deep-linkable modals, listener-leak fix, dialog a11y, next/image, WCAG contrast tokens, OG metadata, ~5MB dead asset cleanup).
 - 2026-06-08: Pushed Themishka redesign to official repo and deployed to `themishka.me`. Replaced Emily Beal gold/bento design entirely.
-- 2026-06-08: Added image lightbox (click hero images to expand as overlay). Added RoiOverlay with zoom controls for Credit Pricing Model. Made all doc chips visible at rest (text-ink-soft).
-- 2026-06-08: Removed ROI Simulator tab from SimulationModal (was AMVero content misplaced there). Rewrote SimulationModal PM contribution copy with accurate specifics.
-- 2026-06-08: Rewrote HowIWork section — four cards with concrete AI-impact framing, first-person, tied to real AMVero and Simulation work. Removed marketing language.
-- 2026-06-08: Fixed mobile layout (Tailwind responsive classes replacing inline gridTemplateColumns). Fixed modal dark backgrounds from stale design tokens.
+- 2026-06-08: Added image lightbox, RoiOverlay with zoom controls, doc chips visible at rest.
+- 2026-06-08: Removed ROI Simulator tab from SimulationModal; rewrote HowIWork cards; fixed mobile layout.
 
 ## In progress
 
-Nothing. Clean state.
+Two variation branches awaiting review on Vercel previews (PRs #4 and #5). Both build green and are smoke-tested; either or both can merge to main independently.
 
 ## Next up
 
+- Decide the three open questions from the audit: (1) IP policy vs. site content — update skill or scrub content; (2) restore a resume PDF; (3) remove or gate /dashboard on production
+- Review PR #4 (content) and PR #5 (UX) previews; merge the keepers
 - Review themishka.me on real mobile device after DNS propagation
-- Consider adding Credit Pricing Model as a tab inside AmveroModal (currently accessible via doc chip and inline decision link only)
+- Consider adding Credit Pricing Model as a tab inside AmveroModal
 
 ## Decisions log
 
