@@ -56,6 +56,16 @@
     .layer-card dd { font-size: 0.9rem; font-weight: 600; color: var(--text); }
 
     .note { font-size: 0.8rem; color: var(--muted); font-style: italic; margin-top: 16px; }
+
+    .viewer { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px 16px 12px; margin-top: 12px; }
+    .viewer img { width: 100%; height: auto; display: block; border-radius: 4px; background: #f4f4f2; }
+    .viewer .caption { font-size: 0.75rem; color: var(--muted); margin-top: 8px; }
+
+    .shot-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+    .shot { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 10px 12px; }
+    .shot img { width: 100%; height: auto; display: block; border-radius: 4px; }
+    .shot .caption { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-top: 8px; font-weight: 600; }
+    @media (max-width: 520px) { .shot-row { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -80,6 +90,14 @@
     </div>
     <p class="pagenote">Excerpt — pages 1–2 of a 25-page auto-generated build record.</p>
   </div>
+
+  <section>
+    <h2>3D Build Viewer</h2>
+    <div class="viewer">
+      <img src="/artifacts/images/traceability-3d-view.jpg" alt="3D point-cloud view of the printed build, default camera angle" loading="lazy" />
+      <p class="caption">3D view at default camera angle, captured at report creation time.</p>
+    </div>
+  </section>
 
   <section>
     <h2>Build Summary</h2>
@@ -127,6 +145,16 @@
         <dt>Area</dt><dd>27,358.78 mm²</dd>
         <dt>Layer Height</dt><dd>0.06 mm</dd>
       </dl>
+    </div>
+    <div class="shot-row">
+      <div class="shot">
+        <img src="/artifacts/images/traceability-layer-post-recoating.jpg" alt="Layer 1 capture, post-recoating" loading="lazy" />
+        <p class="caption">Post Recoating</p>
+      </div>
+      <div class="shot">
+        <img src="/artifacts/images/traceability-layer-post-exposure.jpg" alt="Layer 1 capture, post-exposure, with anomaly markers overlaid" loading="lazy" />
+        <p class="caption">Post Exposure with Anomalies</p>
+      </div>
     </div>
     <p class="note">Report images are downscaled for local storage optimisation; full-resolution RAW data is retained on the AMVero on-premise server.</p>
   </section>
