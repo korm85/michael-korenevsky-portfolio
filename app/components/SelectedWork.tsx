@@ -114,22 +114,41 @@ function DocOverlay({ doc, onClose }: { doc: DocRef; onClose: () => void }) {
   // Once focus moves into the (same-origin) iframe, Escape keydowns fire on
   // its own contentWindow and never reach the outer window listener in
   // useDialogBehavior — forward it manually so Escape still closes the dialog.
+  // contentWindow exists as soon as the iframe element is created, well
+  // before its 'load' event fires — attach immediately rather than waiting
+  // for 'load', which races and can fire before the listener is attached on
+  // fast-loading (especially cached) documents, silently breaking Escape.
   useEffect(() => {
+    if (!ready) return;
     const iframe = iframeRef.current;
     if (!iframe) return;
     const onFrameKeydown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
-    const attach = () => {
+    let attachedWindow: Window | null = null;
+    let attempts = 0;
+    let retryTimer: ReturnType<typeof setTimeout> | null = null;
+    const tryAttach = () => {
       try {
-        iframe.contentWindow?.addEventListener("keydown", onFrameKeydown);
+        const win = iframe.contentWindow;
+        if (win) {
+          win.addEventListener("keydown", onFrameKeydown);
+          attachedWindow = win;
+          return;
+        }
       } catch {}
+      if (attempts++ < 20) retryTimer = setTimeout(tryAttach, 25);
     };
-    iframe.addEventListener("load", attach);
+    tryAttach();
+    // Re-attach on 'load' too, in case the frame navigates and gets a fresh
+    // window object after the initial attach.
+    const onLoad = () => tryAttach();
+    iframe.addEventListener("load", onLoad);
     return () => {
-      iframe.removeEventListener("load", attach);
+      if (retryTimer) clearTimeout(retryTimer);
+      iframe.removeEventListener("load", onLoad);
       try {
-        iframe.contentWindow?.removeEventListener("keydown", onFrameKeydown);
+        attachedWindow?.removeEventListener("keydown", onFrameKeydown);
       } catch {}
     };
   }, [ready, onClose]);
