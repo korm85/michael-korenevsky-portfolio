@@ -94,17 +94,45 @@ function DocOverlay({ doc, onClose }: { doc: DocRef; onClose: () => void }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const isPdf = doc.url.toLowerCase().endsWith(".pdf");
 
-  // The modal container animates in with a CSS transform (animate-scale-in).
-  // Chromium's native PDF viewer can start rendering mid-transform and then
-  // fail to repaint until something forces a reflow — the "needs a second
-  // click" symptom. Mounting the iframe only after the entrance animation
-  // settles avoids that: the PDF plugin always initializes in stable,
-  // untransformed layout.
+  // The modal opens via JS, so focus never naturally lands inside it —
+  // Chromium's native PDF viewer stays inert until its frame is focused,
+  // which is what a manual "second click" was actually doing. Mount after
+  // the entrance animation settles, then focus the iframe ourselves so the
+  // PDF renders without the visitor having to click it.
   const [ready, setReady] = useState(false);
   useEffect(() => {
     const t = setTimeout(() => setReady(true), 260);
     return () => clearTimeout(t);
   }, []);
+
+  useEffect(() => {
+    if (!ready) return;
+    const t = setTimeout(() => iframeRef.current?.focus(), 50);
+    return () => clearTimeout(t);
+  }, [ready]);
+
+  // Once focus moves into the (same-origin) iframe, Escape keydowns fire on
+  // its own contentWindow and never reach the outer window listener in
+  // useDialogBehavior — forward it manually so Escape still closes the dialog.
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+    const onFrameKeydown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    const attach = () => {
+      try {
+        iframe.contentWindow?.addEventListener("keydown", onFrameKeydown);
+      } catch {}
+    };
+    iframe.addEventListener("load", attach);
+    return () => {
+      iframe.removeEventListener("load", attach);
+      try {
+        iframe.contentWindow?.removeEventListener("keydown", onFrameKeydown);
+      } catch {}
+    };
+  }, [ready, onClose]);
 
   const applyZoom = (z: number) => {
     if (isPdf) return;
@@ -201,7 +229,10 @@ function DocOverlay({ doc, onClose }: { doc: DocRef; onClose: () => void }) {
               src={doc.url}
               className="w-full border-0"
               style={{ minHeight: "100%", height: "100%" }}
-              onLoad={() => applyZoom(zoom)}
+              onLoad={() => {
+                applyZoom(zoom);
+                iframeRef.current?.focus();
+              }}
               title={doc.title}
             />
           ) : (
