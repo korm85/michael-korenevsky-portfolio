@@ -542,10 +542,10 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
             onOverlayOpen={setDoc}
             onImageClick={(src, alt) => setOverlayImage({ src, alt })}
             docs={[
-              { name: "Go-to-Market Narrative", url: "/artifacts/amvero-go-to-market-narrative.pdf", subtitle: "GTM document" },
+              { name: "Go-to-Market Narrative", url: "/artifacts/amvero-go-to-market-narrative.html", subtitle: "GTM document" },
               { name: "Launch Announcement", url: "/artifacts/amvero-launch-announcement.html", subtitle: "Announcement" },
-              { name: "Deployment Playbook", url: "/artifacts/amvero-enterprise-deployment-playbook.pdf", subtitle: "Playbook" },
-              { name: "Traceability Record", url: "/artifacts/amvero-end-to-end-traceability-record.pdf", subtitle: "Compliance record" },
+              { name: "Deployment Playbook", url: "/artifacts/amvero-enterprise-deployment-playbook.html", subtitle: "Playbook" },
+              { name: "Traceability Record", url: "/artifacts/amvero-end-to-end-traceability-record.html", subtitle: "Compliance record" },
             ]}
             quote={{
               text: "We've seen a 98% reduction in engineering review time per build, allowing our team to focus on more critical tasks. This, combined with an 18% reduction in scrap costs, has delivered a powerful return on investment.",

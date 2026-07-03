@@ -87,7 +87,7 @@ const GROUPS: ActionGroup[] = [
         label: "Go-to-Market narrative",
         hint: "GTM doc",
         keywords: "gtm go to market narrative launch strategy positioning document",
-        run: () => openDoc("/artifacts/amvero-go-to-market-narrative.pdf", "Go-to-Market Narrative", "GTM document"),
+        run: () => openDoc("/artifacts/amvero-go-to-market-narrative.html", "Go-to-Market Narrative", "GTM document"),
       },
     ],
   },

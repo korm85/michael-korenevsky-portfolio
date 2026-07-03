@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMVero Build Quality Report — Oqton</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f9f8f6; --surface: #ffffff; --border: #e8e5e0;
+      --text: #1c1917; --muted: #78716c; --teal: #0d9488;
+      --teal-soft: #f0fdfb; --teal-dim: #ccfbf1;
+      --amber-soft: #fffbeb; --amber-border: #fde68a; --amber-text: #92400e;
+      --crit-soft: #fef2f2; --crit-border: #fecaca; --crit-text: #b91c1c;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, monospace;
+    }
+    html { font-size: 16px; background: var(--bg); color: var(--text); }
+    body { font-family: var(--sans); line-height: 1.7; max-width: 780px; margin: 0 auto; padding: 40px 24px 100px; }
+
+    .back { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 48px; }
+    .back:hover { color: var(--teal); }
+    .back svg { width: 14px; height: 14px; }
+
+    .doc-header { border-bottom: 1px solid var(--border); padding-bottom: 24px; margin-bottom: 32px; }
+    .doc-eyebrow { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; font-weight: 500; }
+    .title-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; }
+    h1 { font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; }
+    .badge { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border-radius: 5px; background: var(--amber-soft); border: 1px solid var(--amber-border); color: var(--amber-text); }
+    .idline { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); line-height: 1.8; }
+    .idline strong { color: var(--text); font-weight: 600; }
+    .pagenote { font-size: 0.78rem; color: var(--muted); margin-top: 8px; }
+
+    section { margin-top: 36px; }
+    h2 { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--teal-dim); }
+
+    .kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .kv > div { background: var(--surface); padding: 12px 14px; }
+    .kv .k { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 3px; }
+    .kv .v { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+    .kv .v.mono { font-family: var(--mono); font-size: 0.82rem; font-weight: 500; }
+
+    .table-scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin: 8px 0 8px; font-size: 0.85rem; }
+    th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; }
+    th { background: var(--teal-soft); color: #134e4a; font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    td.num { text-align: right; font-family: var(--mono); font-size: 0.82rem; }
+    .sev { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 7px; border-radius: 4px; display: inline-block; }
+    .sev.critical { background: var(--crit-soft); border: 1px solid var(--crit-border); color: var(--crit-text); }
+    .sev.moderate { background: var(--amber-soft); border: 1px solid var(--amber-border); color: var(--amber-text); }
+
+    .layer-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; margin-top: 12px; }
+    .layer-card h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 10px; }
+    .layer-card dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px 20px; }
+    .layer-card dt { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+    .layer-card dd { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+
+    .note { font-size: 0.8rem; color: var(--muted); font-style: italic; margin-top: 16px; }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    Back to portfolio
+  </a>
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">Build Quality Report — AMVero</div>
+    <div class="title-row">
+      <h1>End-to-End Traceability Record</h1>
+      <span class="badge">Needs Review</span>
+    </div>
+    <div class="idline">
+      <strong>Build ID:</strong> MTC_7K_10s_1777049033<br />
+      <strong>Machine:</strong> DMP 350 Triple H — LMP126<br />
+      <strong>Date:</strong> 2026-04-24 16:44:15 UTC
+    </div>
+    <p class="pagenote">Excerpt — pages 1–2 of a 25-page auto-generated build record.</p>
+  </div>
+
+  <section>
+    <h2>Build Summary</h2>
+    <div class="kv">
+      <div><div class="k">Machine Name</div><div class="v">DMP LMP126</div></div>
+      <div><div class="k">Machine ID</div><div class="v mono">DMP 350 Triple H — LMP126</div></div>
+      <div><div class="k">Build ID</div><div class="v mono">MTC_7K_10s_1777049033</div></div>
+      <div><div class="k">Layers Printed</div><div class="v">7,076</div></div>
+      <div><div class="k">Build Height</div><div class="v">424.56 mm</div></div>
+      <div><div class="k">Duration</div><div class="v">1d 15h 25m</div></div>
+      <div><div class="k">Status</div><div class="v">Completed</div></div>
+      <div><div class="k">Critical Anomalies</div><div class="v">770</div></div>
+      <div><div class="k">Total Anomalies</div><div class="v">2,814</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Anomalies Summary <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(Total: 2,814)</span></h2>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Anomaly</th><th>Severity</th><th>Volume (mm³)</th><th>Count</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Short Feed</td><td><span class="sev critical">Critical</span></td><td class="num">76,300.51</td><td class="num">713</td></tr>
+        <tr><td>Warpage</td><td><span class="sev critical">Critical</span></td><td class="num">187.89</td><td class="num">57</td></tr>
+        <tr><td>Recoater Line</td><td><span class="sev critical">Critical</span></td><td class="num">0.00</td><td class="num">0</td></tr>
+        <tr><td>Recoater Hopping</td><td><span class="sev critical">Critical</span></td><td class="num">0.00</td><td class="num">0</td></tr>
+        <tr><td>Short Feed</td><td><span class="sev moderate">Moderate</span></td><td class="num">150,509.14</td><td class="num">782</td></tr>
+        <tr><td>Warpage</td><td><span class="sev moderate">Moderate</span></td><td class="num">3,350.87</td><td class="num">1,259</td></tr>
+        <tr><td>Recoater Hopping</td><td><span class="sev moderate">Moderate</span></td><td class="num">2,709.50</td><td class="num">2</td></tr>
+        <tr><td>Recoater Line</td><td><span class="sev moderate">Moderate</span></td><td class="num">2.65</td><td class="num">1</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Anomaly Detail</h2>
+    <div class="layer-card">
+      <h3>Layer 1 — post-exposure</h3>
+      <dl>
+        <dt>Type</dt><dd>Short Feed</dd>
+        <dt>Severity</dt><dd>Critical</dd>
+        <dt>Area</dt><dd>27,358.78 mm²</dd>
+        <dt>Layer Height</dt><dd>0.06 mm</dd>
+      </dl>
+    </div>
+    <p class="note">Report images are downscaled for local storage optimisation; full-resolution RAW data is retained on the AMVero on-premise server.</p>
+  </section>
+
+</body>
+</html>

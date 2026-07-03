@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMVero On-Premise Deployment Playbook — Oqton</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f9f8f6; --surface: #ffffff; --border: #e8e5e0;
+      --text: #1c1917; --muted: #78716c; --teal: #0d9488;
+      --teal-soft: #f0fdfb; --teal-dim: #ccfbf1;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, monospace;
+    }
+    html { font-size: 16px; background: var(--bg); color: var(--text); }
+    body { font-family: var(--sans); line-height: 1.7; max-width: 760px; margin: 0 auto; padding: 40px 24px 100px; }
+
+    .back { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 48px; }
+    .back:hover { color: var(--teal); }
+    .back svg { width: 14px; height: 14px; }
+
+    .doc-header { border-bottom: 1px solid var(--border); padding-bottom: 28px; margin-bottom: 40px; }
+    .doc-eyebrow { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; font-weight: 500; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: var(--text); margin-bottom: 14px; }
+    .subhead { font-size: 1.0625rem; color: var(--muted); }
+    .meta { display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: var(--muted); margin-top: 14px; }
+    .meta strong { color: var(--text); font-weight: 500; }
+
+    section { margin-top: 40px; }
+    h2 { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--teal-dim); }
+    h3 { font-size: 0.95rem; font-weight: 600; color: var(--text); margin: 22px 0 10px; }
+    p { font-size: 0.9375rem; color: #292524; margin-bottom: 14px; }
+    .note { font-size: 0.8125rem; color: var(--muted); font-style: italic; margin: 6px 0 14px; }
+
+    ul.check { list-style: none; margin: 8px 0 14px; }
+    ul.check li { position: relative; padding-left: 26px; font-size: 0.9375rem; color: #292524; margin-bottom: 10px; }
+    ul.check li::before { content: ""; position: absolute; left: 0; top: 3px; width: 14px; height: 14px; border: 1.5px solid var(--teal); border-radius: 3px; }
+    ul.check li strong { font-weight: 600; }
+    .field { color: var(--muted); }
+    .field::after { content: "________________"; letter-spacing: 1px; color: #cbd5d1; }
+
+    table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 0.85rem; }
+    caption { text-align: left; font-weight: 600; font-size: 0.9375rem; color: var(--text); margin-bottom: 8px; }
+    th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: var(--teal-soft); color: #134e4a; font-weight: 600; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    td { color: #292524; }
+    code, .mono { font-family: var(--mono); font-size: 0.85em; background: #f1f5f4; padding: 1px 5px; border-radius: 3px; color: #134e4a; }
+    .table-scroll { overflow-x: auto; }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    Back to portfolio
+  </a>
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">Enterprise Deployment — Oqton</div>
+    <h1>AMVero On-Premise: Customer Onboarding Checklist</h1>
+    <p class="subhead">The repeatable playbook for getting regulated manufacturers live without disrupting production.</p>
+    <div class="meta">
+      <span><strong>Product</strong> AMVero, On-Premise</span>
+      <span><strong>Owner</strong> Michael Korenevsky, Senior PM</span>
+    </div>
+  </div>
+
+  <section>
+    <h2>Customer Contacts</h2>
+    <p class="note">One named owner per role keeps the deployment unblocked; roles may be held by the same person.</p>
+    <ul class="check">
+      <li><strong>Project Lead:</strong> <span class="field"></span></li>
+      <li><strong>IT Contact:</strong> <span class="field"></span></li>
+      <li><strong>System Administrator:</strong> <span class="field"></span></li>
+      <li><strong>Network Administrator:</strong> <span class="field"></span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Hardware Requirements</h2>
+    <p class="note">AMVero components can be deployed on virtual machines (VM) or physical hardware.</p>
+
+    <div class="table-scroll">
+    <table>
+      <caption>1. AMVero Virtual Gateway</caption>
+      <thead>
+        <tr><th>CPU</th><th>RAM</th><th>Storage</th><th>Network</th><th>Printers</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>16-core with AVX support</td>
+          <td>32 GB</td>
+          <td>250–500 GB SSD</td>
+          <td>1 Gbps on-prem / 10 MBps cloud</td>
+          <td>10 (up to 7 running in parallel per gateway)</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="table-scroll">
+    <table>
+      <caption>2. AMVero Client</caption>
+      <thead>
+        <tr><th>CPU</th><th>RAM</th><th>Storage</th><th>Network</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>4–8 core</td><td>16 GB</td><td>250 GB SSD</td><td>1 Gbps</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="table-scroll">
+    <table>
+      <caption>3. Build Archive</caption>
+      <thead>
+        <tr><th>CPU</th><th>RAM</th><th>Storage</th><th>Network</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>4–8 core</td><td>8 GB</td><td>1 TB SSD</td><td>1 Gbps</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">The Build Archive can be a VM, a physical machine, or a shared network folder, provided it maintains low latency, high read/write speeds, and at least 1 TB of available space.</p>
+  </section>
+
+  <section>
+    <h2>Deployment Target &amp; Operating System</h2>
+    <ul class="check">
+      <li>Deployment target selected: <strong>Virtual Machine</strong> or <strong>Physical Hardware</strong></li>
+      <li>Operating system: <strong>Ubuntu 24.04</strong> (recommended) or <strong>Windows 11</strong> (WSL2 required)</li>
+      <li>Machines — make / model / quantity recorded: <span class="field"></span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Network &amp; Firewall Configuration</h2>
+    <h3>Firewall rules</h3>
+    <ul class="check">
+      <li>Rules implemented to allow downloading packages from the Oqton package source and the Ubuntu and Docker repositories (included in the prerequisites package).</li>
+    </ul>
+    <h3>OT network (operational technology)</h3>
+    <ul class="check">
+      <li>Virtual Gateway and printers are on the same network.</li>
+      <li>Virtual Gateway has a fixed IP address.</li>
+      <li>Virtual Gateway and printers can communicate on the network.</li>
+      <li>Virtual Gateway can reach the Build Archive on <code>port 445</code>.</li>
+    </ul>
+    <h3>IT network</h3>
+    <ul class="check">
+      <li>AMVero Client is installed in the IT network, accessible by end users.</li>
+      <li>Web Client has a fixed IP address.</li>
+      <li>Web Client and Virtual Gateway can communicate on the network.</li>
+      <li>Web Client can reach the Build Archive on <code>port 445</code>.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Printer Firmware &amp; Connectivity</h2>
+    <ul class="check">
+      <li>Supported firmware for IoT and build monitoring is installed.</li>
+      <li>OPC UA server details recorded (IP, port, schema, certificate, credentials) where applicable.</li>
+      <li>OEM connection clients configured for the machines in scope.</li>
+      <li>Minimum supported firmware versions confirmed for each connected machine.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Remote Support</h2>
+    <p class="note">Oqton maintains no direct or persistent remote connection to the system; support access is activated only upon customer initiation.</p>
+    <ul class="check">
+      <li>Screen-sharing / remote-support access arranged for setup assistance when the customer initiates it.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Operational Responsibilities &amp; Data Management</h2>
+    <h3>Real-time monitoring performance</h3>
+    <ul class="check">
+      <li>Customer ensures the provided hardware and network resources remain dedicated and within specification to prevent lag or interruptions in the live monitoring stream.</li>
+    </ul>
+    <h3>Data retention</h3>
+    <ul class="check">
+      <li>Customer acknowledges that build records are retained only while disk space permits. When the Build Archive is full, the oldest records are automatically overwritten — regular backups are strongly recommended to avoid data loss.</li>
+    </ul>
+  </section>
+
+</body>
+</html>
