@@ -38,7 +38,7 @@ export default function CareerTimeline() {
     <section id="career" className="bg-paper px-6 py-12 md:py-20 xl:py-24">
       <div className="max-w-[1180px] mx-auto">
         {/* Section header */}
-        <div className="flex items-baseline gap-4 border-b border-line pb-5 mb-10">
+        <div className="flex items-center gap-4 border-b border-line pb-5 mb-10">
           <span className="font-mono text-[11px] text-accent-deep font-medium tracking-[0.1em]">03</span>
           <h2
             className="font-display font-light text-ink leading-tight"

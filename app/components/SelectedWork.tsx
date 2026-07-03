@@ -262,41 +262,46 @@ function WorkArticle({
             {description}
           </p>
 
-          {/* Key decisions — each carries its own proof links inline */}
+          {/* Key decisions — each bullet carries its own proof links on a row
+              directly beneath its text, aligned to the text column */}
           {decisions && decisions.length > 0 && (
-            <ul className="space-y-3 mb-6">
+            <ul className="space-y-4 mb-6">
               {decisions.slice(0, 3).map((d, i) => {
                 const text = typeof d === "string" ? d : d.text;
                 const links = typeof d !== "string" ? d.links : undefined;
                 const chip =
-                  "ml-2 font-mono text-[10px] uppercase tracking-[0.06em] border border-accent-deep/40 text-accent-deep hover:bg-accent-deep hover:text-paper transition-all rounded-sm px-1.5 py-0.5 whitespace-nowrap";
+                  "font-mono text-[10px] uppercase tracking-[0.06em] border border-accent-deep/40 text-accent-deep hover:bg-accent-deep hover:text-paper transition-all rounded-sm px-2 py-1 whitespace-nowrap";
                 return (
-                  <li key={i} className="flex gap-3 text-sm text-ink-soft leading-relaxed">
-                    <span className="text-accent-deep shrink-0 mt-0.5 font-light">—</span>
-                    <span>
-                      {text}
-                      {links?.map((link) =>
-                        link.onClick ? (
-                          <button key={link.label} onClick={link.onClick} className={chip}>
-                            {link.label} ↗
-                          </button>
-                        ) : link.overlay && onOverlayOpen && link.url ? (
-                          <button key={link.label} onClick={() => onOverlayOpen(link.url!)} className={chip}>
-                            {link.label} ↗
-                          </button>
-                        ) : (
-                          <a
-                            key={link.label}
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={chip}
-                          >
-                            {link.label} ↗
-                          </a>
-                        )
-                      )}
-                    </span>
+                  <li key={i} className="text-sm text-ink-soft leading-relaxed">
+                    <div className="flex gap-3">
+                      <span className="text-accent-deep shrink-0 mt-0.5 font-light">—</span>
+                      <span>{text}</span>
+                    </div>
+                    {links && links.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-2 pl-[1.6rem]">
+                        {links.map((link) =>
+                          link.onClick ? (
+                            <button key={link.label} onClick={link.onClick} className={chip}>
+                              {link.label} ↗
+                            </button>
+                          ) : link.overlay && onOverlayOpen && link.url ? (
+                            <button key={link.label} onClick={() => onOverlayOpen(link.url!)} className={chip}>
+                              {link.label} ↗
+                            </button>
+                          ) : (
+                            <a
+                              key={link.label}
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={chip}
+                            >
+                              {link.label} ↗
+                            </a>
+                          )
+                        )}
+                      </div>
+                    )}
                   </li>
                 );
               })}
@@ -415,7 +420,7 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
     <section id="work" className="bg-paper px-6 py-12 md:py-20 xl:py-24">
       <div className="max-w-[1180px] mx-auto">
         {/* Section header */}
-        <div className="flex items-baseline gap-4 border-b border-line pb-5 mb-10">
+        <div className="flex items-center gap-4 border-b border-line pb-5 mb-10">
           <span className="font-mono text-[11px] text-accent-deep font-medium tracking-[0.1em]">01</span>
           <h2
             className="font-display font-light text-ink leading-tight"

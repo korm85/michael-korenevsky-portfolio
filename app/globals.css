@@ -47,8 +47,10 @@
     min-height: 100dvh;
   }
 
+  /* No fixed header anymore — small offset keeps anchored sections off the
+     very top edge */
   * {
-    scroll-margin-top: 84px;
+    scroll-margin-top: 24px;
   }
 }
 

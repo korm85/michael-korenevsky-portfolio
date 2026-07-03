@@ -93,20 +93,29 @@ export default function Home() {
         />
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          {/* Status eyebrow */}
-          <div className="flex items-center justify-center gap-2.5 mb-8">
-            <div className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+          {/* Identity block: status, name, role */}
+          <div className="flex flex-col items-center gap-2.5 mb-7">
+            <div className="flex items-center gap-2">
+              <div className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+              </div>
+              <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-on-dark-soft">
+                Open to roles
+              </span>
             </div>
-            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-on-dark-soft">
-              Michael Korenevsky · Senior Product Manager · Open to roles
-            </span>
+            <p className="font-mono text-sm md:text-base uppercase tracking-[0.22em] text-on-dark">
+              Michael Korenevsky
+              <span className="hidden sm:inline text-on-dark-soft"> · </span>
+              <span className="block sm:inline text-on-dark-soft text-[12px] sm:text-sm md:text-base mt-1 sm:mt-0">
+                Senior Product Manager
+              </span>
+            </p>
           </div>
 
           {/* Positioning headline */}
           <h1
-            className="font-display font-light text-on-dark leading-[1.05] tracking-[-0.01em] mb-6 max-w-3xl mx-auto"
+            className="font-display font-light text-on-dark leading-[1.05] tracking-[-0.01em] mb-5 max-w-3xl mx-auto"
             style={{ fontSize: "clamp(2.4rem, 6vw, 4.8rem)" }}
           >
             Enterprise AI and predictive tools for{" "}
@@ -115,7 +124,7 @@ export default function Home() {
 
           {/* Lead */}
           <p
-            className="text-on-dark-soft leading-relaxed max-w-2xl mx-auto mb-10"
+            className="text-on-dark-soft leading-relaxed max-w-2xl mx-auto mb-9"
             style={{ fontSize: "clamp(1rem, 2vw, 1.25rem)" }}
           >
             Five enterprise contracts in five months for an AI monitoring product.
@@ -153,14 +162,28 @@ export default function Home() {
             </a>
           </div>
 
-          {/* Company logos */}
+          {/* Customer industries */}
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-on-dark-faint mb-2">
-              Shipped to
+            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-on-dark-faint mb-4">
+              Shipped to enterprise customers in
             </p>
-            <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-on-dark">
-              Baker Hughes · Thales · Elos Medtech · 3D Systems · Beehive
-            </p>
+            <div className="flex flex-wrap justify-center gap-x-9 gap-y-4">
+              {[
+                ["Energy", "Baker Hughes"],
+                ["Aerospace & Defense", "Thales · Beehive"],
+                ["Medical Devices", "Elos Medtech"],
+                ["Industrial 3D Printing", "3D Systems"],
+              ].map(([industry, companies]) => (
+                <div key={industry} className="text-center">
+                  <p className="font-mono text-[12px] uppercase tracking-[0.1em] text-on-dark">
+                    {industry}
+                  </p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-on-dark-faint mt-1">
+                    {companies}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -181,7 +204,7 @@ export default function Home() {
       <section id="about" className="bg-paper-2 px-6 py-12 md:py-20 xl:py-24">
         <div className="max-w-[1180px] mx-auto">
           {/* Section header */}
-          <div className="flex items-baseline gap-4 border-b border-line pb-5 mb-10">
+          <div className="flex items-center gap-4 border-b border-line pb-5 mb-10">
             <span className="font-mono text-[11px] text-accent-deep font-medium tracking-[0.1em]">04</span>
             <h2
               className="font-display font-light text-ink leading-tight"
@@ -266,7 +289,8 @@ export default function Home() {
       <ContactSection />
 
       {/* ── Footer ── */}
-      <footer className="bg-canvas border-t border-line-dark px-6 py-8">
+      {/* Extra bottom padding keeps the floating action pill clear of content */}
+      <footer className="bg-canvas border-t border-line-dark px-6 pt-8 pb-24">
         <div className="max-w-[1180px] mx-auto flex flex-wrap items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[0.15em] text-on-dark-faint">
           <span>© 2026 Michael Korenevsky</span>
           <div className="flex items-center gap-5">
