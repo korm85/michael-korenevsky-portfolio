@@ -105,41 +105,23 @@ export default function Home() {
             <span className="text-accent">high-stakes industries</span>
           </h1>
 
-          {/* Lead — one line: range + stakes */}
+          {/* Lead — same content, two tiers: proof line bright, descriptor dim */}
+          <p
+            className="text-on-dark leading-snug max-w-2xl mx-auto mb-3"
+            style={{ fontSize: "clamp(1.05rem, 2.1vw, 1.35rem)", textWrap: "balance" }}
+          >
+            Five enterprise contracts in five months for an AI monitoring product.
+          </p>
           <p
             className="text-on-dark-soft leading-relaxed max-w-xl mx-auto mb-10"
-            style={{ fontSize: "clamp(1rem, 1.8vw, 1.15rem)" }}
+            style={{ fontSize: "clamp(0.95rem, 1.6vw, 1.05rem)" }}
           >
             AI-powered production monitoring and physics-based predictive
-            simulation, built where a defect costs real money.
+            simulation for manufacturers where a defect costs real money.
           </p>
 
-          {/* Proof — the striking numbers carry the credibility */}
-          <div className="flex items-stretch justify-center max-w-2xl mx-auto mb-11">
-            {[
-              { value: "5", label: "Enterprise contracts in 5 months" },
-              { value: "98%", label: "Less active monitoring time" },
-              { value: "18%", label: "Lower scrap cost" },
-            ].map((m, i) => (
-              <div
-                key={m.value}
-                className={`flex-1 px-3 sm:px-8 ${i > 0 ? "border-l border-line-dark" : ""}`}
-              >
-                <div
-                  className="font-display font-light text-accent leading-none mb-2"
-                  style={{ fontSize: "clamp(2.1rem, 5.5vw, 3.6rem)" }}
-                >
-                  {m.value}
-                </div>
-                <div className="font-mono text-[9px] sm:text-[11px] uppercase tracking-[0.1em] text-on-dark-faint leading-snug">
-                  {m.label}
-                </div>
-              </div>
-            ))}
-          </div>
-
           {/* CTAs */}
-          <div className="flex items-center justify-center gap-4 mb-10">
+          <div className="flex items-center justify-center gap-4 mb-12">
             <a
               href="#work"
               onClick={(e) => {
@@ -168,10 +150,30 @@ export default function Home() {
             </a>
           </div>
 
-          {/* Industries — single quiet breadth line */}
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-on-dark-faint max-w-2xl mx-auto leading-relaxed">
-            Shipped across Energy · Aerospace &amp; Defense · Medical Devices · Industrial 3D Printing
-          </p>
+          {/* Customers — own zone behind a hairline divider so it reads as a
+              distinct proof band, not part of the text stack */}
+          <div className="max-w-3xl mx-auto pt-8 border-t border-line-dark">
+            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-on-dark-faint mb-5">
+              Shipped to enterprise customers in
+            </p>
+            <div className="flex flex-wrap justify-center gap-x-10 gap-y-4">
+              {[
+                ["Energy", "Baker Hughes"],
+                ["Aerospace & Defense", "Thales · Beehive"],
+                ["Medical Devices", "Elos Medtech"],
+                ["Industrial 3D Printing", "3D Systems"],
+              ].map(([industry, companies]) => (
+                <div key={industry} className="text-center">
+                  <p className="font-mono text-[12px] uppercase tracking-[0.1em] text-on-dark">
+                    {industry}
+                  </p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-on-dark-faint mt-1">
+                    {companies}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
