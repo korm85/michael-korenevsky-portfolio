@@ -214,42 +214,42 @@ export default function AmveroPrototype() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col bg-[#0a0a0a] border border-[#27272a] rounded-xl overflow-hidden font-sans text-xs text-[#e2e8f0] relative">
+    <div className="w-full h-full flex flex-col bg-[#1b1916] border border-[#2d2a26] rounded-sm overflow-hidden font-sans text-xs text-[#f0ebe0] relative">
       
       {/* Success Toast */}
       {showSuccessToast && (
-        <div className="absolute top-4 right-4 bg-[#5eead4] text-black px-4 py-2 rounded-md font-semibold font-mono z-50 flex items-center gap-2 shadow-lg animate-fade-in">
+        <div className="absolute top-4 right-4 bg-[#16a34a] text-black px-4 py-2 rounded-sm font-semibold font-mono z-50 flex items-center gap-2 shadow-lg animate-fade-in">
           <span>✔</span> Alert Rule Saved & Applied to Fleet
         </div>
       )}
 
       {/* Tabs / Top Header Bar */}
-      <div className="flex justify-between items-center border-b border-[#27272a] bg-[#1a1b1d] px-4 py-2 flex-shrink-0">
+      <div className="flex justify-between items-center border-b border-[#2d2a26] bg-[#26231e] px-4 py-2 flex-shrink-0">
         <div className="flex gap-2">
           <button
             onClick={() => setActiveTab("dashboard")}
-            className={`px-3 py-1 font-mono uppercase tracking-wider rounded-md text-[10px] md:text-xs font-bold transition-all ${
-              activeTab === "dashboard" ? "bg-[#0a0a0a] text-[#5eead4] border border-[#27272a] shadow-sm" : "text-[#94a3b8] hover:text-white"
+            className={`px-3 py-1 font-mono uppercase tracking-wider rounded-sm text-[10px] md:text-xs font-bold transition-all ${
+              activeTab === "dashboard" ? "bg-[#1b1916] text-[#16a34a] border border-[#2d2a26] shadow-sm" : "text-[#b3ab9b] hover:text-[#f0ebe0]"
             }`}
           >
             Fleet Dashboard
           </button>
           <button
             onClick={() => setActiveTab("create-alert")}
-            className={`px-3 py-1 font-mono uppercase tracking-wider rounded-md text-[10px] md:text-xs font-bold transition-all ${
-              activeTab === "create-alert" ? "bg-[#0a0a0a] text-[#5eead4] border border-[#27272a] shadow-sm" : "text-[#94a3b8] hover:text-white"
+            className={`px-3 py-1 font-mono uppercase tracking-wider rounded-sm text-[10px] md:text-xs font-bold transition-all ${
+              activeTab === "create-alert" ? "bg-[#1b1916] text-[#16a34a] border border-[#2d2a26] shadow-sm" : "text-[#b3ab9b] hover:text-[#f0ebe0]"
             }`}
           >
             + Create Alert Rule
           </button>
         </div>
-        <div className="text-[10px] font-mono text-[#94a3b8] font-medium">
+        <div className="text-[10px] font-mono text-[#b3ab9b] font-medium">
           AMVero AI Control Console v2.1
         </div>
       </div>
 
       {/* Main Tab Views */}
-      <div className="flex-1 overflow-y-auto p-4 min-h-0 bg-[#0a0a0a]">
+      <div className="flex-1 overflow-y-auto p-4 min-h-0 bg-[#1b1916]">
         
         {/* TAB 1: FLEET DASHBOARD */}
         {activeTab === "dashboard" && (
@@ -261,10 +261,10 @@ export default function AmveroPrototype() {
                   <button
                     key={status}
                     onClick={() => setFilterStatus(status)}
-                    className={`px-2 py-1 rounded capitalize font-mono text-[9px] border transition-all ${
+                    className={`px-2 py-1 rounded-sm capitalize font-mono text-[9px] border transition-all ${
                       filterStatus === status
-                        ? "bg-[#5eead4]/10 border-[#5eead4]/30 text-[#5eead4] font-bold"
-                        : "bg-transparent border-transparent text-[#94a3b8] hover:bg-[#111111]"
+                        ? "bg-[#16a34a]/10 border-[#16a34a]/30 text-[#16a34a] font-bold"
+                        : "bg-transparent border-transparent text-[#b3ab9b] hover:bg-[#26231e]"
                     }`}
                   >
                     {status} ({status === "all" ? counts.all : counts[status]})
@@ -275,9 +275,9 @@ export default function AmveroPrototype() {
               {/* Compact mode toggle */}
               <button
                 onClick={() => setIsCompact(!isCompact)}
-                className="flex items-center gap-1.5 font-mono text-[9px] text-[#94a3b8] hover:text-white font-semibold"
+                className="flex items-center gap-1.5 font-mono text-[9px] text-[#b3ab9b] hover:text-[#f0ebe0] font-semibold"
               >
-                <div className={`w-6 h-3 rounded-full relative transition-colors ${isCompact ? "bg-[#5eead4]" : "bg-border-dark"}`}>
+                <div className={`w-6 h-3 rounded-full relative transition-colors ${isCompact ? "bg-[#16a34a]" : "bg-border-dark"}`}>
                   <div className={`w-2.5 h-2.5 bg-white rounded-full absolute top-[1px] transition-transform ${isCompact ? "translate-x-3" : "translate-x-[1px]"}`} />
                 </div>
                 Compact Mode
@@ -287,21 +287,21 @@ export default function AmveroPrototype() {
             {/* Machines Grid */}
             <div className={`grid gap-4 ${isCompact ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-1 md:grid-cols-2"}`}>
               {filteredJobs.map((job) => (
-                <div key={job.id} className="bg-[#111111] border border-[#27272a] rounded-lg p-3 flex flex-col gap-2 relative">
+                <div key={job.id} className="bg-[#26231e] border border-[#2d2a26] rounded-sm p-3 flex flex-col gap-2 relative">
                   
                   {/* Machine Header */}
                   <div className="flex justify-between items-start">
                     <div>
-                      <h4 className="font-bold text-white text-sm tracking-tight">{job.machineName}</h4>
-                      <p className="text-[9px] text-[#94a3b8] font-mono mt-0.5">{job.serialNumber} · {job.jobId || "No active job"}</p>
+                      <h4 className="font-bold text-[#f0ebe0] text-sm tracking-tight">{job.machineName}</h4>
+                      <p className="text-[9px] text-[#b3ab9b] font-mono mt-0.5">{job.serialNumber} · {job.jobId || "No active job"}</p>
                     </div>
                     
                     {/* Status Badge */}
-                    <span className={`px-1.5 py-0.5 rounded text-[8px] font-mono uppercase tracking-widest font-bold ${
-                      job.status === "printing" ? "bg-emerald-950/40 text-emerald-400 border border-emerald-900" :
+                    <span className={`px-1.5 py-0.5 rounded-sm text-[8px] font-mono uppercase tracking-widest font-bold ${
+                      job.status === "printing" ? "bg-[#16a34a]/10 text-[#4ade80] border border-[#16a34a]/40" :
                       job.status === "aborted" ? "bg-red-950/40 text-red-400 border border-red-900" :
-                      job.status === "finished" ? "bg-blue-950/40 text-blue-400 border border-blue-900" :
-                      "bg-black/40 text-[#94a3b8] border border-[#27272a]"
+                      job.status === "finished" ? "bg-[#f0ebe0]/5 text-[#f0ebe0] border border-[#2d2a26]" :
+                      "bg-black/40 text-[#b3ab9b] border border-[#2d2a26]"
                     }`}>
                       {job.status}
                     </span>
@@ -309,19 +309,17 @@ export default function AmveroPrototype() {
 
                   {/* Print layer graphic in non-compact mode */}
                   {!isCompact && job.status !== "idle" && (
-                    <div className="grid grid-cols-2 gap-2 h-20 bg-black/40 border border-[#27272a] rounded p-1.5">
+                    <div className="grid grid-cols-2 gap-2 bg-black/30 border border-[#2d2a26] rounded-sm p-1.5">
                       <div className="flex flex-col gap-1 overflow-hidden">
-                        <span className="text-[7px] text-[#94a3b8] uppercase tracking-widest font-mono font-bold">Pre-Recoat Camera</span>
-                        <div className="flex-1 bg-black rounded overflow-hidden flex items-center justify-center relative">
+                        <span className="text-[8px] text-[#b3ab9b] uppercase tracking-widest font-mono font-bold">Pre-Recoat Camera</span>
+                        <div className="aspect-[16/10] bg-black rounded-none border border-[#2d2a26] overflow-hidden relative">
                           <img src="/ad85b8a1b7ae678f0364407f6e76752a9c3fa60a.png" className="w-full h-full object-cover" alt="pre-recoat feed" />
-                          <div className="absolute inset-0 bg-[#5eead4]/5" />
                         </div>
                       </div>
                       <div className="flex flex-col gap-1 overflow-hidden">
-                        <span className="text-[7px] text-[#94a3b8] uppercase tracking-widest font-mono font-bold">Post-Recoat Camera</span>
-                        <div className="flex-1 bg-black rounded overflow-hidden flex items-center justify-center relative">
+                        <span className="text-[8px] text-[#b3ab9b] uppercase tracking-widest font-mono font-bold">Post-Recoat Camera</span>
+                        <div className="aspect-[16/10] bg-black rounded-none border border-[#2d2a26] overflow-hidden relative">
                           <img src="/ca0f1faccbe56083dad5a77684dd3de5485d8199.png" className="w-full h-full object-cover" alt="post-recoat feed" />
-                          <div className="absolute inset-0 bg-[#5eead4]/5" />
                         </div>
                       </div>
                     </div>
@@ -330,16 +328,16 @@ export default function AmveroPrototype() {
                   {/* Progress info */}
                   {job.status !== "idle" && (
                     <div className="space-y-1">
-                      <div className="flex justify-between items-center text-[9px] font-mono text-[#94a3b8]">
+                      <div className="flex justify-between items-center text-[9px] font-mono text-[#b3ab9b]">
                         <span>Progress:</span>
-                        <span className="font-semibold text-white">{job.progress}% ({job.currentLayer} / {job.totalLayers} L)</span>
+                        <span className="font-semibold text-[#f0ebe0]">{job.progress}% ({job.currentLayer} / {job.totalLayers} L)</span>
                       </div>
                       <div className="w-full bg-black/60 h-1.5 rounded-full overflow-hidden">
                         <div 
                           className={`h-full rounded-full transition-all duration-300 ${
                             job.status === "aborted" ? "bg-red-600" :
-                            job.status === "finished" ? "bg-blue-600" :
-                            "bg-[#5eead4]"
+                            job.status === "finished" ? "bg-[#b3ab9b]" :
+                            "bg-[#16a34a]"
                           }`}
                           style={{ width: `${job.progress}%` }}
                         />
@@ -349,12 +347,12 @@ export default function AmveroPrototype() {
 
                   {/* Alerts Footer */}
                   {!isCompact && (
-                    <div className="mt-1 pt-1.5 border-t border-[#27272a] flex flex-col gap-1">
+                    <div className="mt-1 pt-1.5 border-t border-[#2d2a26] flex flex-col gap-1">
                       {job.activeAlerts.length === 0 ? (
-                        <p className="text-[9px] font-mono text-[#94a3b8] italic">No anomaly alerts active</p>
+                        <p className="text-[9px] font-mono text-[#b3ab9b] italic">No anomaly alerts active</p>
                       ) : (
                         job.activeAlerts.map((alert, idx) => (
-                          <div key={idx} className="flex items-center gap-1.5 text-[9px] text-red-400 bg-red-950/40 border border-red-900 p-1 rounded font-mono leading-none font-medium">
+                          <div key={idx} className="flex items-center gap-1.5 text-[9px] text-red-400 bg-red-950/40 border border-red-900 p-1 rounded-sm font-mono leading-none font-medium">
                             <span className="text-red-500 font-bold">⚠</span>
                             <span>{alert}</span>
                           </div>
@@ -367,22 +365,22 @@ export default function AmveroPrototype() {
             </div>
 
             {/* Active Rules List */}
-            <div className="bg-[#111111] border border-[#27272a] rounded-xl p-4 mt-2">
-              <h4 className="font-mono text-[10px] uppercase tracking-wider text-[#94a3b8] mb-2 font-bold">
+            <div className="bg-[#26231e] border border-[#2d2a26] rounded-sm p-4 mt-2">
+              <h4 className="font-mono text-[10px] uppercase tracking-wider text-[#b3ab9b] mb-2 font-bold">
                 Active Anomaly Trigger Logic Rules ({alertRules.length})
               </h4>
               <div className="flex flex-col gap-2">
                 {alertRules.map((rule) => (
-                  <div key={rule.id} className="flex justify-between items-center border border-[#27272a] bg-black/30 rounded-lg p-2 font-mono text-[9px]">
+                  <div key={rule.id} className="flex justify-between items-center border border-[#2d2a26] bg-black/30 rounded-sm p-2 font-mono text-[9px]">
                     <div className="flex items-center gap-3">
-                      <span className={`px-1.5 py-0.5 rounded text-[8px] uppercase tracking-wider font-bold ${
-                        rule.alertType === "anomaly" ? "bg-[#5eead4]/10 text-[#5eead4] border border-[#5eead4]/25" : "bg-blue-950/50 text-blue-400 border border-blue-900/50"
+                      <span className={`px-1.5 py-0.5 rounded-sm text-[8px] uppercase tracking-wider font-bold ${
+                        rule.alertType === "anomaly" ? "bg-[#16a34a]/10 text-[#4ade80] border border-[#16a34a]/25" : "bg-[#f0ebe0]/5 text-[#b3ab9b] border border-[#2d2a26]"
                       }`}>
                         {rule.alertType}
                       </span>
                       <div>
-                        <p className="font-bold text-white">{rule.name}</p>
-                        <p className="text-[#94a3b8] mt-0.5 font-medium">
+                        <p className="font-bold text-[#f0ebe0]">{rule.name}</p>
+                        <p className="text-[#b3ab9b] mt-0.5 font-medium">
                           Logic: `{rule.property} {rule.operator === "gte" ? ">=" : rule.operator === "gt" ? ">" : "=="} {rule.value}` 
                           {rule.anomalyType && ` | Anomaly: ${rule.anomalyType}`} 
                           {rule.severity && ` | Severity: ${rule.severity}`}
@@ -391,7 +389,7 @@ export default function AmveroPrototype() {
                     </div>
                     <button
                       onClick={() => handleDeleteRule(rule.id)}
-                      className="text-[#94a3b8] hover:text-red-400 p-1 transition-colors"
+                      className="text-[#b3ab9b] hover:text-red-400 p-1 transition-colors"
                       title="Delete Rule"
                     >
                       {/* Trash SVG */}
@@ -408,45 +406,45 @@ export default function AmveroPrototype() {
 
         {/* TAB 2: CREATE ALERT RULE */}
         {activeTab === "create-alert" && (
-          <form onSubmit={handleCreateRule} className="max-w-xl mx-auto bg-[#111111] border border-[#27272a] rounded-xl p-5 flex flex-col gap-4 font-mono text-xs text-[#e2e8f0]">
-            <h3 className="text-sm font-bold text-[#5eead4] uppercase tracking-wider border-b border-[#27272a] pb-2">
+          <form onSubmit={handleCreateRule} className="max-w-xl mx-auto bg-[#26231e] border border-[#2d2a26] rounded-sm p-5 flex flex-col gap-4 font-mono text-xs text-[#f0ebe0]">
+            <h3 className="text-sm font-bold text-[#16a34a] uppercase tracking-wider border-b border-[#2d2a26] pb-2">
               Create Smart Alert Model
             </h3>
 
             {/* Rule Name */}
             <div className="flex flex-col gap-1">
-              <label className="text-[#94a3b8] text-[10px] uppercase font-bold">Rule Name</label>
+              <label className="text-[#b3ab9b] text-[10px] uppercase font-bold">Rule Name</label>
               <input
                 type="text"
                 required
                 value={newRuleName}
                 onChange={(e) => setNewRuleName(e.target.value)}
                 placeholder="e.g. Recoater Lines Alert Level 3"
-                className="bg-[#0a0a0a] border border-[#27272a] p-2 rounded focus:outline-none focus:border-[#5eead4] text-white font-medium placeholder:text-[#94a3b8]"
+                className="bg-[#1b1916] border border-[#2d2a26] p-2 rounded-sm focus:outline-none focus:border-[#16a34a] text-[#f0ebe0] font-medium placeholder:text-[#b3ab9b]"
               />
             </div>
 
             {/* Alert Type Selection */}
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1">
-                <label className="text-[#94a3b8] text-[10px] uppercase font-bold">Alert Type</label>
+                <label className="text-[#b3ab9b] text-[10px] uppercase font-bold">Alert Type</label>
                 <select
                   value={newAlertType}
                   onChange={(e) => setNewAlertType(e.target.value as "anomaly" | "iot")}
-                  className="bg-[#0a0a0a] border border-[#27272a] p-2 rounded focus:outline-none focus:border-[#5eead4] text-white font-medium"
+                  className="bg-[#1b1916] border border-[#2d2a26] p-2 rounded-sm focus:outline-none focus:border-[#16a34a] text-[#f0ebe0] font-medium"
                 >
-                  <option value="anomaly">Anomaly (Computer Vision)</option>
+                  <option value="anomaly">Anomaly (AI Detection)</option>
                   <option value="iot">IOT Sensor</option>
                 </select>
               </div>
 
               {newAlertType === "anomaly" ? (
                 <div className="flex flex-col gap-1">
-                  <label className="text-[#94a3b8] text-[10px] uppercase font-bold">Anomaly Type</label>
+                  <label className="text-[#b3ab9b] text-[10px] uppercase font-bold">Anomaly Type</label>
                   <select
                     value={newAnomalyType}
                     onChange={(e) => setNewAnomalyType(e.target.value)}
-                    className="bg-[#0a0a0a] border border-[#27272a] p-2 rounded focus:outline-none focus:border-[#5eead4] text-white font-medium"
+                    className="bg-[#1b1916] border border-[#2d2a26] p-2 rounded-sm focus:outline-none focus:border-[#16a34a] text-[#f0ebe0] font-medium"
                   >
                     <option value="recoater_lines">Recoater Lines</option>
                     <option value="warp">Warpage</option>
@@ -456,11 +454,11 @@ export default function AmveroPrototype() {
                 </div>
               ) : (
                 <div className="flex flex-col gap-1">
-                  <label className="text-[#94a3b8] text-[10px] uppercase font-bold">Severity Override</label>
+                  <label className="text-[#b3ab9b] text-[10px] uppercase font-bold">Severity Override</label>
                   <select
                     value={newSeverity}
                     onChange={(e) => setNewSeverity(e.target.value as any)}
-                    className="bg-[#0a0a0a] border border-[#27272a] p-2 rounded focus:outline-none focus:border-[#5eead4] text-white font-medium"
+                    className="bg-[#1b1916] border border-[#2d2a26] p-2 rounded-sm focus:outline-none focus:border-[#16a34a] text-[#f0ebe0] font-medium"
                   >
                     <option value="critical">Critical</option>
                     <option value="moderate">Moderate</option>
@@ -471,11 +469,11 @@ export default function AmveroPrototype() {
 
             {/* Condition Property */}
             <div className="flex flex-col gap-1">
-              <label className="text-[#94a3b8] text-[10px] uppercase font-bold">Condition Property</label>
+              <label className="text-[#b3ab9b] text-[10px] uppercase font-bold">Condition Property</label>
               <select
                 value={newProperty}
                 onChange={(e) => setNewProperty(e.target.value)}
-                className="bg-[#0a0a0a] border border-[#27272a] p-2 rounded focus:outline-none focus:border-[#5eead4] text-white font-medium"
+                className="bg-[#1b1916] border border-[#2d2a26] p-2 rounded-sm focus:outline-none focus:border-[#16a34a] text-[#f0ebe0] font-medium"
               >
                 {newAlertType === "anomaly" ? (
                   <>
@@ -497,11 +495,11 @@ export default function AmveroPrototype() {
             {/* Operator and Value */}
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-1">
-                <label className="text-[#94a3b8] text-[10px] uppercase font-bold">Logic Operator</label>
+                <label className="text-[#b3ab9b] text-[10px] uppercase font-bold">Logic Operator</label>
                 <select
                   value={newOperator}
                   onChange={(e) => setNewOperator(e.target.value)}
-                  className="bg-[#0a0a0a] border border-[#27272a] p-2 rounded focus:outline-none focus:border-[#5eead4] text-white font-medium"
+                  className="bg-[#1b1916] border border-[#2d2a26] p-2 rounded-sm focus:outline-none focus:border-[#16a34a] text-[#f0ebe0] font-medium"
                 >
                   <option value="gte">Greater or equal (&gt;=)</option>
                   <option value="gt">Greater than (&gt;)</option>
@@ -510,21 +508,21 @@ export default function AmveroPrototype() {
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="text-[#94a3b8] text-[10px] uppercase font-bold">Threshold Value</label>
+                <label className="text-[#b3ab9b] text-[10px] uppercase font-bold">Threshold Value</label>
                 <input
                   type="number"
                   required
                   value={newValue}
                   onChange={(e) => setNewValue(Number(e.target.value))}
-                  className="bg-[#0a0a0a] border border-[#27272a] p-2 rounded focus:outline-none focus:border-[#5eead4] text-white font-medium"
+                  className="bg-[#1b1916] border border-[#2d2a26] p-2 rounded-sm focus:outline-none focus:border-[#16a34a] text-[#f0ebe0] font-medium"
                 />
               </div>
             </div>
 
             {/* Recurrent alert rule */}
-            <div className="flex items-center gap-2 mt-2 pt-2 border-t border-[#27272a]">
-              <input type="checkbox" defaultChecked id="recurrent" className="accent-[#5eead4] h-3.5 w-3.5" />
-              <label htmlFor="recurrent" className="text-[#94a3b8] cursor-pointer font-medium select-none">
+            <div className="flex items-center gap-2 mt-2 pt-2 border-t border-[#2d2a26]">
+              <input type="checkbox" defaultChecked id="recurrent" className="accent-[#16a34a] h-3.5 w-3.5" />
+              <label htmlFor="recurrent" className="text-[#b3ab9b] cursor-pointer font-medium select-none">
                 Recurrent rule: repeat alert on subsequent layer crossings
               </label>
             </div>
@@ -534,13 +532,13 @@ export default function AmveroPrototype() {
               <button
                 type="button"
                 onClick={() => setActiveTab("dashboard")}
-                className="px-4 py-2 bg-[#0a0a0a] border border-[#27272a] hover:bg-[#111111] text-[#e2e8f0] rounded font-bold font-mono transition-all"
+                className="px-4 py-2 bg-[#1b1916] border border-[#2d2a26] hover:bg-[#26231e] text-[#f0ebe0] rounded-sm font-bold font-mono transition-all"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-[#5eead4] hover:bg-[#5eead4]/80 text-black font-bold font-mono rounded transition-all shadow-sm"
+                className="px-4 py-2 bg-[#16a34a] hover:bg-[#16a34a]/80 text-black font-bold font-mono rounded-sm transition-all shadow-sm"
               >
                 Save & Apply
               </button>

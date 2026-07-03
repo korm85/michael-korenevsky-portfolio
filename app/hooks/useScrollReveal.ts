@@ -6,6 +6,7 @@ export function useScrollReveal(direction: "up" | "left" = "up") {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     el.style.opacity = "0";
     el.style.transform = direction === "up" ? "translateY(40px)" : "translateX(-20px)";

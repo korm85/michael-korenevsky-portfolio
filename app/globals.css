@@ -7,18 +7,20 @@
   --color-paper-2: #ebe5d8;
 
   /* ── Accent ── */
+  /* accent passes WCAG AA on dark canvas; accent-deep is the text-safe
+     variant for cream surfaces (≥4.5:1 on paper) */
   --color-accent: #16a34a;
-  --color-accent-deep: #15803d;
+  --color-accent-deep: #166534;
 
   /* ── Text on dark sections ── */
   --color-on-dark: #f0ebe0;
   --color-on-dark-soft: #b3ab9b;
-  --color-on-dark-faint: #75705f;
+  --color-on-dark-faint: #8f8a7a;
 
   /* ── Text on cream sections ── */
   --color-ink: #1b1916;
   --color-ink-soft: #514c42;
-  --color-ink-faint: #8b8478;
+  --color-ink-faint: #6e6759;
 
   /* ── Borders ── */
   --color-line: #cdc7be;
@@ -45,8 +47,31 @@
     min-height: 100dvh;
   }
 
+  /* No fixed header anymore — small offset keeps anchored sections off the
+     very top edge */
   * {
-    scroll-margin-top: 84px;
+    scroll-margin-top: 24px;
+  }
+
+  /* Pin Fraunces' optical size and turn WONK off. Left on "auto", high opsz
+     at display sizes produces a swashy, distracting lowercase "f"/"g"; a
+     moderate fixed opsz keeps the terminals calm while staying a display serif. */
+  .font-display {
+    font-variation-settings: "opsz" 30, "SOFT" 0, "WONK" 0;
+  }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

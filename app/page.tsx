@@ -1,34 +1,50 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import Header from "./components/Header";
 import SelectedWork from "./components/SelectedWork";
 import HowIWork from "./components/HowIWork";
 import CareerTimeline from "./components/CareerTimeline";
 import ContactSection from "./components/ContactSection";
-import AmveroModal from "./components/AmveroModal";
-import SimulationModal from "./components/SimulationModal";
+import ActionPanel from "./components/ActionPanel";
+
+const AmveroModal = dynamic(() => import("./components/AmveroModal"), { ssr: false });
+const SimulationModal = dynamic(() => import("./components/SimulationModal"), { ssr: false });
+
+const CASE_HASHES = ["#case-amvero", "#case-simulation"];
 
 export default function Home() {
   const [amveroOpen, setAmveroOpen] = useState(false);
   const [simulationOpen, setSimulationOpen] = useState(false);
-  const [time, setTime] = useState("");
+
+  // Case study modals are synced to the URL hash so they are deep-linkable
+  // and the browser Back button closes them instead of leaving the site.
+  const syncFromHash = useCallback(() => {
+    const h = window.location.hash;
+    setAmveroOpen(h === "#case-amvero");
+    setSimulationOpen(h === "#case-simulation");
+  }, []);
 
   useEffect(() => {
-    const update = () => {
-      setTime(
-        new Date().toLocaleTimeString("en-US", {
-          timeZone: "Asia/Jerusalem",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        })
-      );
-    };
-    update();
-    const id = setInterval(update, 30000);
-    return () => clearInterval(id);
+    syncFromHash();
+    window.addEventListener("popstate", syncFromHash);
+    return () => window.removeEventListener("popstate", syncFromHash);
+  }, [syncFromHash]);
+
+  const openCase = (hash: string) => {
+    window.history.pushState(null, "", hash);
+    syncFromHash();
+  };
+
+  const closeCase = useCallback(() => {
+    if (CASE_HASHES.includes(window.location.hash)) {
+      window.history.back();
+    } else {
+      setAmveroOpen(false);
+      setSimulationOpen(false);
+    }
   }, []);
 
   return (
@@ -60,35 +76,57 @@ export default function Home() {
         />
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          {/* Status eyebrow */}
-          <div className="flex items-center justify-center gap-2.5 mb-12">
-            <div className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+          {/* Identity block: status, name, role */}
+          <div className="flex flex-col items-center gap-2.5 mb-7">
+            <div className="flex items-center gap-2">
+              <div className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+              </div>
+              <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-on-dark-soft">
+                Open to roles
+              </span>
             </div>
-            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-on-dark-soft">
-              Senior Product Manager · Open to roles
-            </span>
+            <p className="font-mono text-sm md:text-base uppercase tracking-[0.22em] text-on-dark">
+              Michael Korenevsky
+              <span className="hidden sm:inline text-on-dark-soft"> · </span>
+              <span className="block sm:inline text-on-dark-soft text-[12px] sm:text-sm md:text-base mt-1 sm:mt-0">
+                Senior Product Manager
+              </span>
+            </p>
           </div>
 
-          {/* Name */}
+          {/* Positioning headline — the PM's signature move, not a product line */}
           <h1
-            className="font-display font-light text-on-dark leading-[0.93] tracking-[-0.01em] mb-8"
-            style={{ fontSize: "clamp(3.4rem, 11.5vw, 9.5rem)" }}
+            className="font-display font-light text-on-dark leading-[1.05] tracking-[-0.01em] mb-5 max-w-3xl mx-auto"
+            style={{ fontSize: "clamp(2.4rem, 6vw, 4.8rem)" }}
           >
-            Michael Korenevsky
+            Taking enterprise AI from{" "}
+            <span className="text-accent">pilot to production</span> in
+            high-stakes industries
           </h1>
 
-          {/* Lead */}
+          {/* Lead — two tiers: what I own (bright), the range I own it across (dim) */}
           <p
-            className="text-on-dark-soft leading-relaxed max-w-xl mx-auto mb-12"
-            style={{ fontSize: "clamp(1rem, 2.2vw, 1.4rem)" }}
+            className="text-on-dark leading-snug max-w-2xl mx-auto mb-3"
+            style={{ fontSize: "clamp(1.05rem, 2.1vw, 1.35rem)", textWrap: "balance" }}
           >
-            Building enterprise AI and predictive tools for high-stakes industries.
+            I own products end to end: the go-to-market narrative, the call on
+            which alerts are worth an operator&apos;s attention, and the
+            deployment playbook that gets regulated manufacturers live without
+            disrupting production.
+          </p>
+          <p
+            className="text-on-dark-soft leading-relaxed max-w-xl mx-auto mb-10"
+            style={{ fontSize: "clamp(0.95rem, 1.6vw, 1.05rem)" }}
+          >
+            Two products, two different technical bets: AI-powered monitoring
+            and physics-based predictive simulation. Both for manufacturers
+            where a defect costs real money.
           </p>
 
           {/* CTAs */}
-          <div className="flex items-center justify-center gap-4 mb-16">
+          <div className="flex items-center justify-center gap-4 mb-12">
             <a
               href="#work"
               onClick={(e) => {
@@ -117,22 +155,37 @@ export default function Home() {
             </a>
           </div>
 
-          {/* Company logos */}
-          <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-on-dark-faint mb-2">
-              Shipped to
+          {/* Customers — own zone behind a hairline divider so it reads as a
+              distinct proof band, not part of the text stack */}
+          <div className="max-w-3xl mx-auto pt-8 border-t border-line-dark">
+            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-on-dark-faint mb-5">
+              Shipped to enterprise customers in
             </p>
-            <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-on-dark-soft">
-              Baker Hughes · Thales · Elos Medtech · 3D Systems · Beehive
-            </p>
+            <div className="flex flex-wrap justify-center gap-x-10 gap-y-4">
+              {[
+                ["Energy", "Baker Hughes"],
+                ["Aerospace & Defense", "Thales · Beehive"],
+                ["Medical Devices", "Elos Medtech"],
+                ["Industrial 3D Printing", "3D Systems"],
+              ].map(([industry, companies]) => (
+                <div key={industry} className="text-center">
+                  <p className="font-mono text-[12px] uppercase tracking-[0.1em] text-on-dark">
+                    {industry}
+                  </p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-on-dark-faint mt-1">
+                    {companies}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── Work ── */}
       <SelectedWork
-        onOpenAmvero={() => setAmveroOpen(true)}
-        onOpenSimulation={() => setSimulationOpen(true)}
+        onOpenAmvero={() => openCase("#case-amvero")}
+        onOpenSimulation={() => openCase("#case-simulation")}
       />
 
       {/* ── Practice ── */}
@@ -142,11 +195,11 @@ export default function Home() {
       <CareerTimeline />
 
       {/* ── About ── */}
-      <section id="about" className="bg-paper-2 px-6 py-14 md:py-24 xl:py-32">
+      <section id="about" className="bg-paper-2 px-6 py-12 md:py-20 xl:py-24">
         <div className="max-w-[1180px] mx-auto">
           {/* Section header */}
-          <div className="flex items-baseline gap-4 border-b border-line pb-6 mb-16">
-            <span className="font-mono text-[11px] text-accent font-medium tracking-[0.1em]">04</span>
+          <div className="flex items-center gap-4 border-b border-line pb-5 mb-10">
+            <span className="font-mono text-[11px] text-accent-deep font-medium tracking-[0.1em]">04</span>
             <h2
               className="font-display font-light text-ink leading-tight"
               style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.8rem)" }}
@@ -155,7 +208,7 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
+          <div className="grid md:grid-cols-2 gap-10 md:gap-12 items-start">
             {/* Profile photo */}
             <div>
               <div className="overflow-hidden rounded-sm" style={{ maxWidth: 340 }}>
@@ -164,7 +217,6 @@ export default function Home() {
                   alt="Michael Korenevsky"
                   width={340}
                   height={425}
-                  priority
                   className="w-full object-cover object-top"
                   style={{ aspectRatio: "4/5" }}
                 />
@@ -174,7 +226,7 @@ export default function Home() {
             {/* Bio + details */}
             <div>
               <p
-                className="text-ink-soft leading-relaxed mb-10"
+                className="text-ink-soft leading-relaxed mb-8"
                 style={{ fontSize: "clamp(1rem, 1.8vw, 1.1rem)" }}
               >
                 Ten years building and certifying industrial software before moving into
@@ -231,22 +283,19 @@ export default function Home() {
       <ContactSection />
 
       {/* ── Footer ── */}
-      <footer className="bg-canvas border-t border-line-dark px-6 py-8">
-        <div className="max-w-[1180px] mx-auto flex flex-wrap items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[0.15em] text-on-dark-faint">
+      {/* Extra bottom padding keeps the floating action pill clear of content */}
+      <footer className="bg-canvas border-t border-line-dark px-6 pt-8 pb-24">
+        <div className="max-w-[1180px] mx-auto font-mono text-[10px] uppercase tracking-[0.15em] text-on-dark-faint">
           <span>© 2026 Michael Korenevsky</span>
-          <div className="flex items-center gap-5">
-            {time && <span>ISR {time}</span>}
-            <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-              Available
-            </span>
-          </div>
         </div>
       </footer>
 
+      {/* ── Always-available quick actions ── */}
+      <ActionPanel />
+
       {/* ── Modals ── */}
-      <AmveroModal isOpen={amveroOpen} onClose={() => setAmveroOpen(false)} />
-      <SimulationModal isOpen={simulationOpen} onClose={() => setSimulationOpen(false)} />
+      <AmveroModal isOpen={amveroOpen} onClose={closeCase} />
+      <SimulationModal isOpen={simulationOpen} onClose={closeCase} />
     </main>
   );
 }

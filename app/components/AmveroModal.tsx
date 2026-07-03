@@ -15,7 +15,12 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -24,6 +29,9 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-md animate-fade-in"
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="AMVero case study and interactive prototype"
     >
       <div
         className="w-full max-w-[96vw] xl:max-w-7xl h-[92dvh] bg-paper border border-line rounded-sm flex flex-col overflow-hidden animate-scale-in text-left select-text shadow-2xl"
@@ -32,7 +40,7 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
         {/* Modal Header */}
         <div className="flex justify-between items-center px-6 py-4 border-b border-line bg-paper-2 flex-shrink-0">
           <div>
-            <p className="font-mono text-[9px] md:text-[10px] uppercase tracking-widest text-accent font-medium">
+            <p className="font-mono text-[9px] md:text-[10px] uppercase tracking-widest text-accent-deep font-medium">
               AI PRODUCT CASE STUDY & INTERACTIVE PROTOTYPE
             </p>
             <h3 className="text-base md:text-xl font-display font-light text-ink mt-0.5">
@@ -57,11 +65,11 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
             {/* Left Column: Overview */}
             <div className="lg:col-span-3 flex flex-col h-full overflow-y-auto pr-2 min-h-0 space-y-5 border-b lg:border-b-0 lg:border-r border-line pb-4 lg:pb-0 lg:pr-5">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent font-medium mb-1.5">
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent-deep font-medium mb-1.5">
                   THE PRODUCT & MISSION
                 </p>
                 <p className="text-xs font-medium text-ink leading-snug">
-                  B2B industrial AI platform running real-time computer vision pipelines at the edge to automate quality control and flag structural defects on manufacturing floors.
+                  B2B industrial AI product running real-time inspection pipelines at the edge to automate quality control and flag structural defects on manufacturing floors.
                 </p>
                 <p className="text-xs text-ink-faint leading-relaxed mt-2">
                   Reduces operational labor and material scrap costs for aerospace and defense clients by terminating defective print runs early, built under strict defense-grade ITAR compliance.
@@ -69,7 +77,7 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
               </div>
 
               <div className="border-t border-line pt-3.5">
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent font-medium mb-1.5">
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent-deep font-medium mb-1.5">
                   PM CONTRIBUTION
                 </p>
                 <p className="text-xs leading-relaxed text-ink-soft">
@@ -79,7 +87,7 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
 
               {/* AI Detection Feed */}
               <div className="border-t border-line pt-3.5 space-y-2.5">
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent font-medium">
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent-deep font-medium">
                   AI DETECTION FEED
                 </p>
                 <div className="grid grid-cols-2 gap-2">
@@ -89,7 +97,7 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
                   </div>
                   <div className="rounded-sm overflow-hidden border border-line">
                     <img src="/ca0f1faccbe56083dad5a77684dd3de5485d8199.png" alt="AI-annotated anomaly detection" className="w-full h-16 object-cover" />
-                    <p className="text-[8px] font-mono text-accent text-center py-0.5 bg-accent/10 uppercase tracking-wider font-medium">AI Active</p>
+                    <p className="text-[8px] font-mono text-accent-deep text-center py-0.5 bg-accent/10 uppercase tracking-wider font-medium">AI Active</p>
                   </div>
                 </div>
               </div>
@@ -101,15 +109,15 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
                 <div className="grid grid-cols-2 gap-2">
                   {[
                     { value: "18%", label: "Scrap cost cut" },
-                    { value: "90%", label: "Model accuracy" },
-                    { value: "136h", label: "Hours saved" },
-                    { value: "98%", label: "Workload cut" },
+                    { value: "~50%", label: "Machine time recovered per rejected part" },
+                    { value: "136h", label: "Saved per printer / year" },
+                    { value: "98%", label: "Active monitoring time cut" },
                   ].map((m) => (
                     <div
                       key={m.value}
                       className="bg-paper-2 rounded-sm p-2.5 border border-line hover:border-accent/40 transition-all duration-300 flex flex-col justify-between"
                     >
-                      <p className="font-display font-light text-accent" style={{ fontSize: "clamp(1.2rem, 3vw, 1.6rem)" }}>
+                      <p className="font-display font-light text-accent-deep" style={{ fontSize: "clamp(1.2rem, 3vw, 1.6rem)" }}>
                         {m.value}
                       </p>
                       <p className="text-[9px] text-ink-faint font-medium mt-0.5 leading-snug">{m.label}</p>

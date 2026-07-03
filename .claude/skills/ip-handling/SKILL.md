@@ -2,6 +2,17 @@
 
 Rules for referencing Oqton products, visuals, and proprietary details without exposing confidential information or violating attribution obligations. Apply to every word and image in Sections 2 and 3.
 
+> **Status update (2026-07-03, confirmed by Michael):** naming products
+> (AMVero, Simulation Suite), naming customers (Baker Hughes, Thales, Elos
+> Medtech, 3D Systems, Beehive, Knauf, Wärtsilä), and using attributed
+> customer quotes on the portfolio is **approved — a non-issue**. The
+> restrictions below on product names, customer names, and technique naming
+> are superseded for portfolio use. Still in force: no revenue/contract
+> figures, no internal architecture or algorithm specifics, no internal
+> roadmap items, no unscrubbed screenshots, and metrics must trace to the
+> BRIEF or DRIVE-DATA.md. (Separately, `portfolio-copy-voice` still prefers
+> "AI-powered" over technique names for audience-fit reasons, not IP.)
+
 ## Core rule
 
 Michael did the PM work. The IP belongs to Oqton. The portfolio shows his judgment, process, and outcomes — not the product internals.

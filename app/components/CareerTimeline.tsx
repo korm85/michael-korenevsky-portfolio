@@ -35,11 +35,11 @@ const TIMELINE = [
 
 export default function CareerTimeline() {
   return (
-    <section id="career" className="bg-paper px-6 py-14 md:py-24 xl:py-32">
+    <section id="career" className="bg-paper px-6 py-12 md:py-20 xl:py-24">
       <div className="max-w-[1180px] mx-auto">
         {/* Section header */}
-        <div className="flex items-baseline gap-4 border-b border-line pb-6 mb-16">
-          <span className="font-mono text-[11px] text-accent font-medium tracking-[0.1em]">03</span>
+        <div className="flex items-center gap-4 border-b border-line pb-5 mb-10">
+          <span className="font-mono text-[11px] text-accent-deep font-medium tracking-[0.1em]">03</span>
           <h2
             className="font-display font-light text-ink leading-tight"
             style={{ fontSize: "clamp(2rem, 5.4vw, 3.6rem)" }}
@@ -53,9 +53,9 @@ export default function CareerTimeline() {
           {TIMELINE.map((entry, i) => (
             <div
               key={i}
-              className="grid grid-cols-1 sm:grid-cols-[110px_1fr] gap-1 sm:gap-6 py-6 border-b border-line last:border-0 items-baseline transition-all duration-200 hover:pl-1"
+              className="grid grid-cols-1 sm:grid-cols-[110px_1fr] gap-1 sm:gap-6 py-5 border-b border-line last:border-0 items-baseline transition-all duration-200 hover:pl-1"
             >
-              <span className="font-mono text-[10px] text-accent tracking-[0.06em] pt-0.5">
+              <span className="font-mono text-[10px] text-accent-deep tracking-[0.06em] pt-0.5">
                 {entry.years}
               </span>
               <div>
@@ -77,7 +77,7 @@ export default function CareerTimeline() {
 
         {/* Closing note */}
         <p
-          className="font-display italic text-ink-soft mt-12 max-w-2xl"
+          className="font-display italic text-ink-soft mt-10 max-w-2xl"
           style={{ fontSize: "clamp(1rem, 1.8vw, 1.15rem)" }}
         >
           A decade of QA before PM means I approach AI product decisions the way a test

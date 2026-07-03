@@ -1,14 +1,28 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { useScrollReveal } from "../hooks/useScrollReveal";
+
+function useDialogBehavior(onClose: () => void) {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handler);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handler);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [onClose]);
+}
 
 interface Doc {
   name: string;
   url: string;
-  suffix?: string;
-  category?: string;
-  overlay?: boolean;
+  subtitle?: string;
 }
 
 interface Quote {
@@ -23,7 +37,14 @@ interface PrdQuote {
   linkUrl: string;
 }
 
-type Decision = string | { text: string; docLabel?: string; docUrl?: string; docOverlay?: boolean };
+interface DecisionLink {
+  label: string;
+  url?: string;
+  subtitle?: string;
+  onClick?: () => void;
+}
+
+type Decision = string | { text: string; links?: DecisionLink[] };
 
 interface WorkArticleProps {
   eyebrow: string;
@@ -35,13 +56,13 @@ interface WorkArticleProps {
   imageAlt: string;
   metrics: { value: string; label: string }[];
   customerLine: string;
-  ctaLabel: string;
-  onCta: () => void;
+  ctaLabel?: string;
+  onCta?: () => void;
   docs: Doc[];
   quote?: Quote;
   prdQuote?: PrdQuote;
   imageLeft?: boolean;
-  onOverlayOpen?: (url: string) => void;
+  onOverlayOpen?: (doc: DocRef) => void;
   onImageClick?: (src: string, alt: string) => void;
 }
 
@@ -59,11 +80,81 @@ function ArrowIcon() {
   );
 }
 
-function RoiOverlay({ url, onClose }: { url: string; onClose: () => void }) {
+interface DocRef {
+  url: string;
+  title: string;
+  subtitle?: string;
+}
+
+// Generic in-site document viewer. Any same-origin artifact — HTML page, PDF,
+// or interactive tool — opens here in an iframe so the visitor never leaves the
+// site. Zoom applies to HTML docs; PDFs use the browser viewer's own controls.
+function DocOverlay({ doc, onClose }: { doc: DocRef; onClose: () => void }) {
   const [zoom, setZoom] = useState(1);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const isPdf = doc.url.toLowerCase().endsWith(".pdf");
+
+  // The modal opens via JS, so focus never naturally lands inside it —
+  // Chromium's native PDF viewer stays inert until its frame is focused,
+  // which is what a manual "second click" was actually doing. Mount after
+  // the entrance animation settles, then focus the iframe ourselves so the
+  // PDF renders without the visitor having to click it.
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setReady(true), 260);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    if (!ready) return;
+    const t = setTimeout(() => iframeRef.current?.focus(), 50);
+    return () => clearTimeout(t);
+  }, [ready]);
+
+  // Once focus moves into the (same-origin) iframe, Escape keydowns fire on
+  // its own contentWindow and never reach the outer window listener in
+  // useDialogBehavior — forward it manually so Escape still closes the dialog.
+  // contentWindow exists as soon as the iframe element is created, well
+  // before its 'load' event fires — attach immediately rather than waiting
+  // for 'load', which races and can fire before the listener is attached on
+  // fast-loading (especially cached) documents, silently breaking Escape.
+  useEffect(() => {
+    if (!ready) return;
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+    const onFrameKeydown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    let attachedWindow: Window | null = null;
+    let attempts = 0;
+    let retryTimer: ReturnType<typeof setTimeout> | null = null;
+    const tryAttach = () => {
+      try {
+        const win = iframe.contentWindow;
+        if (win) {
+          win.addEventListener("keydown", onFrameKeydown);
+          attachedWindow = win;
+          return;
+        }
+      } catch {}
+      if (attempts++ < 20) retryTimer = setTimeout(tryAttach, 25);
+    };
+    tryAttach();
+    // Re-attach on 'load' too, in case the frame navigates and gets a fresh
+    // window object after the initial attach.
+    const onLoad = () => tryAttach();
+    iframe.addEventListener("load", onLoad);
+    return () => {
+      if (retryTimer) clearTimeout(retryTimer);
+      iframe.removeEventListener("load", onLoad);
+      try {
+        attachedWindow?.removeEventListener("keydown", onFrameKeydown);
+      } catch {}
+    };
+  }, [ready, onClose]);
 
   const applyZoom = (z: number) => {
+    if (isPdf) return;
     try {
       const body = iframeRef.current?.contentWindow?.document?.body;
       if (body) body.style.zoom = String(z);
@@ -78,49 +169,62 @@ function RoiOverlay({ url, onClose }: { url: string; onClose: () => void }) {
     });
   };
 
-  useState(() => {
-    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  });
+  useDialogBehavior(onClose);
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-md animate-fade-in"
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={doc.title}
     >
       <div
         className="w-full max-w-5xl h-[90dvh] bg-paper border border-line rounded-sm flex flex-col overflow-hidden animate-scale-in shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex justify-between items-center px-6 py-4 border-b border-line bg-paper-2 flex-shrink-0">
-          <div>
-            <p className="font-mono text-[10px] uppercase tracking-widest text-accent font-medium">
-              AMVero · Pricing
+        <div className="flex justify-between items-center gap-4 px-6 py-4 border-b border-line bg-paper-2 flex-shrink-0">
+          <div className="min-w-0">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-accent-deep font-medium">
+              {doc.subtitle ?? "Document"}
             </p>
-            <h3 className="text-base font-display font-light text-ink mt-0.5">
-              Credit-based Pricing Model
+            <h3 className="text-base font-display font-light text-ink mt-0.5 truncate">
+              {doc.title}
             </h3>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center border border-line rounded-sm overflow-hidden">
-              <button
-                onClick={() => handleZoom(-0.25)}
-                className="px-3 py-1.5 font-mono text-sm text-ink-soft hover:text-ink hover:bg-line/30 transition-colors border-r border-line"
-              >
-                −
-              </button>
-              <span className="font-mono text-[10px] text-ink-soft w-12 text-center">
-                {Math.round(zoom * 100)}%
-              </span>
-              <button
-                onClick={() => handleZoom(0.25)}
-                className="px-3 py-1.5 font-mono text-sm text-ink-soft hover:text-ink hover:bg-line/30 transition-colors border-l border-line"
-              >
-                +
-              </button>
-            </div>
+          <div className="flex items-center gap-3 shrink-0">
+            {!isPdf && (
+              <div className="flex items-center border border-line rounded-sm overflow-hidden">
+                <button
+                  onClick={() => handleZoom(-0.25)}
+                  className="px-3 py-1.5 font-mono text-sm text-ink-soft hover:text-ink hover:bg-line/30 transition-colors border-r border-line"
+                  aria-label="Zoom out"
+                >
+                  −
+                </button>
+                <span className="font-mono text-[10px] text-ink-soft w-12 text-center">
+                  {Math.round(zoom * 100)}%
+                </span>
+                <button
+                  onClick={() => handleZoom(0.25)}
+                  className="px-3 py-1.5 font-mono text-sm text-ink-soft hover:text-ink hover:bg-line/30 transition-colors border-l border-line"
+                  aria-label="Zoom in"
+                >
+                  +
+                </button>
+              </div>
+            )}
+            <a
+              href={doc.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.06em] text-ink-soft hover:text-accent-deep transition-colors"
+              aria-label="Open in a new tab"
+            >
+              New tab
+              <ArrowIcon />
+            </a>
             <button
               onClick={onClose}
               className="p-1 rounded-sm text-ink-faint hover:text-ink hover:bg-line/40 border border-transparent hover:border-line transition-all"
@@ -134,16 +238,29 @@ function RoiOverlay({ url, onClose }: { url: string; onClose: () => void }) {
         </div>
 
         {/* iframe */}
-        <div className="flex-1 overflow-auto">
-          <iframe
-            ref={iframeRef}
-            src={url}
-            className="w-full border-0"
-            style={{ minHeight: "100%", height: "100%" }}
-            onLoad={() => applyZoom(zoom)}
-            sandbox="allow-scripts allow-forms allow-popups allow-same-origin"
-            title="Credit-based Pricing Model"
-          />
+        <div className="flex-1 overflow-auto bg-paper">
+          {ready ? (
+            // No sandbox: these are all first-party artifacts under /artifacts
+            // and /tools. Sandboxing blocks Chromium's built-in PDF viewer, and
+            // the HTML zoom hook needs same-origin document access.
+            <iframe
+              ref={iframeRef}
+              src={doc.url}
+              className="w-full border-0"
+              style={{ minHeight: "100%", height: "100%" }}
+              onLoad={() => {
+                applyZoom(zoom);
+                iframeRef.current?.focus();
+              }}
+              title={doc.title}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-ink-faint">
+                Loading…
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -151,16 +268,15 @@ function RoiOverlay({ url, onClose }: { url: string; onClose: () => void }) {
 }
 
 function ImageOverlay({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
-  useState(() => {
-    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  });
+  useDialogBehavior(onClose);
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-8 bg-ink/85 backdrop-blur-sm animate-fade-in cursor-zoom-out"
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={alt}
     >
       <img
         src={src}
@@ -193,27 +309,37 @@ function WorkArticle({
   const cols = metrics.length >= 4 ? 4 : metrics.length;
 
   return (
-    <article ref={ref} className="pb-16 border-b border-line last:border-0 last:pb-0">
+    <article ref={ref} className="pb-12 border-b border-line last:border-0 last:pb-0">
       {/* Eyebrow */}
-      <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent mb-8">
+      <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-deep mb-5">
         {eyebrow}
       </p>
 
       {/* 2-col: image + content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start mb-10">
         {/* Image — always first in DOM so it leads on mobile */}
         <div
-          className={`relative overflow-hidden rounded-sm ${!imageLeft ? "md:order-last" : ""} ${onImageClick ? "cursor-zoom-in" : ""}`}
+          className={`relative aspect-[4/3] overflow-hidden rounded-sm ${!imageLeft ? "md:order-last" : ""} ${onImageClick ? "cursor-zoom-in" : ""}`}
           onClick={() => onImageClick?.(image, imageAlt)}
+          role={onImageClick ? "button" : undefined}
+          tabIndex={onImageClick ? 0 : undefined}
+          aria-label={onImageClick ? `Enlarge image: ${imageAlt}` : undefined}
+          onKeyDown={(e) => {
+            if (onImageClick && (e.key === "Enter" || e.key === " ")) {
+              e.preventDefault();
+              onImageClick(image, imageAlt);
+            }
+          }}
         >
-          <img
+          <Image
             src={image}
             alt={imageAlt}
-            className="w-full object-cover transition-transform duration-500 hover:scale-[1.02]"
-            style={{ aspectRatio: "4/3" }}
+            fill
+            sizes="(min-width: 768px) 560px, 100vw"
+            className="object-cover transition-transform duration-500 hover:scale-[1.02]"
           />
           <div className="absolute top-3 left-3">
-            <span className="font-mono text-[9px] uppercase tracking-[0.1em] bg-paper/90 backdrop-blur-sm text-ink-soft border border-line px-2.5 py-1.5 rounded-sm">
+            <span className="font-mono text-[10px] uppercase tracking-[0.1em] bg-paper/90 backdrop-blur-sm text-ink-soft border border-line px-2.5 py-1.5 rounded-sm">
               {roleTag}
             </span>
           </div>
@@ -231,76 +357,81 @@ function WorkArticle({
             {description}
           </p>
 
-          {/* Key decisions */}
+          {/* Key decisions — each bullet carries its own proof links on a row
+              directly beneath its text, aligned to the text column */}
           {decisions && decisions.length > 0 && (
-            <ul className="space-y-3 mb-8">
+            <ul className="space-y-4 mb-6">
               {decisions.slice(0, 3).map((d, i) => {
                 const text = typeof d === "string" ? d : d.text;
-                const docLabel = typeof d !== "string" ? d.docLabel : undefined;
-                const docUrl = typeof d !== "string" ? d.docUrl : undefined;
-                const docOverlay = typeof d !== "string" ? d.docOverlay : undefined;
+                const links = typeof d !== "string" ? d.links : undefined;
+                const chip =
+                  "font-mono text-[10px] uppercase tracking-[0.06em] border border-accent-deep/40 text-accent-deep hover:bg-accent-deep hover:text-paper transition-all rounded-sm px-2 py-1 whitespace-nowrap";
                 return (
-                  <li key={i} className="flex gap-3 text-sm text-ink-soft leading-relaxed">
-                    <span className="text-accent shrink-0 mt-0.5 font-light">—</span>
-                    <span>
-                      {text}
-                      {docLabel && docUrl && (
-                        docOverlay && onOverlayOpen ? (
-                          <button
-                            onClick={() => onOverlayOpen(docUrl)}
-                            className="ml-2 font-mono text-[9px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent transition-all rounded-sm px-1.5 py-0.5"
-                          >
-                            {docLabel} ↗
-                          </button>
-                        ) : (
-                          <a
-                            href={docUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="ml-2 font-mono text-[9px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent transition-all rounded-sm px-1.5 py-0.5"
-                          >
-                            {docLabel} ↗
-                          </a>
-                        )
-                      )}
-                    </span>
+                  <li key={i} className="text-sm text-ink-soft leading-relaxed">
+                    <div className="flex gap-3">
+                      <span className="text-accent-deep shrink-0 mt-0.5 font-light">–</span>
+                      <span>{text}</span>
+                    </div>
+                    {links && links.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-2 pl-[1.6rem]">
+                        {links.map((link) =>
+                          link.onClick ? (
+                            <button key={link.label} onClick={link.onClick} className={chip}>
+                              {link.label} ↗
+                            </button>
+                          ) : link.url && onOverlayOpen ? (
+                            <button
+                              key={link.label}
+                              onClick={() =>
+                                onOverlayOpen({ url: link.url!, title: link.label, subtitle: link.subtitle })
+                              }
+                              className={chip}
+                            >
+                              {link.label} ↗
+                            </button>
+                          ) : null
+                        )}
+                      </div>
+                    )}
                   </li>
                 );
               })}
             </ul>
           )}
 
-          {/* CTA */}
-          <button
-            onClick={onCta}
-            className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.06em] border border-ink text-ink px-4 py-2.5 rounded-sm hover:bg-ink hover:text-paper transition-all duration-300 group"
-            style={{ transform: "translateY(0)" }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
-          >
-            {ctaLabel}
-            <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
-              <ArrowIcon />
-            </span>
-          </button>
+          {/* CTA (only when the article has no inline entry point) */}
+          {ctaLabel && onCta && (
+            <button
+              onClick={onCta}
+              className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.06em] bg-ink text-paper border border-ink px-4 py-2.5 rounded-sm hover:bg-accent-deep hover:border-accent-deep transition-all duration-300 group"
+              style={{ transform: "translateY(0)" }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+            >
+              {ctaLabel}
+              <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                <ArrowIcon />
+              </span>
+            </button>
+          )}
         </div>
       </div>
 
       {/* Metrics grid */}
       <div
-        className={`grid border-r border-b border-line mb-12 grid-cols-2 ${
+        className={`grid border-r border-b border-line mb-10 grid-cols-2 ${
           cols === 4 ? "md:grid-cols-4" : "md:grid-cols-3"
         }`}
       >
         {metrics.map((m, i) => (
           <div key={i} className="border-t border-l border-line p-5 md:p-6">
             <div
-              className="font-display text-accent font-light leading-none mb-2"
+              className="font-display text-accent-deep font-light leading-none mb-2"
               style={{ fontSize: "clamp(2rem, 4.5vw, 3.2rem)" }}
             >
               {m.value}
             </div>
-            <div className="font-mono text-[9px] uppercase tracking-[0.1em] text-ink-faint leading-relaxed">
+            <div className="font-mono text-[11px] uppercase tracking-[0.1em] text-ink-faint leading-relaxed">
               {m.label}
             </div>
           </div>
@@ -309,14 +440,14 @@ function WorkArticle({
 
       {/* Pullquote */}
       {quote && (
-        <figure className="mb-10">
+        <figure className="mb-8">
           <blockquote
             className="font-display font-light italic text-ink-soft leading-snug mb-4"
             style={{ fontSize: "clamp(1.15rem, 2.2vw, 1.55rem)" }}
           >
-            <span className="text-accent not-italic">&ldquo;</span>
+            <span className="text-accent-deep not-italic">&ldquo;</span>
             {quote.text}
-            <span className="text-accent not-italic">&rdquo;</span>
+            <span className="text-accent-deep not-italic">&rdquo;</span>
           </blockquote>
           <figcaption className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-faint text-right">
             {quote.author} · {quote.role}
@@ -324,36 +455,23 @@ function WorkArticle({
         </figure>
       )}
 
-      {/* Doc chips */}
+      {/* Doc chips — every artifact opens in-site via the doc overlay */}
       {docs.length > 0 && (
         <div className="flex flex-wrap gap-2">
-          {docs.map((doc, i) =>
-            doc.overlay && onOverlayOpen ? (
-              <button
-                key={i}
-                onClick={() => onOverlayOpen(doc.url)}
-                className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent rounded-sm px-2.5 py-1.5 transition-all duration-200 group"
-              >
-                {doc.name}
-                <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
-                  <ArrowIcon />
-                </span>
-              </button>
-            ) : (
-              <a
-                key={i}
-                href={doc.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-ink hover:text-ink rounded-sm px-2.5 py-1.5 transition-all duration-200 group"
-              >
-                {doc.name}
-                <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
-                  <ArrowIcon />
-                </span>
-              </a>
-            )
-          )}
+          {docs.map((doc, i) => (
+            <button
+              key={i}
+              onClick={() =>
+                onOverlayOpen?.({ url: doc.url, title: doc.name, subtitle: doc.subtitle })
+              }
+              className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent-deep rounded-sm px-2.5 py-1.5 transition-all duration-200 group"
+            >
+              {doc.name}
+              <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                <ArrowIcon />
+              </span>
+            </button>
+          ))}
         </div>
       )}
     </article>
@@ -365,16 +483,38 @@ interface SelectedWorkProps {
   onOpenSimulation: () => void;
 }
 
+const PRICING_DOC: DocRef = {
+  url: "/tools/amvero-roi-optimizer.html",
+  title: "Credit-based Pricing Model",
+  subtitle: "Interactive pricing tool",
+};
+
 export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: SelectedWorkProps) {
-  const [roiUrl, setRoiUrl] = useState<string | null>(null);
+  const [doc, setDoc] = useState<DocRef | null>(null);
   const [overlayImage, setOverlayImage] = useState<{ src: string; alt: string } | null>(null);
 
+  // Site-wide entry points: the action panel and any other component can open
+  // the pricing tool or an arbitrary in-site document via window events.
+  useEffect(() => {
+    const openPricing = () => setDoc(PRICING_DOC);
+    const openDoc = (e: Event) => {
+      const d = (e as CustomEvent<DocRef>).detail;
+      if (d?.url) setDoc({ url: d.url, title: d.title ?? "Document", subtitle: d.subtitle });
+    };
+    window.addEventListener("open-pricing-model", openPricing);
+    window.addEventListener("open-doc-overlay", openDoc as EventListener);
+    return () => {
+      window.removeEventListener("open-pricing-model", openPricing);
+      window.removeEventListener("open-doc-overlay", openDoc as EventListener);
+    };
+  }, []);
+
   return (
-    <section id="work" className="bg-paper px-6 py-14 md:py-24 xl:py-32">
+    <section id="work" className="bg-paper px-6 py-12 md:py-20 xl:py-24">
       <div className="max-w-[1180px] mx-auto">
         {/* Section header */}
-        <div className="flex items-baseline gap-4 border-b border-line pb-6 mb-16">
-          <span className="font-mono text-[11px] text-accent font-medium tracking-[0.1em]">01</span>
+        <div className="flex items-center gap-4 border-b border-line pb-5 mb-10">
+          <span className="font-mono text-[11px] text-accent-deep font-medium tracking-[0.1em]">01</span>
           <h2
             className="font-display font-light text-ink leading-tight"
             style={{ fontSize: "clamp(2rem, 5.4vw, 3.6rem)" }}
@@ -383,7 +523,7 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
           </h2>
         </div>
 
-        <div className="space-y-14 md:space-y-20">
+        <div className="space-y-12 md:space-y-16">
           <WorkArticle
             eyebrow="AI Platform · Oqton · 2025–Present"
             roleTag="Senior PM, AI Platform"
@@ -392,15 +532,21 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
             decisions={[
               {
                 text: "Chose condition-based multi-layer filtering over severity thresholds. Turned AMVero from a noise source into a trusted monitoring tool operators actually relied on.",
-                docLabel: "Alerts PRD",
-                docUrl: "/artifacts/amvero-smart-alerting-prd.html",
+                links: [
+                  { label: "Smart Alerts Prototype", onClick: onOpenAmvero },
+                  { label: "Alerts PRD", url: "/artifacts/amvero-smart-alerting-prd.html", subtitle: "Product spec" },
+                ],
               },
               "Defined on-premise as a product, not a cloud port, for aerospace and defense clients who required air-gapped environments.",
               {
                 text: "Moved pricing from flat per-seat to consumption-based credits, aligning costs with customer production volume.",
-                docLabel: "Credit Pricing Model",
-                docUrl: "/tools/amvero-roi-optimizer.html",
-                docOverlay: true,
+                links: [
+                  {
+                    label: "Credit Pricing Model",
+                    url: "/tools/amvero-roi-optimizer.html",
+                    subtitle: "Interactive pricing tool",
+                  },
+                ],
               },
             ]}
             image="/amvero-product.png"
@@ -408,21 +554,17 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
             metrics={[
               { value: "98%", label: "Reduction in active monitoring time, Baker Hughes" },
               { value: "18%", label: "Scrap cost reduction via mid-run failure detection" },
-              { value: "136h", label: "Saved per printer per year" },
+              { value: "136h", label: "Saved per printer per year vs. manual layer review" },
               { value: "5", label: "Enterprise clients in 5 months" },
             ]}
             customerLine="Baker Hughes · Thales · Elos Medtech · 3D Systems · Beehive"
-            ctaLabel="Try interactive prototype"
-            onCta={onOpenAmvero}
-            onOverlayOpen={setRoiUrl}
+            onOverlayOpen={setDoc}
             onImageClick={(src, alt) => setOverlayImage({ src, alt })}
             docs={[
-              { name: "Go-to-Market Narrative", url: "/artifacts/amvero-go-to-market-narrative.pdf" },
-              { name: "Launch Announcement", url: "/artifacts/amvero-launch-announcement.html" },
-              { name: "Alerts PRD", url: "/artifacts/amvero-smart-alerting-prd.html" },
-              { name: "Credit Pricing Model", url: "/tools/amvero-roi-optimizer.html", overlay: true },
-              { name: "Deployment Playbook", url: "/artifacts/amvero-enterprise-deployment-playbook.pdf" },
-              { name: "Traceability Record", url: "/artifacts/amvero-end-to-end-traceability-record.pdf" },
+              { name: "Go-to-Market Narrative", url: "/artifacts/amvero-go-to-market-narrative.html", subtitle: "GTM document" },
+              { name: "Launch Announcement", url: "/artifacts/amvero-launch-announcement.html", subtitle: "Announcement" },
+              { name: "Deployment Playbook", url: "/artifacts/amvero-enterprise-deployment-playbook.html", subtitle: "Playbook" },
+              { name: "Traceability Record", url: "/artifacts/amvero-end-to-end-traceability-record.html", subtitle: "Compliance record" },
             ]}
             quote={{
               text: "We've seen a 98% reduction in engineering review time per build, allowing our team to focus on more critical tasks. This, combined with an 18% reduction in scrap costs, has delivered a powerful return on investment.",
@@ -439,24 +581,25 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
             description="I built out the Simulation Suite over three years, shipping a Thermal module, a Mechanical module, and then the Thermo-mechanical module that combined both into a single pass, eliminating inter-stage wait times and making serial production with first-time-right accuracy viable."
             decisions={[
               "Shipped Thermal and Mechanical as separate modules, then unified them into a single coupled thermo-mechanical pass, eliminating inter-stage wait times and making first-time-right accuracy viable in serial production.",
-              "Validated on standard engineering workstations, not servers. Expanded the addressable market to any manufacturer running 3DXpert.",
+              "Validated on standard engineering workstations, not servers. Expanded the addressable market to manufacturers without specialized compute infrastructure.",
               "Ran a structured beta with Knauf before release, reducing launch risk and generating a credible customer story at release.",
             ]}
             image="/simulation-knauf-fit.png"
             imageAlt="Predictive simulation structural fit validation"
             metrics={[
-              { value: "80%", label: "Fewer dimensional errors once thermal and mechanical ran as a single coupled pass" },
-              { value: "99%+", label: "Dimensional accuracy via predictive compensation" },
-              { value: "<150µm", label: "Maximum measured dimensional deviation" },
+              { value: "80%", label: "Fewer dimensional errors on a large-format industrial part, 20+ hour production run" },
+              { value: "~100%", label: "Of dimensional distortion compensated by predictive pre-deformation" },
+              { value: "<150µm", label: "Maximum measured deviation on the same large-format part" },
             ]}
             customerLine="Knauf and tooling manufacturers across Europe"
             ctaLabel="Explore case study"
             onCta={onOpenSimulation}
+            onOverlayOpen={setDoc}
             onImageClick={(src, alt) => setOverlayImage({ src, alt })}
             docs={[
-              { name: "Thermal Whitepaper", url: "/artifacts/simulation-thermal-whitepaper.html" },
-              { name: "Customer Story: Tooling", url: "/artifacts/simulation-customer-story-tooling.html" },
-              { name: "Customer Story: Large Parts", url: "/artifacts/simulation-customer-story-large-parts.html" },
+              { name: "Thermal Whitepaper", url: "/artifacts/simulation-thermal-whitepaper.html", subtitle: "Whitepaper" },
+              { name: "Customer Story: Tooling", url: "/artifacts/simulation-customer-story-tooling.html", subtitle: "Customer story" },
+              { name: "Customer Story: Large Parts", url: "/artifacts/simulation-customer-story-large-parts.html", subtitle: "Customer story" },
             ]}
             quote={{
               text: "We have achieved a lightweight component we would have never imagined creating before this project. This application creates new sparks for more AM applications in the marine industry.",
@@ -468,7 +611,7 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
         </div>
       </div>
 
-      {roiUrl && <RoiOverlay url={roiUrl} onClose={() => setRoiUrl(null)} />}
+      {doc && <DocOverlay doc={doc} onClose={() => setDoc(null)} />}
       {overlayImage && <ImageOverlay src={overlayImage.src} alt={overlayImage.alt} onClose={() => setOverlayImage(null)} />}
     </section>
   );
