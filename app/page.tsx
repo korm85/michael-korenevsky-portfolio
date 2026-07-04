@@ -128,8 +128,9 @@ export default function Home() {
               >
                 Took a third-party physics engine and shipped it in three
                 stages: thermal, mechanical, then a unified thermo-mechanical
-                module, cutting deformation from 0.35mm to under 0.1mm versus
-                mechanical alone.
+                module. It compensates close to 100% of dimensional
+                distortion, turning trial and error into a first-time-right
+                process.
               </span>
             </li>
           </ul>
