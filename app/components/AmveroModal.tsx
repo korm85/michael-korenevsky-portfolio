@@ -120,8 +120,8 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
             {/* Right Column: Prototype Console (occupies 9 columns) */}
             <div className="lg:col-span-9 h-[700px] md:h-[750px] lg:h-full min-h-0 border border-border-dark rounded-xl flex flex-col">
               <div className="px-4 pt-3 pb-2 border-b border-border-dark flex-shrink-0">
-                <p className="text-[10px] text-text-muted leading-relaxed">
-                  The core design problem: operators were receiving too many alerts to trust any of them. The prototype below is the solution I specified — condition-based rules that fire only when a defect crosses multiple thresholds across consecutive layers. Walk through the alert creation flow to see how the filtering logic works.
+                <p className="text-xs text-text-secondary leading-relaxed">
+                  The core design problem: operators were receiving too many alerts to trust any of them. The prototype below is the solution I specified: condition-based rules that fire only when a defect crosses multiple thresholds across consecutive layers. Walk through the alert creation flow to see how the filtering logic works.
                 </p>
               </div>
               <AmveroPrototype />

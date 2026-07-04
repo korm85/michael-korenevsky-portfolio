@@ -13,7 +13,7 @@ const TIMELINE = [
     years: "2022–2025",
     company: "Oqton",
     role: "Product Manager, Simulation",
-    line: "Shipped the thermo-mechanical simulation module — coupled two previously separate solvers, validated on standard workstations, and ran a structured beta with Knauf that eliminated launch risk and delivered a credible customer story at release.",
+    line: "Shipped the thermo-mechanical simulation module: coupled two previously separate solvers, validated on standard workstations, and ran a structured beta with Knauf that eliminated launch risk and delivered a credible customer story at release.",
   },
   {
     years: "2017–2022",
