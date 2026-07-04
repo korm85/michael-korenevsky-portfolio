@@ -116,8 +116,9 @@ export default function Home() {
                 className="text-on-dark leading-snug"
                 style={{ fontSize: "clamp(1rem, 1.9vw, 1.2rem)" }}
               >
-                Took a real-time AI monitoring product from pilot to five
-                paying enterprise customers in five months, owned end to end.
+                Five paying enterprise customers in five months for a
+                real-time AI monitoring product I owned end to end, from
+                build to deployment.
               </span>
             </li>
             <li className="flex gap-3">
