@@ -78,15 +78,15 @@ export default function Home() {
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           {/* Identity: plain name/role line -- no availability signal here.
               That already lives once, in Contact, where it belongs. */}
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 mb-6">
+          <p className="mb-6">
             <span className="font-mono font-semibold text-sm md:text-base uppercase tracking-[0.14em] text-on-dark">
               Michael Korenevsky
             </span>
-            <span className="font-mono text-sm text-on-dark-soft/40">·</span>
-            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-on-dark-soft">
+            <span className="hidden sm:inline font-mono text-sm text-on-dark-soft/40"> · </span>
+            <span className="block sm:inline font-mono text-[11px] uppercase tracking-[0.2em] text-on-dark-soft mt-1.5 sm:mt-0">
               Senior Product Manager
             </span>
-          </div>
+          </p>
 
           {/* Positioning headline — the PM's signature move, not a product line */}
           <h1
