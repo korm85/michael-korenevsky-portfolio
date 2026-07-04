@@ -126,10 +126,10 @@ export default function Home() {
                 className="text-on-dark leading-snug"
                 style={{ fontSize: "clamp(1rem, 1.9vw, 1.2rem)" }}
               >
-                Took a third-party physics engine and sequenced it into
-                thermal, mechanical, then a unified thermo-mechanical module,
-                each stage validated in production: proof the product vision
-                was right.
+                Took a third-party physics engine and shipped it in three
+                stages: thermal, mechanical, then a unified thermo-mechanical
+                module. Each stage validated in production, proof the product
+                vision was right.
               </span>
             </li>
           </ul>
