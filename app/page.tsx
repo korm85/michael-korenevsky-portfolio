@@ -116,8 +116,8 @@ export default function Home() {
                 className="text-on-dark leading-snug"
                 style={{ fontSize: "clamp(1rem, 1.9vw, 1.2rem)" }}
               >
-                Five enterprise contracts in five months on the AI monitoring
-                product I own end to end, from go-to-market to deployment.
+                Took a real-time AI monitoring product from pilot to five
+                paying enterprise customers in five months, owned end to end.
               </span>
             </li>
             <li className="flex gap-3">
