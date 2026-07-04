@@ -76,18 +76,9 @@ export default function Home() {
         />
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          {/* Identity: one merged row instead of two stacked lines/registers */}
+          {/* Identity: plain name/role line -- no availability signal here.
+              That already lives once, in Contact, where it belongs. */}
           <div className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1.5 mb-6">
-            <span className="flex items-center gap-2">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
-              </span>
-              <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-on-dark-soft">
-                Open to roles
-              </span>
-            </span>
-            <span className="font-mono text-[11px] text-on-dark-soft/40">·</span>
             <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-on-dark">
               Michael Korenevsky
             </span>
