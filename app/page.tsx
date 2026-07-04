@@ -128,8 +128,8 @@ export default function Home() {
               >
                 Took a third-party physics engine and shipped it in three
                 stages: thermal, mechanical, then a unified thermo-mechanical
-                module. Each stage validated in production, proof the product
-                vision was right.
+                module, cutting deformation from 0.35mm to under 0.1mm versus
+                mechanical alone.
               </span>
             </li>
           </ul>
