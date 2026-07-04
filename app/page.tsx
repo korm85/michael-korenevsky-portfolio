@@ -76,29 +76,30 @@ export default function Home() {
         />
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          {/* Identity block: status, name, role */}
-          <div className="flex flex-col items-center gap-2.5 mb-7">
-            <div className="flex items-center gap-2">
-              <div className="relative flex h-2 w-2">
+          {/* Identity: one merged row instead of two stacked lines/registers */}
+          <div className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1.5 mb-6">
+            <span className="flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
-              </div>
+              </span>
               <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-on-dark-soft">
                 Open to roles
               </span>
-            </div>
-            <p className="font-mono text-sm md:text-base uppercase tracking-[0.22em] text-on-dark">
+            </span>
+            <span className="font-mono text-[11px] text-on-dark-soft/40">·</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-on-dark">
               Michael Korenevsky
-              <span className="hidden sm:inline text-on-dark-soft"> · </span>
-              <span className="block sm:inline text-on-dark-soft text-[12px] sm:text-sm md:text-base mt-1 sm:mt-0">
-                Senior Product Manager
-              </span>
-            </p>
+            </span>
+            <span className="font-mono text-[11px] text-on-dark-soft/40">·</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-on-dark-soft">
+              Senior Product Manager
+            </span>
           </div>
 
           {/* Positioning headline — the PM's signature move, not a product line */}
           <h1
-            className="font-display font-light text-on-dark leading-[1.05] tracking-[-0.01em] mb-5 max-w-3xl mx-auto"
+            className="font-display font-light text-on-dark leading-[1.05] tracking-[-0.01em] mb-6 max-w-2xl mx-auto"
             style={{ fontSize: "clamp(2.4rem, 6vw, 4.8rem)" }}
           >
             Taking enterprise AI from{" "}
@@ -106,27 +107,33 @@ export default function Home() {
             high-stakes industries
           </h1>
 
-          {/* Lead — two tiers: what I own (bright), the range I own it across (dim) */}
-          <p
-            className="text-on-dark leading-snug max-w-2xl mx-auto mb-3"
-            style={{ fontSize: "clamp(1.05rem, 2.1vw, 1.35rem)", textWrap: "balance" }}
-          >
-            I own products end to end: the go-to-market narrative, the call on
-            which alerts are worth an operator&apos;s attention, and the
-            deployment playbook that gets regulated manufacturers live without
-            disrupting production.
-          </p>
-          <p
-            className="text-on-dark-soft leading-relaxed max-w-xl mx-auto mb-10"
-            style={{ fontSize: "clamp(0.95rem, 1.6vw, 1.05rem)" }}
-          >
-            Two products, two different technical bets: AI-powered monitoring
-            and physics-based predictive simulation. Both for manufacturers
-            where a defect costs real money.
-          </p>
+          {/* Subhead — two short bullets (metric-led, one per product) instead
+              of a dense paragraph; easier to scan than unbroken prose */}
+          <ul className="max-w-2xl mx-auto mb-9 space-y-2.5 text-left">
+            <li className="flex gap-3">
+              <span className="text-accent shrink-0 mt-0.5 font-light">–</span>
+              <span
+                className="text-on-dark leading-snug"
+                style={{ fontSize: "clamp(1rem, 1.9vw, 1.2rem)" }}
+              >
+                Five enterprise contracts in five months on the AI monitoring
+                product I own end to end, from go-to-market to deployment.
+              </span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-accent shrink-0 mt-0.5 font-light">–</span>
+              <span
+                className="text-on-dark leading-snug"
+                style={{ fontSize: "clamp(1rem, 1.9vw, 1.2rem)" }}
+              >
+                A physics-based predictive simulation product, built for
+                manufacturers where a defect costs real money.
+              </span>
+            </li>
+          </ul>
 
           {/* CTAs */}
-          <div className="flex items-center justify-center gap-4 mb-12">
+          <div className="flex items-center justify-center gap-4 mb-10">
             <a
               href="#work"
               onClick={(e) => {
@@ -156,28 +163,25 @@ export default function Home() {
           </div>
 
           {/* Customers — own zone behind a hairline divider so it reads as a
-              distinct proof band, not part of the text stack */}
-          <div className="max-w-3xl mx-auto pt-8 border-t border-line-dark">
-            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-on-dark-faint mb-5">
+              distinct proof band, not part of the text stack. One line per
+              industry/company pair instead of a 2-row grid. */}
+          <div className="max-w-2xl mx-auto pt-8 border-t border-line-dark">
+            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-on-dark-faint mb-4">
               Shipped to enterprise customers in
             </p>
-            <div className="flex flex-wrap justify-center gap-x-10 gap-y-4">
+            <p className="font-mono text-[11px] uppercase tracking-[0.06em] flex flex-wrap justify-center gap-x-8 gap-y-2">
               {[
                 ["Energy", "Baker Hughes"],
                 ["Aerospace & Defense", "Thales · Beehive"],
                 ["Medical Devices", "Elos Medtech"],
-                ["Industrial 3D Printing", "3D Systems"],
+                ["Manufacturing Operations", "3D Systems"],
               ].map(([industry, companies]) => (
-                <div key={industry} className="text-center">
-                  <p className="font-mono text-[12px] uppercase tracking-[0.1em] text-on-dark">
-                    {industry}
-                  </p>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-on-dark-faint mt-1">
-                    {companies}
-                  </p>
-                </div>
+                <span key={industry}>
+                  <span className="text-on-dark">{industry}</span>
+                  <span className="text-on-dark-faint">: {companies}</span>
+                </span>
               ))}
-            </div>
+            </p>
           </div>
         </div>
       </section>
