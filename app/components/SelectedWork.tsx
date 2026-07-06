@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useScrollReveal } from "../hooks/useScrollReveal";
+import RoiCalculator from "./RoiCalculator";
 
 function useDialogBehavior(onClose: () => void) {
   useEffect(() => {
@@ -267,6 +268,74 @@ function DocOverlay({ doc, onClose }: { doc: DocRef; onClose: () => void }) {
   );
 }
 
+// The Credit Pricing Model renders natively (no iframe): it's a responsive
+// React component, so it reflows instead of needing the doc overlay's zoom
+// hook, and Escape/focus work through the normal dialog path.
+function PricingOverlay({ onClose }: { onClose: () => void }) {
+  useDialogBehavior(onClose);
+
+  // JS-opened dialog: focus never lands inside on its own (same lesson as the
+  // doc overlay's PDF fix) — move it to the panel so Escape and Tab work
+  // immediately.
+  const panelRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    panelRef.current?.focus();
+  }, []);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-md animate-fade-in"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Credit Pricing Model — interactive pricing tool"
+    >
+      <div
+        ref={panelRef}
+        tabIndex={-1}
+        className="w-full max-w-6xl max-h-[92dvh] bg-paper border border-line rounded-sm flex flex-col overflow-hidden animate-scale-in shadow-2xl outline-none"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center gap-4 px-6 py-4 border-b border-line bg-paper-2 flex-shrink-0">
+          <div className="min-w-0">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-accent-deep font-medium">
+              Interactive pricing tool
+            </p>
+            <h3 className="text-base md:text-xl font-display font-light text-ink mt-0.5">
+              Credit Pricing Model
+            </h3>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-sm text-ink-faint hover:text-ink hover:bg-line/40 border border-transparent hover:border-line transition-all flex-shrink-0"
+            aria-label="Close"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Framing + tool */}
+        <div className="flex-1 overflow-y-auto min-h-0 bg-paper">
+          <div className="px-6 pt-4 pb-1">
+            <p className="text-[11px] text-ink-faint leading-relaxed max-w-3xl">
+              The model behind AMVero&apos;s pricing decision: moving from flat
+              per-seat licenses to consumption-based credits that scale with
+              production volume. Adjust the variables to see where each model
+              wins and where they break even.
+            </p>
+          </div>
+          <div className="p-6 pt-4">
+            <RoiCalculator />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ImageOverlay({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
   useDialogBehavior(onClose);
 
@@ -483,20 +552,15 @@ interface SelectedWorkProps {
   onOpenSimulation: () => void;
 }
 
-const PRICING_DOC: DocRef = {
-  url: "/tools/amvero-roi-optimizer.html",
-  title: "Credit-based Pricing Model",
-  subtitle: "Interactive pricing tool",
-};
-
 export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: SelectedWorkProps) {
   const [doc, setDoc] = useState<DocRef | null>(null);
+  const [pricingOpen, setPricingOpen] = useState(false);
   const [overlayImage, setOverlayImage] = useState<{ src: string; alt: string } | null>(null);
 
   // Site-wide entry points: the action panel and any other component can open
   // the pricing tool or an arbitrary in-site document via window events.
   useEffect(() => {
-    const openPricing = () => setDoc(PRICING_DOC);
+    const openPricing = () => setPricingOpen(true);
     const openDoc = (e: Event) => {
       const d = (e as CustomEvent<DocRef>).detail;
       if (d?.url) setDoc({ url: d.url, title: d.title ?? "Document", subtitle: d.subtitle });
@@ -543,8 +607,7 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
                 links: [
                   {
                     label: "Credit Pricing Model",
-                    url: "/tools/amvero-roi-optimizer.html",
-                    subtitle: "Interactive pricing tool",
+                    onClick: () => setPricingOpen(true),
                   },
                 ],
               },
@@ -578,7 +641,7 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
             eyebrow="Predictive Simulation · Oqton · 2022–2025"
             roleTag="Product Manager, Simulation"
             title="Shipped three simulation modules, culminating in the thermo-mechanical solver that made first-time-right manufacturing achievable"
-            description="I built out the Simulation Suite over three years, shipping a Thermal module, a Mechanical module, and then the Thermo-mechanical module that combined both into a single pass, eliminating inter-stage wait times and making serial production with first-time-right accuracy viable."
+            description="I built out the Simulation Suite over three years, shipping a Thermal module, a Mechanical module, and then the Thermo-mechanical module that combined both into a single pass. That eliminated inter-stage wait times and made first-time-right serial production viable: parts come out correct on the first run, with no physical trial iterations."
             decisions={[
               "Shipped Thermal and Mechanical as separate modules, then unified them into a single coupled thermo-mechanical pass, eliminating inter-stage wait times and making first-time-right accuracy viable in serial production.",
               "Validated on standard engineering workstations, not servers. Expanded the addressable market to manufacturers without specialized compute infrastructure.",
@@ -591,7 +654,7 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
               { value: "~100%", label: "Of dimensional distortion compensated by predictive pre-deformation" },
               { value: "<150µm", label: "Maximum measured deviation on the same large-format part" },
             ]}
-            customerLine="Knauf and tooling manufacturers across Europe"
+            customerLine="Knauf · Wärtsilä · tooling manufacturers across Europe"
             ctaLabel="Explore case study"
             onCta={onOpenSimulation}
             onOverlayOpen={setDoc}
@@ -612,6 +675,7 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
       </div>
 
       {doc && <DocOverlay doc={doc} onClose={() => setDoc(null)} />}
+      {pricingOpen && <PricingOverlay onClose={() => setPricingOpen(false)} />}
       {overlayImage && <ImageOverlay src={overlayImage.src} alt={overlayImage.alt} onClose={() => setOverlayImage(null)} />}
     </section>
   );

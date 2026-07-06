@@ -29,10 +29,25 @@ interface MockJob {
   activeAlerts: string[];
 }
 
+// Optional annotation layer: one-line notes anchored to the UI regions that
+// embody the PM decisions behind the product. Off by default so the demo
+// stays a clean product simulation.
+function PmNote({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex items-start gap-2 bg-[#16a34a]/10 border border-[#16a34a]/30 rounded-sm p-2 text-[9px] leading-relaxed text-[#d6d0c4] font-sans normal-case tracking-normal text-left font-normal">
+      <span className="font-mono text-[8px] uppercase tracking-widest text-[#4ade80] border border-[#16a34a]/40 rounded-sm px-1 py-0.5 shrink-0 font-bold">
+        PM
+      </span>
+      <span>{children}</span>
+    </div>
+  );
+}
+
 export default function AmveroPrototype() {
   const [activeTab, setActiveTab] = useState<"dashboard" | "create-alert">("dashboard");
   const [filterStatus, setFilterStatus] = useState<JobStatus | "all">("all");
   const [isCompact, setIsCompact] = useState<boolean>(false);
+  const [showPmNotes, setShowPmNotes] = useState<boolean>(false);
 
   // --- State for Alert Rules ---
   const [alertRules, setAlertRules] = useState<AlertRule[]>([
@@ -243,8 +258,22 @@ export default function AmveroPrototype() {
             + Create Alert Rule
           </button>
         </div>
-        <div className="text-[10px] font-mono text-[#b3ab9b] font-medium">
-          AMVero AI Control Console v2.1
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => setShowPmNotes(!showPmNotes)}
+            aria-pressed={showPmNotes}
+            className={`flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-wider font-semibold transition-colors ${
+              showPmNotes ? "text-[#4ade80]" : "text-[#b3ab9b] hover:text-[#f0ebe0]"
+            }`}
+          >
+            <div className={`w-6 h-3 rounded-full relative transition-colors ${showPmNotes ? "bg-[#16a34a]" : "bg-[#2d2a26]"}`}>
+              <div className={`w-2.5 h-2.5 bg-white rounded-full absolute top-[1px] transition-transform ${showPmNotes ? "translate-x-3" : "translate-x-[1px]"}`} />
+            </div>
+            PM Notes
+          </button>
+          <div className="hidden md:block text-[10px] font-mono text-[#b3ab9b] font-medium">
+            AMVero AI Control Console v2.1
+          </div>
         </div>
       </div>
 
@@ -277,7 +306,7 @@ export default function AmveroPrototype() {
                 onClick={() => setIsCompact(!isCompact)}
                 className="flex items-center gap-1.5 font-mono text-[9px] text-[#b3ab9b] hover:text-[#f0ebe0] font-semibold"
               >
-                <div className={`w-6 h-3 rounded-full relative transition-colors ${isCompact ? "bg-[#16a34a]" : "bg-border-dark"}`}>
+                <div className={`w-6 h-3 rounded-full relative transition-colors ${isCompact ? "bg-[#16a34a]" : "bg-[#2d2a26]"}`}>
                   <div className={`w-2.5 h-2.5 bg-white rounded-full absolute top-[1px] transition-transform ${isCompact ? "translate-x-3" : "translate-x-[1px]"}`} />
                 </div>
                 Compact Mode
@@ -313,13 +342,23 @@ export default function AmveroPrototype() {
                       <div className="flex flex-col gap-1 overflow-hidden">
                         <span className="text-[8px] text-[#b3ab9b] uppercase tracking-widest font-mono font-bold">Pre-Recoat Camera</span>
                         <div className="aspect-[16/10] bg-black rounded-none border border-[#2d2a26] overflow-hidden relative">
-                          <img src="/ad85b8a1b7ae678f0364407f6e76752a9c3fa60a.png" className="w-full h-full object-cover" alt="pre-recoat feed" />
+                          <img src="/ad85b8a1b7ae678f0364407f6e76752a9c3fa60a.png" className="w-full h-full object-cover" alt="Pre-recoat powder-bed camera frame" />
+                          {job.status === "printing" && (
+                            <span className="absolute top-1 right-1 flex items-center gap-1 bg-black/70 px-1 py-0.5 rounded-sm text-[7px] font-mono text-[#4ade80] tracking-widest font-bold">
+                              <span className="w-1 h-1 rounded-full bg-[#4ade80] animate-pulse" /> LIVE
+                            </span>
+                          )}
                         </div>
                       </div>
                       <div className="flex flex-col gap-1 overflow-hidden">
                         <span className="text-[8px] text-[#b3ab9b] uppercase tracking-widest font-mono font-bold">Post-Recoat Camera</span>
                         <div className="aspect-[16/10] bg-black rounded-none border border-[#2d2a26] overflow-hidden relative">
-                          <img src="/ca0f1faccbe56083dad5a77684dd3de5485d8199.png" className="w-full h-full object-cover" alt="post-recoat feed" />
+                          <img src="/ca0f1faccbe56083dad5a77684dd3de5485d8199.png" className="w-full h-full object-cover" alt="Post-recoat camera frame with AI anomaly annotation" />
+                          {job.status === "printing" && (
+                            <span className="absolute top-1 right-1 flex items-center gap-1 bg-black/70 px-1 py-0.5 rounded-sm text-[7px] font-mono text-[#4ade80] tracking-widest font-bold">
+                              <span className="w-1 h-1 rounded-full bg-[#4ade80] animate-pulse" /> LIVE
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -358,6 +397,13 @@ export default function AmveroPrototype() {
                           </div>
                         ))
                       )}
+                      {showPmNotes && job.id === "j1" && (
+                        <PmNote>
+                          Why operators trust this alert: it fired only after the
+                          defect persisted across consecutive layers. A
+                          single-frame spike never pages anyone.
+                        </PmNote>
+                      )}
                     </div>
                   )}
                 </div>
@@ -369,6 +415,16 @@ export default function AmveroPrototype() {
               <h4 className="font-mono text-[10px] uppercase tracking-wider text-[#b3ab9b] mb-2 font-bold">
                 Active Anomaly Trigger Logic Rules ({alertRules.length})
               </h4>
+              {showPmNotes && (
+                <div className="mb-2">
+                  <PmNote>
+                    The core decision: condition-based rules instead of one
+                    global severity threshold. Operators define the exact
+                    conditions they trust — that is what eliminated alert
+                    fatigue.
+                  </PmNote>
+                </div>
+              )}
               <div className="flex flex-col gap-2">
                 {alertRules.map((rule) => (
                   <div key={rule.id} className="flex justify-between items-center border border-[#2d2a26] bg-black/30 rounded-sm p-2 font-mono text-[9px]">
@@ -466,6 +522,15 @@ export default function AmveroPrototype() {
                 </div>
               )}
             </div>
+
+            {showPmNotes && (
+              <PmNote>
+                Every rule combines an anomaly type, a measurable property, and
+                a persistence threshold. I specified this multi-condition
+                structure so alerts fire on confirmed defects, not
+                single-layer noise.
+              </PmNote>
+            )}
 
             {/* Condition Property */}
             <div className="flex flex-col gap-1">

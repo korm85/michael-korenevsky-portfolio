@@ -2,6 +2,9 @@
 
 import { useState, useMemo } from "react";
 
+// Interactive model behind the AMVero pricing decision: flat per-seat licenses
+// vs consumption-based credits. Renders natively on the site's cream surface —
+// same tokens as the case-study modals (see globals.css @theme).
 export default function RoiCalculator() {
   const [baseFee, setBaseFee] = useState<number>(8000);
   const [layerCost, setLayerCost] = useState<number>(0.05);
@@ -53,105 +56,106 @@ export default function RoiCalculator() {
     return { points, maxVal: Math.max(legacyTotalCost, baseFee + (maxRange * layersPerBuild * layerCost)), maxRange };
   }, [tippingPointBuilds, baseFee, layersPerBuild, layerCost, legacyTotalCost]);
 
-  const sliderClass = "w-full accent-[#004ac6] h-1.5 rounded-lg cursor-pointer";
+  const sliderClass = "w-full accent-[#16a34a] h-1.5 cursor-pointer";
+  const panelClass = "bg-paper-2 border border-line rounded-sm p-4 flex flex-col gap-4";
+  const panelHeading = "font-mono text-[10px] uppercase tracking-[0.12em] text-accent-deep font-medium";
 
   return (
-    <div className="w-full flex flex-col gap-6 text-text-secondary">
+    <div className="w-full flex flex-col gap-5 text-ink-soft">
       {/* Controls */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
         {/* Pricing Inputs */}
-        <div className="md:col-span-4 bg-canvas border border-border-dark rounded p-4 flex flex-col gap-4">
-          <h4 className="font-mono text-[10px] uppercase tracking-wider text-primary font-bold">
-            1. Pricing Variables
-          </h4>
+        <div className={`md:col-span-4 ${panelClass}`}>
+          <h4 className={panelHeading}>1. Pricing Variables</h4>
           <div className="space-y-1">
             <div className="flex justify-between text-xs font-mono">
-              <span className="text-text-muted">Proposed Base Fee:</span>
-              <span className="text-primary font-bold">${baseFee.toLocaleString()}</span>
+              <span className="text-ink-faint">Proposed Base Fee:</span>
+              <span className="text-ink font-semibold">${baseFee.toLocaleString()}</span>
             </div>
-            <input type="range" min="2000" max="15000" step="500" value={baseFee} onChange={(e) => setBaseFee(Number(e.target.value))} className={sliderClass} />
+            <input type="range" min="2000" max="15000" step="500" value={baseFee} onChange={(e) => setBaseFee(Number(e.target.value))} className={sliderClass} aria-label="Proposed base fee" />
           </div>
           <div className="space-y-1">
             <div className="flex justify-between text-xs font-mono">
-              <span className="text-text-muted">Cost per 1,000 Layers:</span>
-              <span className="text-primary font-bold">${(layerCost * 1000).toFixed(2)}</span>
+              <span className="text-ink-faint">Cost per 1,000 Layers:</span>
+              <span className="text-ink font-semibold">${(layerCost * 1000).toFixed(2)}</span>
             </div>
-            <input type="range" min="0.01" max="0.15" step="0.005" value={layerCost} onChange={(e) => setLayerCost(Number(e.target.value))} className={sliderClass} />
+            <input type="range" min="0.01" max="0.15" step="0.005" value={layerCost} onChange={(e) => setLayerCost(Number(e.target.value))} className={sliderClass} aria-label="Cost per thousand layers" />
           </div>
-          <div className="pt-2 border-t border-border-dark text-[10px] text-text-muted leading-normal">
+          <div className="pt-2 border-t border-line text-[10px] text-ink-faint leading-normal">
             Proposed credit model charges a low base fee + volume-based consumption fee. Legacy charges a flat ${legacyFixedPerPrinter.toLocaleString()}/yr per node.
           </div>
         </div>
 
         {/* Fleet & Usage Inputs */}
-        <div className="md:col-span-4 bg-canvas border border-border-dark rounded p-4 flex flex-col gap-4">
-          <h4 className="font-mono text-[10px] uppercase tracking-wider text-primary font-bold">
-            2. Production & Fleet
-          </h4>
+        <div className={`md:col-span-4 ${panelClass}`}>
+          <h4 className={panelHeading}>2. Production & Fleet</h4>
           <div className="space-y-1">
             <div className="flex justify-between text-xs font-mono">
-              <span className="text-text-muted">Active Printers:</span>
-              <span className="text-primary font-bold">{fleetSize} {fleetSize === 1 ? "Node" : "Nodes"}</span>
+              <span className="text-ink-faint">Active Printers:</span>
+              <span className="text-ink font-semibold">{fleetSize} {fleetSize === 1 ? "Node" : "Nodes"}</span>
             </div>
-            <input type="range" min="1" max="20" step="1" value={fleetSize} onChange={(e) => setFleetSize(Number(e.target.value))} className={sliderClass} />
+            <input type="range" min="1" max="20" step="1" value={fleetSize} onChange={(e) => setFleetSize(Number(e.target.value))} className={sliderClass} aria-label="Fleet size" />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <div className="flex justify-between text-[10px] font-mono text-text-muted">
+              <div className="flex justify-between text-[10px] font-mono text-ink-faint">
                 <span>Height:</span>
-                <span className="text-text-primary font-semibold">{buildHeight}mm</span>
+                <span className="text-ink font-semibold">{buildHeight}mm</span>
               </div>
-              <input type="range" min="10" max="500" step="10" value={buildHeight} onChange={(e) => setBuildHeight(Number(e.target.value))} className={sliderClass} />
+              <input type="range" min="10" max="500" step="10" value={buildHeight} onChange={(e) => setBuildHeight(Number(e.target.value))} className={sliderClass} aria-label="Build height in millimeters" />
             </div>
             <div className="space-y-1">
-              <div className="flex justify-between text-[10px] font-mono text-text-muted">
+              <div className="flex justify-between text-[10px] font-mono text-ink-faint">
                 <span>Layer Res:</span>
-                <span className="text-text-primary font-semibold">{layerHeight}µm</span>
+                <span className="text-ink font-semibold">{layerHeight}µm</span>
               </div>
-              <input type="range" min="20" max="120" step="10" value={layerHeight} onChange={(e) => setLayerHeight(Number(e.target.value))} className={sliderClass} />
+              <input type="range" min="20" max="120" step="10" value={layerHeight} onChange={(e) => setLayerHeight(Number(e.target.value))} className={sliderClass} aria-label="Layer resolution in microns" />
             </div>
           </div>
           <div className="space-y-1">
             <div className="flex justify-between text-xs font-mono">
-              <span className="text-text-muted">Weekly Builds (Total):</span>
-              <span className="text-primary font-bold">{weeklyBuilds} / week</span>
+              <span className="text-ink-faint">Weekly Builds (Total):</span>
+              <span className="text-ink font-semibold">{weeklyBuilds} / week</span>
             </div>
-            <input type="range" min="1" max="100" step="1" value={weeklyBuilds} onChange={(e) => setWeeklyBuilds(Number(e.target.value))} className={sliderClass} />
+            <input type="range" min="1" max="100" step="1" value={weeklyBuilds} onChange={(e) => setWeeklyBuilds(Number(e.target.value))} className={sliderClass} aria-label="Weekly builds" />
           </div>
         </div>
 
         {/* Results */}
         <div className="md:col-span-4 grid grid-rows-3 gap-3">
-          <div className="bg-canvas border border-border-dark rounded p-3 flex justify-between items-center">
+          <div className="bg-paper-2 border border-line rounded-sm p-3 flex justify-between items-center">
             <div>
-              <p className="text-[9px] font-mono uppercase tracking-wider text-text-muted font-bold">Proposed Credit Cost</p>
-              <h3 className="text-xl font-bold font-display text-text-primary mt-1">${Math.round(proposedTotalCost).toLocaleString()}<span className="text-xs text-text-muted font-normal">/yr</span></h3>
+              <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-ink-faint">Proposed Credit Cost</p>
+              <h3 className="text-2xl font-display font-light text-accent-deep mt-1 leading-none">
+                ${Math.round(proposedTotalCost).toLocaleString()}
+                <span className="text-xs text-ink-faint font-sans">/yr</span>
+              </h3>
             </div>
             <div className="text-right">
-              <p className="text-[9px] font-mono uppercase tracking-wider text-text-muted font-bold">Legacy Fixed Cost</p>
-              <p className="text-sm font-bold text-primary mt-1">${legacyTotalCost.toLocaleString()}/yr</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-ink-faint">Legacy Fixed Cost</p>
+              <p className="text-sm font-display font-light text-ink mt-1">${legacyTotalCost.toLocaleString()}/yr</p>
             </div>
           </div>
-          <div className="bg-canvas border border-border-dark rounded p-3 flex justify-between items-center">
+          <div className="bg-paper-2 border border-line rounded-sm p-3 flex justify-between items-center">
             <div>
-              <p className="text-[9px] font-mono uppercase tracking-wider text-text-muted font-bold">Parity Threshold</p>
-              <h3 className="text-sm font-bold font-display text-text-primary mt-1">{tippingPointBuilds} Builds / year</h3>
-              <p className="text-[8px] text-text-muted">Below this point, credits save money</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-ink-faint">Parity Threshold</p>
+              <h3 className="text-sm font-display text-ink mt-1">{tippingPointBuilds} Builds / year</h3>
+              <p className="text-[9px] text-ink-faint">Below this point, credits save money</p>
             </div>
             <div className="text-right">
-              <p className="text-[9px] font-mono uppercase tracking-wider text-text-muted font-bold">Weekly Target</p>
-              <p className="text-xs font-semibold text-text-secondary mt-1">{(tippingPointBuilds / 52).toFixed(1)} builds</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-ink-faint">Weekly Target</p>
+              <p className="text-xs font-semibold text-ink-soft mt-1">{(tippingPointBuilds / 52).toFixed(1)} builds</p>
             </div>
           </div>
-          <div className={`rounded p-3 border flex flex-col justify-center items-center text-center gap-1 transition-all ${
+          <div className={`rounded-sm p-3 border flex flex-col justify-center items-center text-center gap-1 transition-all ${
             isCreditsRecommended
-              ? "bg-emerald-50 border-emerald-200 text-emerald-700"
-              : "bg-amber-50 border-amber-200 text-amber-700"
+              ? "bg-accent/10 border-accent-deep/40 text-accent-deep"
+              : "bg-paper-2 border-line text-ink-soft"
           }`}>
-            <span className="text-[10px] font-mono uppercase font-bold tracking-widest">
+            <span className="text-[10px] font-mono uppercase font-medium tracking-[0.12em]">
               {isCreditsRecommended ? "✔ Credit Pricing Recommended" : "Legacy Fixed Pricing Better"}
             </span>
-            <span className="text-[8px] text-text-muted leading-none">
+            <span className="text-[9px] text-ink-faint leading-none">
               {isCreditsRecommended
                 ? `Saves $${Math.max(0, Math.round(legacyTotalCost - proposedTotalCost)).toLocaleString()}/yr over legacy flat pricing`
                 : `Proposed is $${Math.max(0, Math.round(proposedTotalCost - legacyTotalCost)).toLocaleString()}/yr higher than legacy`}
@@ -161,69 +165,65 @@ export default function RoiCalculator() {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Fleet Scaling Bar Chart */}
-        <div className="bg-canvas border border-border-dark rounded p-4 flex flex-col gap-3">
-          <h4 className="font-mono text-[10px] uppercase tracking-wider text-text-muted font-bold">
-            Annual Cost Comparison (Fleet Scaling)
-          </h4>
-          <div className="h-[200px] w-full flex items-end justify-between px-2 pb-6 pt-4 border-b border-l border-border-dark relative">
-            <div className="absolute inset-x-0 bottom-1/4 border-b border-border-dark/40 pointer-events-none" />
-            <div className="absolute inset-x-0 bottom-2/4 border-b border-border-dark/40 pointer-events-none" />
-            <div className="absolute inset-x-0 bottom-3/4 border-b border-border-dark/40 pointer-events-none" />
+        <div className={panelClass}>
+          <h4 className={panelHeading}>Annual Cost Comparison (Fleet Scaling)</h4>
+          <div className="h-[200px] w-full flex items-end justify-between px-2 pb-6 pt-4 border-b border-l border-line relative">
+            <div className="absolute inset-x-0 bottom-1/4 border-b border-line/50 pointer-events-none" />
+            <div className="absolute inset-x-0 bottom-2/4 border-b border-line/50 pointer-events-none" />
+            <div className="absolute inset-x-0 bottom-3/4 border-b border-line/50 pointer-events-none" />
             {fleetScalingData.map((data) => (
               <div key={data.fleet} className="flex flex-col items-center gap-2 flex-1 group">
                 <div className="w-full flex justify-center gap-3 items-end h-[140px]">
                   <div
-                    className="w-4 bg-outline-variant hover:bg-text-muted rounded-t transition-all duration-500 relative"
+                    className="w-4 bg-ink-faint/60 hover:bg-ink-faint rounded-t-sm transition-all duration-500 relative"
                     style={{ height: `${data.legacyHeightPercent}%` }}
                   >
-                    <div className="opacity-0 group-hover:opacity-100 absolute bottom-full left-1/2 -translate-x-1/2 bg-surface border border-border-dark px-1.5 py-0.5 rounded text-[8px] font-mono text-text-muted mb-1 z-10 whitespace-nowrap shadow-md transition-opacity duration-300">
+                    <div className="opacity-0 group-hover:opacity-100 absolute bottom-full left-1/2 -translate-x-1/2 bg-paper border border-line px-1.5 py-0.5 rounded-sm text-[8px] font-mono text-ink-soft mb-1 z-10 whitespace-nowrap shadow-md transition-opacity duration-300">
                       Legacy: ${Math.round(data.legacyCost / 1000)}k
                     </div>
                   </div>
                   <div
-                    className="w-4 bg-primary hover:bg-primary-bright rounded-t transition-all duration-500 relative"
+                    className="w-4 bg-accent hover:bg-accent-deep rounded-t-sm transition-all duration-500 relative"
                     style={{ height: `${data.proposedHeightPercent}%` }}
                   >
-                    <div className="opacity-0 group-hover:opacity-100 absolute bottom-full left-1/2 -translate-x-1/2 bg-surface border border-border-dark px-1.5 py-0.5 rounded text-[8px] font-mono text-primary mb-1 z-10 whitespace-nowrap shadow-md transition-opacity duration-300">
+                    <div className="opacity-0 group-hover:opacity-100 absolute bottom-full left-1/2 -translate-x-1/2 bg-paper border border-line px-1.5 py-0.5 rounded-sm text-[8px] font-mono text-accent-deep mb-1 z-10 whitespace-nowrap shadow-md transition-opacity duration-300">
                       Credits: ${Math.round(data.proposedCost / 1000)}k
                     </div>
                   </div>
                 </div>
-                <span className="text-[10px] text-text-muted font-mono font-medium">{data.fleet} {data.fleet === 1 ? "Node" : "Nodes"}</span>
+                <span className="text-[10px] text-ink-faint font-mono">{data.fleet} {data.fleet === 1 ? "Node" : "Nodes"}</span>
               </div>
             ))}
           </div>
-          <div className="flex justify-center gap-4 text-[9px] font-mono uppercase tracking-wider text-text-muted font-bold">
-            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2 bg-outline-variant rounded-sm border border-border-dark" /> Legacy Fixed</span>
-            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2 bg-primary rounded-sm" /> Proposed Credit</span>
+          <div className="flex justify-center gap-4 font-mono text-[9px] uppercase tracking-[0.1em] text-ink-faint">
+            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2 bg-ink-faint/60 rounded-sm" /> Legacy Fixed</span>
+            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2 bg-accent rounded-sm" /> Proposed Credit</span>
           </div>
         </div>
 
         {/* Breakeven Threshold Line Chart */}
-        <div className="bg-canvas border border-border-dark rounded p-4 flex flex-col gap-3">
-          <h4 className="font-mono text-[10px] uppercase tracking-wider text-text-muted font-bold">
-            Parity Threshold Analysis (Active Fleet)
-          </h4>
-          <div className="h-[200px] w-full relative border-b border-l border-border-dark">
+        <div className={panelClass}>
+          <h4 className={panelHeading}>Parity Threshold Analysis (Active Fleet)</h4>
+          <div className="h-[200px] w-full relative border-b border-l border-line">
             <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
               {lineChartData.maxVal > 0 && (
                 <line
                   x1="0" y1={100 - (legacyTotalCost / lineChartData.maxVal) * 100}
                   x2="100" y2={100 - (legacyTotalCost / lineChartData.maxVal) * 100}
-                  stroke="#c3c6d7" strokeWidth="1.5" strokeDasharray="3 3"
+                  stroke="#6e6759" strokeWidth="1.5" strokeDasharray="3 3"
                 />
               )}
               {lineChartData.points.length > 0 && (
                 <>
                   <path
                     d={`M 0,${100 - (baseFee / lineChartData.maxVal) * 100} ${lineChartData.points.map((p, idx) => `L ${(idx / (lineChartData.points.length - 1)) * 100},${100 - (p.proposedVal / lineChartData.maxVal) * 100}`).join(" ")} L 100,100 L 0,100 Z`}
-                    fill="url(#blueGradient)" opacity="0.12"
+                    fill="url(#creditGradient)" opacity="0.12"
                   />
                   <path
                     d={`M 0,${100 - (baseFee / lineChartData.maxVal) * 100} ${lineChartData.points.map((p, idx) => `L ${(idx / (lineChartData.points.length - 1)) * 100},${100 - (p.proposedVal / lineChartData.maxVal) * 100}`).join(" ")}`}
-                    fill="none" stroke="#004ac6" strokeWidth="2"
+                    fill="none" stroke="#16a34a" strokeWidth="2"
                   />
                 </>
               )}
@@ -231,54 +231,54 @@ export default function RoiCalculator() {
                 <circle
                   cx={(tippingPointBuilds / lineChartData.maxRange) * 100}
                   cy={100 - (legacyTotalCost / lineChartData.maxVal) * 100}
-                  r="3.5" fill="#004ac6"
+                  r="3.5" fill="#166534"
                 />
               )}
               <defs>
-                <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#004ac6" />
-                  <stop offset="100%" stopColor="#004ac6" stopOpacity="0" />
+                <linearGradient id="creditGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#16a34a" />
+                  <stop offset="100%" stopColor="#16a34a" stopOpacity="0" />
                 </linearGradient>
               </defs>
             </svg>
             <div className="absolute top-2 left-2 flex flex-col gap-0.5">
-              <span className="text-[9px] font-mono text-text-muted bg-surface px-1 py-0.5 rounded border border-border-dark font-semibold">
+              <span className="text-[9px] font-mono text-ink-soft bg-paper px-1.5 py-0.5 rounded-sm border border-line">
                 Legacy baseline: ${legacyTotalCost.toLocaleString()}
               </span>
             </div>
             {tippingPointBuilds > 0 && tippingPointBuilds < lineChartData.maxRange && (
               <div
-                className="absolute text-[8px] font-mono bg-surface text-primary border border-border-dark rounded px-1.5 py-0.5 shadow-md flex flex-col items-center pointer-events-none -translate-x-1/2 -translate-y-full"
+                className="absolute text-[8px] font-mono bg-paper text-accent-deep border border-line rounded-sm px-1.5 py-0.5 shadow-md flex flex-col items-center pointer-events-none -translate-x-1/2 -translate-y-full"
                 style={{ left: `${(tippingPointBuilds / lineChartData.maxRange) * 100}%`, top: `${100 - (legacyTotalCost / lineChartData.maxVal) * 100}%`, marginTop: "-6px" }}
               >
-                <span className="font-bold">Parity Point</span>
-                <span className="font-black">{tippingPointBuilds} builds/yr</span>
+                <span className="font-medium uppercase tracking-wider">Parity Point</span>
+                <span className="font-bold">{tippingPointBuilds} builds/yr</span>
               </div>
             )}
-            <div className="absolute bottom-1 left-2 text-[8px] text-text-muted font-mono">0 builds</div>
-            <div className="absolute bottom-1 right-2 text-[8px] text-text-muted font-mono">{Math.round(lineChartData.maxRange)} builds/yr</div>
+            <div className="absolute bottom-1 left-2 text-[8px] text-ink-faint font-mono">0 builds</div>
+            <div className="absolute bottom-1 right-2 text-[8px] text-ink-faint font-mono">{Math.round(lineChartData.maxRange)} builds/yr</div>
           </div>
-          <div className="flex justify-center gap-4 text-[9px] font-mono uppercase tracking-wider text-text-muted font-bold">
-            <span className="flex items-center gap-1.5"><span className="w-2.5 h-0.5 border-t border-dashed border-outline-variant" /> Legacy Baseline</span>
-            <span className="flex items-center gap-1.5"><span className="w-2.5 h-0.5 bg-primary" /> Proposed Credits</span>
+          <div className="flex justify-center gap-4 font-mono text-[9px] uppercase tracking-[0.1em] text-ink-faint">
+            <span className="flex items-center gap-1.5"><span className="w-2.5 h-0.5 border-t border-dashed border-ink-faint" /> Legacy Baseline</span>
+            <span className="flex items-center gap-1.5"><span className="w-2.5 h-0.5 bg-accent" /> Proposed Credits</span>
           </div>
         </div>
       </div>
 
       {/* Info Block */}
-      <div className="bg-canvas border border-border-dark rounded p-3 text-xs text-text-muted leading-relaxed grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="bg-paper-2 border border-line rounded-sm p-4 text-xs text-ink-faint leading-relaxed grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <span className="font-bold font-display text-text-primary">Weekly Layer Calculation Details:</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-soft font-medium">Layer Calculation</span>
           <p className="mt-1">
-            Each print build runs layers of thickness <span className="text-text-primary font-semibold font-mono">{layerHeight}µm</span>. For a build height of <span className="text-text-primary font-semibold font-mono">{buildHeight}mm</span>, this requires <span className="text-primary font-bold font-mono">{layersPerBuild.toLocaleString()}</span> individual layers. Under a 52-week schedule with <span className="text-text-primary font-semibold font-mono">{weeklyBuilds}</span> builds/week, the fleet consumes <span className="text-primary font-bold font-mono">{yearlyLayers.toLocaleString()}</span> layers per year.
+            Each build runs layers of thickness <span className="text-ink font-semibold font-mono">{layerHeight}µm</span>. For a build height of <span className="text-ink font-semibold font-mono">{buildHeight}mm</span>, this requires <span className="text-accent-deep font-semibold font-mono">{layersPerBuild.toLocaleString()}</span> individual layers. Under a 52-week schedule with <span className="text-ink font-semibold font-mono">{weeklyBuilds}</span> builds/week, the fleet consumes <span className="text-accent-deep font-semibold font-mono">{yearlyLayers.toLocaleString()}</span> layers per year.
           </p>
         </div>
         <div>
-          <span className="font-bold font-display text-text-primary">Licensing Formula Model:</span>
-          <p className="mt-1">
-            {`Proposed Cost = Base Fee (${baseFee.toLocaleString()}) + (Yearly Layers (${yearlyLayers.toLocaleString()}) × Cost per Layer ($${layerCost.toFixed(3)}))`}
+          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-soft font-medium">Pricing Formula</span>
+          <p className="mt-1 font-mono text-[10px] leading-relaxed">
+            {`Proposed = Base Fee ($${baseFee.toLocaleString()}) + Yearly Layers (${yearlyLayers.toLocaleString()}) × Cost/Layer ($${layerCost.toFixed(3)})`}
             <br />
-            {`Legacy Cost = Base Fee ($8,000) + (Printers (${fleetSize}) × Annual License ($6,000))`}
+            {`Legacy = Base Fee ($8,000) + Printers (${fleetSize}) × Annual License ($6,000)`}
           </p>
         </div>
       </div>
