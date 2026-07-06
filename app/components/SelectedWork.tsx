@@ -282,10 +282,21 @@ function PricingOverlay({ onClose }: { onClose: () => void }) {
     panelRef.current?.focus();
   }, []);
 
+  // A slider drag that starts inside the panel and releases over the backdrop
+  // fires the click on the backdrop (common ancestor of down/up targets) —
+  // close only when the pointer went DOWN on the backdrop itself, so dragging
+  // a slider can never dismiss the dialog.
+  const downOnBackdrop = useRef(false);
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-md animate-fade-in"
-      onClick={onClose}
+      onPointerDown={(e) => {
+        downOnBackdrop.current = e.target === e.currentTarget;
+      }}
+      onClick={(e) => {
+        if (downOnBackdrop.current && e.target === e.currentTarget) onClose();
+      }}
       role="dialog"
       aria-modal="true"
       aria-label="Credit Pricing Model — interactive pricing tool"
