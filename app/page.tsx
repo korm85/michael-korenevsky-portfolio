@@ -118,11 +118,11 @@ export default function Home() {
                 className="text-on-dark leading-snug"
                 style={{ fontSize: "clamp(1rem, 1.9vw, 1.2rem)" }}
               >
-                Took a third-party physics engine and shipped it in three
-                stages: thermal, mechanical, then a unified thermo-mechanical
-                module. It compensates close to 100% of dimensional
-                distortion, turning trial and error into a first-time-right
-                process.
+                A physics-based simulation product I shipped in three
+                releases over three years. It predicts how a part will
+                deform during manufacturing and corrects for it upfront, so
+                customers get parts right the first time instead of paying
+                for trial runs.
               </span>
             </li>
           </ul>

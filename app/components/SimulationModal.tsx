@@ -113,12 +113,23 @@ export default function SimulationModal({ isOpen, onClose }: SimulationModalProp
 
             {/* Right: Image + Outcomes */}
             <div className="md:col-span-5 space-y-4">
-              <div className="rounded-sm overflow-hidden border border-line bg-paper-2 p-2">
-                <img
-                  src="/simulation-knauf-fit.png"
-                  alt="Simulation Suite first-time-right validation"
-                  className="w-full h-auto object-contain"
-                />
+              <div className="rounded-sm overflow-hidden border border-line bg-paper-2">
+                <div className="px-3 pt-2.5 pb-1.5">
+                  <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-accent-deep font-medium">
+                    Beta Validation
+                  </p>
+                </div>
+                <div className="px-2 pb-2">
+                  <img
+                    src="/simulation-knauf-fit.png"
+                    alt="Structural fit validation from the Knauf beta"
+                    className="w-full h-auto object-contain rounded-sm"
+                  />
+                </div>
+                <p className="px-3 pb-2.5 text-[10px] text-ink-faint leading-relaxed">
+                  Structural fit validation from the Knauf beta: distortion
+                  predicted and compensated before the part was manufactured.
+                </p>
               </div>
 
               <p className="font-mono text-[10px] uppercase tracking-widest text-ink-faint font-medium">

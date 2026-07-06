@@ -1,5 +1,21 @@
 # Skill: Portfolio Design System
 
+> **Status update (2026-07-06):** the token tables below describe the
+> pre-redesign teal/amber dark system and are **superseded** by the live
+> "Themishka" redesign merged in PR #6 (2026-07-03). The source of truth for
+> tokens is `app/globals.css` (`@theme` block). Live system in brief:
+> dark canvas `#1b1916`, cream paper `#f3efe6` / `#ebe5d8`, forest-green
+> accent `#16a34a` (text-safe deep variant `#166534` on cream), hairline
+> borders `#cdc7be` / `#2d2a26`, Fraunces display, Hanken Grotesk body,
+> JetBrains Mono labels. Semantic Tailwind tokens: `bg-canvas`, `bg-paper`,
+> `bg-paper-2`, `text-ink`/`-soft`/`-faint`, `text-on-dark`/`-soft`/`-faint`,
+> `border-line`/`-dark`, `text-accent`/`-deep`. Sections alternate dark and
+> cream; modals use cream surfaces; the AmveroPrototype stays dark
+> (simulates the real product UI). The durable rules below that survive the
+> redesign: no drop shadows on cards, `rounded-sm` corners (no pills), no
+> stock illustrations/emoji, mono uppercase eyebrows, restraint over
+> decoration.
+
 Authoritative visual rules for Michael's portfolio site. Every styling decision must trace back to this document. When in conflict with ad-hoc choices made during a build session, this skill wins.
 
 ## Color palette

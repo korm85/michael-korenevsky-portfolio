@@ -6,11 +6,12 @@ Full visual redesign complete and live on `themishka.me`. Dark/cream/forest-gree
 
 ## Last completed
 
+- 2026-07-06: Fixed Credit Pricing Model regressions from the clarity-audit rebuild (branch `claude/portfolio-clarity-audit-l2t7id`): a slider drag that released over the backdrop was closing the whole overlay (now only closes on a plain click that both starts and ends on the backdrop); the parity chart's `preserveAspectRatio="none"` SVG was stretching stroke widths and smearing the parity dot into an ellipse (switched to `vector-effect="non-scaling-stroke"` + an HTML dot); both charts were missing $ y-axis labels; the Weekly Builds slider had no visible effect (bar chart used a hardcoded 2 builds/week/printer, and the "Yearly Builds" readout from the old tool had been dropped) — now scales off the fleet's actual per-printer rate and a restored "Your Yearly Builds" stat plus a volume marker line make the slider's effect visible; added a hover tooltip to the parity chart; restored the `0.001` cost/layer slider step and the "Build Height:" label.
+- 2026-07-06: Clarity audit + mock/prototype visual upgrade (branch `claude/portfolio-clarity-audit-l2t7id`, PR pending review). Credit Pricing Model rebuilt as a native on-brand React overlay (retired the off-brand CDN-Tailwind iframe tool and its AI-generation meta tags); PM Notes annotation toggle added to AmveroPrototype; all 8 artifact docs rethemed from teal/system-fonts to site green/cream/Fraunces (fonts load async so the doc overlay never blanks); hero bullet 2 rewritten jargon-free; Wärtsilä added to the Simulation customer line; Knauf beta caption added to SimulationModal; deleted orphaned `/site-build`, `SiteArchitecture`, `TimelineNav`; fixed AmveroModal clipping on short screens.
 - 2026-07-03: Merged the audit-driven redesign (PR #6, "Variation C") to `main` — now live on `themishka.me`. PM-first hero, bottom "Find Anything" action panel with scrollspy, in-site document overlay (PDFs converted to HTML, replacing new-tab links), AmveroPrototype rethemed to the site palette, WCAG AA contrast, dialog a11y, `/dashboard` and `/portfolio` removed.
 - 2026-07-03: Fixed a real race condition where Escape could silently fail to close a doc overlay depending on load speed (the Escape-forwarding listener now attaches immediately instead of waiting on the iframe's `load` event).
 - 2026-07-03: Fixed PDF-overlay "needs a second click" bug — root cause was focus never moving into the JS-opened dialog; now focused programmatically on mount.
 - 2026-07-03: Converted 3 PDF artifacts (GTM Narrative, Deployment Playbook, Traceability Record) to in-site HTML docs; restored the Traceability Record's 3 embedded images (3D build viewer, two anomaly-marked layer captures) from the original PDF. GTM Narrative's 5 screenshots were intentionally left out (unscrubbed, include a customer job name and a partner's logo) — text-only for now.
-- 2026-06-08: Pushed Themishka redesign to official repo and deployed to `themishka.me`. Replaced Emily Beal gold/bento design entirely.
 
 ## In progress
 
@@ -18,6 +19,7 @@ Nothing. Clean state.
 
 ## Next up
 
+- Review the clarity-audit PR on its Vercel preview and merge to `main`
 - Decide on PRs #3/#4/#5 (audit doc + the two standalone comparison variations) — now superseded by the merged #6, candidates for closing
 - GTM Narrative screenshots: revisit if Michael wants them scrubbed and added later
 - Review themishka.me on a real mobile device post-deploy
@@ -40,3 +42,6 @@ Nothing. Clean state.
 - **/dashboard removed from production (2026-07-03)**: It rendered internal STATUS.md publicly. Status lives in the repo only.
 - **PDF artifacts converted to in-site HTML (2026-07-03)**: Browser-native PDF viewers proved unreliable inside a JS-opened overlay (needed a second click, and separately a race condition could break Escape-to-close). Converting to HTML sidesteps both classes of bug entirely and matches the rest of the site's doc-overlay pattern. 5 remaining PDFs with no HTML equivalent were deleted as unreferenced dead weight.
 - **GTM Narrative ships text-only, no screenshots (2026-07-03)**: The original PDF's 5 screenshots include an unscrubbed customer job name and a partner company's logo. Per `ip-handling`, unscrubbed screenshots aren't shown as-is; Michael deferred the scrubbing decision rather than approve as-is. Revisit if he wants them added later.
+- **Pricing tool is native React, not an iframe (2026-07-06)**: The Credit Pricing Model renders as a `PricingOverlay` + `RoiCalculator` component. A responsive component reflows, so the doc overlay's zoom hook isn't needed, and Escape/focus work through the normal dialog path. The old `/tools/amvero-roi-optimizer.html` (CDN Tailwind, Chart.js, off-brand palette, leftover AI-generation meta tags in source) was deleted along with its unreferenced `/artifacts/roi-optimizer.html` duplicate.
+- **Artifact docs load Google Fonts async (2026-07-06)**: A render-blocking fonts `<link>` blanks the doc-overlay iframe until the stylesheet resolves. All 8 artifacts use the `media="print" onload` swap pattern (+ noscript fallback) so content paints immediately with fallback fonts.
+- **PM Notes off by default (2026-07-06)**: The AmveroPrototype annotation layer stays hidden so the demo reads as a clean product simulation; the modal intro tells visitors the toggle exists. Availability signal stays in Contact/About only — Michael reconfirmed the hero carries no availability line (2026-07-06).
