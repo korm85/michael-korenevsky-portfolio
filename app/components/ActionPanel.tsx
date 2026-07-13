@@ -350,7 +350,7 @@ export default function ActionPanel() {
             <path strokeLinecap="round" d="m20 20-3.5-3.5" />
           </svg>
           <span className="font-mono text-[11px] uppercase tracking-[0.1em]">
-            {open ? "Close" : "Find anything"}
+            {open ? "Close" : "Explore portfolio"}
           </span>
           <span className="hidden md:inline font-mono text-[9px] text-ink-faint border border-line rounded-sm px-1.5 py-0.5">
             ⌘K
