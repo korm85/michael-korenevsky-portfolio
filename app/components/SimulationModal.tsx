@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useRef } from "react";
+import { useDialog } from "../hooks/useDialog";
 
 interface SimulationModalProps {
   isOpen: boolean;
@@ -8,19 +9,8 @@ interface SimulationModalProps {
 }
 
 export default function SimulationModal({ isOpen, onClose }: SimulationModalProps) {
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [isOpen, onClose]);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialog({ isOpen, onClose, dialogRef });
 
   if (!isOpen) return null;
 
@@ -33,6 +23,8 @@ export default function SimulationModal({ isOpen, onClose }: SimulationModalProp
       aria-label="Physics-based simulation case study"
     >
       <div
+        ref={dialogRef}
+        tabIndex={-1}
         className="w-full max-w-[94vw] xl:max-w-7xl h-[90dvh] md:h-[82vh] bg-paper border border-line rounded-sm flex flex-col overflow-hidden animate-scale-in text-left select-text shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
@@ -48,6 +40,7 @@ export default function SimulationModal({ isOpen, onClose }: SimulationModalProp
           </div>
           <button
             onClick={onClose}
+            data-dialog-autofocus
             className="p-1 rounded-sm text-ink-faint hover:text-ink hover:bg-line/40 border border-transparent hover:border-line transition-all flex-shrink-0"
             aria-label="Close"
           >

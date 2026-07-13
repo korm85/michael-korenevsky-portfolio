@@ -49,6 +49,12 @@ export default function Home() {
 
   return (
     <main className="flex flex-col min-h-screen overflow-x-hidden">
+      <a
+        href="#work"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-1/2 focus:-translate-x-1/2 focus:z-[100] focus:bg-paper focus:text-ink focus:border focus:border-line focus:px-4 focus:py-2 focus:rounded-sm focus:font-mono focus:text-xs focus:uppercase focus:tracking-[0.08em]"
+      >
+        Skip to selected work
+      </a>
       <Header />
 
       {/* ── Hero ── */}
@@ -140,20 +146,16 @@ export default function Home() {
               onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
               onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
             >
-              View Work
+              Explore case studies
             </a>
             <a
-              href="#contact"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-              }}
+              href="mailto:korm85@gmail.com"
               className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.06em] bg-transparent text-on-dark px-5 py-3 rounded-sm border border-on-dark/40 hover:bg-on-dark hover:text-canvas hover:border-on-dark transition-all duration-300"
               style={{ transform: "translateY(0)" }}
               onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
               onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
             >
-              Get in Touch
+              Email Michael
             </a>
           </div>
 
