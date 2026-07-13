@@ -638,6 +638,8 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
               { value: "5", label: "Enterprise clients in 5 months" },
             ]}
             customerLine="Baker Hughes · Thales · Elos Medtech · 3D Systems · Beehive"
+            ctaLabel="Explore the AMVero case study"
+            onCta={onOpenAmvero}
             onOverlayOpen={setDoc}
             onImageClick={(src, alt) => setOverlayImage({ src, alt })}
             docs={[
