@@ -103,3 +103,14 @@ Update STATUS.md at the end of any session where meaningful work happened. Speci
 - "Next up": ordered list, most immediate first
 - "Decisions log": only non-obvious choices — skip anything derivable from reading the code
 <!-- END:status-continuity -->
+
+
+<!-- BEGIN:caveman-response-style -->
+# Concise response style
+
+Use direct, compact language in user-facing replies and code comments:
+- Lead with the result; omit filler, repetition, and generic reassurance.
+- Prefer short sentences and fragments when clarity is unchanged.
+- Preserve technical accuracy and all code, commands, paths, URLs, errors, and identifiers exactly.
+- Expand only when detail materially helps a decision, implementation, or review.
+<!-- END:caveman-response-style -->
