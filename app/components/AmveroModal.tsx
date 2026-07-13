@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useRef } from "react";
 import AmveroPrototype from "./AmveroPrototype";
+import { useDialog } from "../hooks/useDialog";
 
 interface AmveroModalProps {
   isOpen: boolean;
@@ -9,19 +10,8 @@ interface AmveroModalProps {
 }
 
 export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [isOpen, onClose]);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialog({ isOpen, onClose, dialogRef });
 
   if (!isOpen) return null;
 
@@ -34,6 +24,8 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
       aria-label="AMVero case study and interactive prototype"
     >
       <div
+        ref={dialogRef}
+        tabIndex={-1}
         className="w-full max-w-[96vw] xl:max-w-7xl h-[92dvh] bg-paper border border-line rounded-sm flex flex-col overflow-hidden animate-scale-in text-left select-text shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
@@ -49,6 +41,7 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
           </div>
           <button
             onClick={onClose}
+            data-dialog-autofocus
             className="p-1.5 rounded-sm text-ink-faint hover:text-ink hover:bg-line/40 border border-transparent hover:border-line transition-all flex-shrink-0"
             aria-label="Close"
           >
