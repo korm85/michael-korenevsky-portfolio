@@ -3,22 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useScrollReveal } from "../hooks/useScrollReveal";
+import { useDialog } from "../hooks/useDialog";
 import RoiCalculator from "./RoiCalculator";
-
-function useDialogBehavior(onClose: () => void) {
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handler);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", handler);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [onClose]);
-}
 
 interface Doc {
   name: string;
@@ -93,7 +79,9 @@ interface DocRef {
 function DocOverlay({ doc, onClose }: { doc: DocRef; onClose: () => void }) {
   const [zoom, setZoom] = useState(1);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const isPdf = doc.url.toLowerCase().endsWith(".pdf");
+  useDialog({ isOpen: true, onClose, dialogRef });
 
   // The modal opens via JS, so focus never naturally lands inside it —
   // Chromium's native PDF viewer stays inert until its frame is focused,
@@ -170,8 +158,6 @@ function DocOverlay({ doc, onClose }: { doc: DocRef; onClose: () => void }) {
     });
   };
 
-  useDialogBehavior(onClose);
-
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-md animate-fade-in"
@@ -181,6 +167,8 @@ function DocOverlay({ doc, onClose }: { doc: DocRef; onClose: () => void }) {
       aria-label={doc.title}
     >
       <div
+        ref={dialogRef}
+        tabIndex={-1}
         className="w-full max-w-5xl h-[90dvh] bg-paper border border-line rounded-sm flex flex-col overflow-hidden animate-scale-in shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
@@ -228,6 +216,7 @@ function DocOverlay({ doc, onClose }: { doc: DocRef; onClose: () => void }) {
             </a>
             <button
               onClick={onClose}
+              data-dialog-autofocus
               className="p-1 rounded-sm text-ink-faint hover:text-ink hover:bg-line/40 border border-transparent hover:border-line transition-all"
               aria-label="Close"
             >
@@ -272,12 +261,11 @@ function DocOverlay({ doc, onClose }: { doc: DocRef; onClose: () => void }) {
 // React component, so it reflows instead of needing the doc overlay's zoom
 // hook, and Escape/focus work through the normal dialog path.
 function PricingOverlay({ onClose }: { onClose: () => void }) {
-  useDialogBehavior(onClose);
-
   // JS-opened dialog: focus never lands inside on its own (same lesson as the
   // doc overlay's PDF fix) — move it to the panel so Escape and Tab work
   // immediately.
   const panelRef = useRef<HTMLDivElement>(null);
+  useDialog({ isOpen: true, onClose, dialogRef: panelRef });
   useEffect(() => {
     panelRef.current?.focus();
   }, []);
@@ -319,6 +307,7 @@ function PricingOverlay({ onClose }: { onClose: () => void }) {
           </div>
           <button
             onClick={onClose}
+            data-dialog-autofocus
             className="p-1.5 rounded-sm text-ink-faint hover:text-ink hover:bg-line/40 border border-transparent hover:border-line transition-all flex-shrink-0"
             aria-label="Close"
           >
@@ -348,16 +337,33 @@ function PricingOverlay({ onClose }: { onClose: () => void }) {
 }
 
 function ImageOverlay({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
-  useDialogBehavior(onClose);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialog({ isOpen: true, onClose, dialogRef });
 
   return (
     <div
+      ref={dialogRef}
+      tabIndex={-1}
       className="fixed inset-0 z-50 flex items-center justify-center p-8 bg-ink/85 backdrop-blur-sm animate-fade-in cursor-zoom-out"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-label={alt}
     >
+      <button
+        type="button"
+        onClick={(event) => {
+          event.stopPropagation();
+          onClose();
+        }}
+        data-dialog-autofocus
+        className="absolute top-5 right-5 z-10 p-2 rounded-sm border border-on-dark-faint/50 text-on-dark hover:bg-on-dark hover:text-ink transition-colors"
+        aria-label="Close image"
+      >
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
       <img
         src={src}
         alt={alt}
