@@ -420,7 +420,7 @@ export default function AmveroPrototype() {
                   <PmNote>
                     The core decision: condition-based rules instead of one
                     global severity threshold. Operators define the exact
-                    conditions they trust — that is what eliminated alert
+                    conditions they trust. That is what eliminated alert
                     fatigue.
                   </PmNote>
                 </div>

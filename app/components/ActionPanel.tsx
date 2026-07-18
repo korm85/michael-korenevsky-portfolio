@@ -13,8 +13,8 @@ interface Action {
 // Scrollspy targets, in page order. The label is what the pill displays.
 const SECTIONS: [id: string, label: string][] = [
   ["hero", "Intro"],
-  ["work", "Selected work"],
-  ["how-i-work", "AI practice"],
+  ["work", "Product work"],
+  ["how-i-work", "How I work"],
   ["career", "Career"],
   ["about", "About"],
   ["contact", "Contact"],
@@ -61,15 +61,15 @@ const GROUPS: ActionGroup[] = [
         run: () => window.dispatchEvent(new Event("open-pricing-model")),
       },
       {
-        label: "Case study: AI monitoring",
+        label: "Product work: AI monitoring",
         hint: "5 contracts in 5 months",
-        keywords: "amvero case study monitoring anomaly detection enterprise outcomes metrics",
+        keywords: "amvero product work monitoring anomaly detection enterprise outcomes metrics",
         run: () => openHash("#case-amvero"),
       },
       {
-        label: "Case study: predictive simulation",
+        label: "Product work: predictive simulation",
         hint: "Physics-based",
-        keywords: "simulation case study thermal mechanical physics solver first-time-right",
+        keywords: "simulation product work thermal mechanical physics solver first-time-right",
         run: () => openHash("#case-simulation"),
       },
     ],
@@ -95,14 +95,14 @@ const GROUPS: ActionGroup[] = [
     category: "Explore the site",
     actions: [
       {
-        label: "Selected work",
+        label: "Selected product work",
         hint: "Section",
         keywords: "work projects portfolio case studies section",
         run: () => scrollToSection("work"),
         sectionId: "work",
       },
       {
-        label: "How I use AI as a PM",
+        label: "How I lead product work",
         hint: "Section",
         keywords: "ai practice workflow process discovery prototyping native section",
         run: () => scrollToSection("how-i-work"),
@@ -175,8 +175,6 @@ export default function ActionPanel() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const activeLabel = SECTIONS.find(([id]) => id === activeSection)?.[1] ?? "Intro";
 
   const groups = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -257,20 +255,22 @@ export default function ActionPanel() {
 
   let flatIndex = -1;
 
+  if (!open) return null;
+
   return (
     <div
       ref={panelRef}
-      className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center"
-      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      className="fixed inset-0 z-40 flex items-end justify-center p-5 pointer-events-none"
+      style={{ paddingBottom: "max(1.25rem, env(safe-area-inset-bottom))" }}
     >
-      {/* Expanded palette */}
-      {open && (
-        <div
-          role="dialog"
-          aria-label="Quick actions"
-          className="mb-3 w-[min(92vw,26rem)] border border-line rounded-sm shadow-2xl overflow-hidden animate-scale-in"
-          style={glass}
-        >
+      {/* Keyboard-triggered palette: it is intentionally absent during normal
+          reading so it cannot obscure portfolio content. */}
+      <div
+        role="dialog"
+        aria-label="Quick actions"
+        className="w-[min(92vw,26rem)] border border-line rounded-sm shadow-2xl overflow-hidden animate-scale-in pointer-events-auto"
+        style={glass}
+      >
           <div className="border-b border-line px-4 py-3">
             <input
               ref={inputRef}
@@ -327,36 +327,7 @@ export default function ActionPanel() {
             <span>↑↓ navigate · ↵ open</span>
             <span>esc to close</span>
           </div>
-        </div>
-      )}
-
-      {/* Pill: current section indicator + find-anything trigger */}
-      <button
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        aria-haspopup="dialog"
-        className="flex items-center border border-line text-ink-soft hover:text-ink hover:border-accent-deep/60 rounded-full py-2.5 shadow-xl transition-all duration-200"
-        style={glass}
-      >
-        <span className="flex items-center gap-2 pl-4 pr-3 border-r border-line">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent-deep shrink-0" />
-          <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-ink whitespace-nowrap">
-            {activeLabel}
-          </span>
-        </span>
-        <span className="flex items-center gap-2 pl-3 pr-3.5">
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <circle cx="11" cy="11" r="7" />
-            <path strokeLinecap="round" d="m20 20-3.5-3.5" />
-          </svg>
-          <span className="font-mono text-[11px] uppercase tracking-[0.1em]">
-            {open ? "Close" : "Find anything"}
-          </span>
-          <span className="hidden md:inline font-mono text-[9px] text-ink-faint border border-line rounded-sm px-1.5 py-0.5">
-            ⌘K
-          </span>
-        </span>
-      </button>
+      </div>
     </div>
   );
 }

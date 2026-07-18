@@ -31,7 +31,7 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label="AMVero case study and interactive prototype"
+      aria-label="AMVero product work and interactive prototype"
     >
       <div
         className="w-full max-w-[96vw] xl:max-w-7xl h-[92dvh] bg-paper border border-line rounded-sm flex flex-col overflow-hidden animate-scale-in text-left select-text shadow-2xl"
@@ -41,10 +41,10 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
         <div className="flex justify-between items-center px-6 py-4 border-b border-line bg-paper-2 flex-shrink-0">
           <div>
             <p className="font-mono text-[9px] md:text-[10px] uppercase tracking-widest text-accent-deep font-medium">
-              AI PRODUCT CASE STUDY & INTERACTIVE PROTOTYPE
+              PRODUCT WORK & INTERACTIVE EVIDENCE
             </p>
             <h3 className="text-base md:text-xl font-display font-light text-ink mt-0.5">
-              AMVero Anomaly Detection Suite
+              From alert noise to operator trust
             </h3>
           </div>
           <button
@@ -65,23 +65,32 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
             {/* Left Column: Overview */}
             <div className="lg:col-span-3 flex flex-col h-full overflow-y-auto pr-2 min-h-0 space-y-5 border-b lg:border-b-0 lg:border-r border-line pb-4 lg:pb-0 lg:pr-5">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent-deep font-medium mb-1.5">
-                  THE PRODUCT & MISSION
+                <p className="font-mono text-[0.72rem] uppercase tracking-[0.16em] text-accent-deep font-medium mb-1.5">
+                  MY MANDATE
                 </p>
-                <p className="text-xs font-medium text-ink leading-snug">
-                  B2B industrial AI product running real-time inspection pipelines at the edge to automate quality control and flag structural defects on manufacturing floors.
+                <p className="text-[0.82rem] font-medium text-ink leading-snug">
+                  Turn an AI monitoring pilot that operators did not trust into a product customers could buy, install, and rely on.
                 </p>
-                <p className="text-xs text-ink-faint leading-relaxed mt-2">
-                  Reduces operational labor and material scrap costs for aerospace and defense clients by terminating defective print runs early, built under strict defense-grade ITAR compliance.
+                <p className="text-[0.82rem] text-ink-faint leading-relaxed mt-2">
+                  I led product strategy from customer discovery through requirements, pricing, launch, and deployment across engineering, design, sales, marketing, and application engineering.
                 </p>
               </div>
 
               <div className="border-t border-line pt-3.5">
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent-deep font-medium mb-1.5">
-                  PM CONTRIBUTION
+                <p className="font-mono text-[0.72rem] uppercase tracking-[0.16em] text-accent-deep font-medium mb-1.5">
+                  KEY PRODUCT JUDGMENT
                 </p>
-                <p className="text-xs leading-relaxed text-ink-soft">
-                  The core alerting decision: condition-based multi-layer filtering instead of static severity thresholds. That trade-off eliminated false-positive noise and turned operator trust from a blocker into a selling point. I also defined the on-premise deployment as a first-class product variant, not a cloud port, which opened accounts requiring air-gapped environments. Five enterprise contracts in five months followed from those two decisions.
+                <p className="text-[0.82rem] leading-relaxed text-ink-soft">
+                  On one customer workflow, half of 6,000 layers triggered alerts. The model was finding issues, but operators had too many alerts to act on. I required the same issue across multiple layers before raising an alert, cutting the review list by about 90%. In closed on-premise environments, the bigger need was keeping the system reliable, so I prioritized a health-check tool over SSO. I also replaced command-line installation with guided setup so customers could get running without days of support.
+                </p>
+              </div>
+
+              <div className="border-t border-line pt-3.5">
+                <p className="font-mono text-[0.72rem] uppercase tracking-[0.16em] text-ink-faint font-medium mb-1.5">
+                  PRODUCT CONTEXT
+                </p>
+                <p className="text-[0.82rem] leading-relaxed text-ink-faint">
+                  AMVero analyzes manufacturing data as a build runs, helping operators catch structural defects early, reduce review time, and avoid wasted material.
                 </p>
               </div>
 
@@ -127,11 +136,11 @@ export default function AmveroModal({ isOpen, onClose }: AmveroModalProps) {
               </div>
             </div>
 
-            {/* Right Column: Prototype Console — stays dark (simulates real product UI) */}
+            {/* Right Column: Prototype Console; stays dark to simulate the real product UI */}
             <div className="lg:col-span-9 h-[72dvh] md:h-[75dvh] lg:h-full min-h-0 border border-line rounded-sm flex flex-col overflow-hidden">
               <div className="px-4 pt-3 pb-2 border-b border-line flex-shrink-0 bg-paper-2">
                 <p className="text-[10px] text-ink-faint leading-relaxed">
-                  The core design problem: operators were receiving too many alerts to trust any of them. The prototype below is the solution I specified: condition-based rules that fire only when a defect crosses multiple thresholds across consecutive layers. Walk through the alert creation flow to see how the filtering logic works, or switch on <span className="font-mono text-[9px] uppercase tracking-wider text-accent-deep">PM Notes</span> to see the decisions annotated in place.
+                  This prototype shows the decision in practice. Walk through the condition-based alert flow to see how the filtering logic addressed operator trust, or switch on <span className="font-mono text-[9px] uppercase tracking-wider text-accent-deep">PM Notes</span> to see the product judgments annotated in place.
                 </p>
               </div>
               <AmveroPrototype />

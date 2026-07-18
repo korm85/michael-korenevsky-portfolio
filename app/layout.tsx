@@ -3,7 +3,7 @@ import { Fraunces, Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 // Loaded as a variable font so the optical-size (opsz) and WONK axes can be
-// pinned in CSS — the default high-opsz rendering gives Fraunces a swashy,
+// pinned in CSS; the default high-opsz rendering gives Fraunces a swashy,
 // distracting lowercase "f"/"g" at display sizes. See globals.css .font-display.
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -28,14 +28,14 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.themishka.me"),
   title: "Michael Korenevsky | Senior Product Manager",
   description:
-    "Senior Product Manager building enterprise AI and predictive tools for high-stakes industries.",
+    "Senior Product Manager who takes enterprise products from customer discovery and roadmap decisions through deployment and results customers can measure.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "Michael Korenevsky | Senior Product Manager",
     description:
-      "Senior Product Manager building enterprise AI and predictive tools for high-stakes industries.",
+      "Senior Product Manager who takes enterprise products from customer discovery and roadmap decisions through deployment and results customers can measure.",
     url: "/",
     siteName: "Michael Korenevsky",
     type: "website",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     card: "summary",
     title: "Michael Korenevsky | Senior Product Manager",
     description:
-      "Senior Product Manager building enterprise AI and predictive tools for high-stakes industries.",
+      "Senior Product Manager who takes enterprise products from customer discovery and roadmap decisions through deployment and results customers can measure.",
     images: ["/OfficialProfile.jpg"],
   },
 };
@@ -64,6 +64,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${fraunces.variable} ${hankenGrotesk.variable} ${jetBrainsMono.variable} h-full`}
+      suppressHydrationWarning
     >
       <body className="min-h-full bg-canvas text-on-dark antialiased">
         {children}

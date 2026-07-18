@@ -45,24 +45,27 @@ interface DecisionLink {
   onClick?: () => void;
 }
 
-type Decision = string | { text: string; links?: DecisionLink[] };
+type Decision = string | { label?: string; impact?: string; text: string; links?: DecisionLink[] };
 
 interface WorkArticleProps {
+  id: string;
+  caseNumber: string;
   eyebrow: string;
   roleTag: string;
   title: string;
-  description: string;
+  mandate: string;
+  leadership: string;
   decisions?: Decision[];
   image: string;
   imageAlt: string;
   metrics: { value: string; label: string }[];
   customerLine: string;
   ctaLabel?: string;
+  ctaContext?: string;
   onCta?: () => void;
   docs: Doc[];
   quote?: Quote;
   prdQuote?: PrdQuote;
-  imageLeft?: boolean;
   onOverlayOpen?: (doc: DocRef) => void;
   onImageClick?: (src: string, alt: string) => void;
 }
@@ -87,15 +90,15 @@ interface DocRef {
   subtitle?: string;
 }
 
-// Generic in-site document viewer. Any same-origin artifact — HTML page, PDF,
-// or interactive tool — opens here in an iframe so the visitor never leaves the
+// Generic in-site document viewer. Any same-origin artifact, HTML page, PDF,
+// or interactive tool, opens here in an iframe so the visitor never leaves the
 // site. Zoom applies to HTML docs; PDFs use the browser viewer's own controls.
 function DocOverlay({ doc, onClose }: { doc: DocRef; onClose: () => void }) {
   const [zoom, setZoom] = useState(1);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const isPdf = doc.url.toLowerCase().endsWith(".pdf");
 
-  // The modal opens via JS, so focus never naturally lands inside it —
+  // The modal opens via JS, so focus never naturally lands inside it;
   // Chromium's native PDF viewer stays inert until its frame is focused,
   // which is what a manual "second click" was actually doing. Mount after
   // the entrance animation settles, then focus the iframe ourselves so the
@@ -114,9 +117,9 @@ function DocOverlay({ doc, onClose }: { doc: DocRef; onClose: () => void }) {
 
   // Once focus moves into the (same-origin) iframe, Escape keydowns fire on
   // its own contentWindow and never reach the outer window listener in
-  // useDialogBehavior — forward it manually so Escape still closes the dialog.
+  // useDialogBehavior; forward it manually so Escape still closes the dialog.
   // contentWindow exists as soon as the iframe element is created, well
-  // before its 'load' event fires — attach immediately rather than waiting
+  // before its 'load' event fires; attach immediately rather than waiting
   // for 'load', which races and can fire before the listener is attached on
   // fast-loading (especially cached) documents, silently breaking Escape.
   useEffect(() => {
@@ -275,7 +278,7 @@ function PricingOverlay({ onClose }: { onClose: () => void }) {
   useDialogBehavior(onClose);
 
   // JS-opened dialog: focus never lands inside on its own (same lesson as the
-  // doc overlay's PDF fix) — move it to the panel so Escape and Tab work
+  // doc overlay's PDF fix); move it to the panel so Escape and Tab work
   // immediately.
   const panelRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -283,7 +286,7 @@ function PricingOverlay({ onClose }: { onClose: () => void }) {
   }, []);
 
   // A slider drag that starts inside the panel and releases over the backdrop
-  // fires the click on the backdrop (common ancestor of down/up targets) —
+  // fires the click on the backdrop (common ancestor of down/up targets);
   // close only when the pointer went DOWN on the backdrop itself, so dragging
   // a slider can never dismiss the dialog.
   const downOnBackdrop = useRef(false);
@@ -299,7 +302,7 @@ function PricingOverlay({ onClose }: { onClose: () => void }) {
       }}
       role="dialog"
       aria-modal="true"
-      aria-label="Credit Pricing Model — interactive pricing tool"
+      aria-label="Credit Pricing Model, interactive pricing tool"
     >
       <div
         ref={panelRef}
@@ -369,153 +372,211 @@ function ImageOverlay({ src, alt, onClose }: { src: string; alt: string; onClose
 }
 
 function WorkArticle({
+  id,
+  caseNumber,
   eyebrow,
   roleTag,
   title,
-  description,
+  mandate,
+  leadership,
   decisions,
   image,
   imageAlt,
   metrics,
+  customerLine,
   ctaLabel,
+  ctaContext,
   onCta,
   docs,
   quote,
-  imageLeft = true,
   onOverlayOpen,
   onImageClick,
 }: WorkArticleProps) {
   const ref = useScrollReveal();
-  const cols = metrics.length >= 4 ? 4 : metrics.length;
-
   return (
-    <article ref={ref} className="pb-12 border-b border-line last:border-0 last:pb-0">
-      {/* Eyebrow */}
-      <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-deep mb-5">
-        {eyebrow}
-      </p>
-
-      {/* 2-col: image + content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start mb-10">
-        {/* Image — always first in DOM so it leads on mobile */}
-        <div
-          className={`relative aspect-[4/3] overflow-hidden rounded-sm ${!imageLeft ? "md:order-last" : ""} ${onImageClick ? "cursor-zoom-in" : ""}`}
-          onClick={() => onImageClick?.(image, imageAlt)}
-          role={onImageClick ? "button" : undefined}
-          tabIndex={onImageClick ? 0 : undefined}
-          aria-label={onImageClick ? `Enlarge image: ${imageAlt}` : undefined}
-          onKeyDown={(e) => {
-            if (onImageClick && (e.key === "Enter" || e.key === " ")) {
-              e.preventDefault();
-              onImageClick(image, imageAlt);
-            }
-          }}
-        >
-          <Image
-            src={image}
-            alt={imageAlt}
-            fill
-            sizes="(min-width: 768px) 560px, 100vw"
-            className="object-cover transition-transform duration-500 hover:scale-[1.02]"
-          />
-          <div className="absolute top-3 left-3">
-            <span className="font-mono text-[10px] uppercase tracking-[0.1em] bg-paper/90 backdrop-blur-sm text-ink-soft border border-line px-2.5 py-1.5 rounded-sm">
-              {roleTag}
-            </span>
-          </div>
-        </div>
-
+    <article id={id} ref={ref} className="scroll-mt-20 pb-4 last:pb-0">
+      {/* The PM story owns the larger, first-read column. The product visual
+          is supporting evidence, positioned to the right on desktop. */}
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.2fr)_minmax(360px,0.8fr)] gap-10 xl:gap-20 items-start mb-12">
         {/* Content */}
         <div>
-          <h3
-            className="font-display font-light text-ink leading-tight mb-5"
-            style={{ fontSize: "clamp(1.4rem, 2.8vw, 2.2rem)" }}
-          >
-            {title}
-          </h3>
-          <p className="text-ink-soft leading-relaxed mb-6 text-[0.9rem]">
-            {description}
-          </p>
+          <div className="grid grid-cols-[auto_1fr] gap-x-5 md:gap-x-7">
+            <p className="font-display leading-none text-accent-deep/25" style={{ fontSize: "clamp(3.4rem, 6vw, 6.5rem)" }}>
+              {caseNumber}
+            </p>
+            <div className="pt-1 md:pt-3">
+              <p className="mb-3 font-mono text-[0.78rem] uppercase tracking-[0.12em] text-accent-deep">Product work</p>
+              <h3
+                className="font-display font-light text-ink leading-tight mb-5 text-balance"
+                style={{ fontSize: "clamp(1.65rem, 2.9vw, 2.8rem)" }}
+              >
+                {title}
+              </h3>
+            </div>
+          </div>
 
-          {/* Key decisions — each bullet carries its own proof links on a row
-              directly beneath its text, aligned to the text column */}
-          {decisions && decisions.length > 0 && (
-            <ul className="space-y-4 mb-6">
+          <div className="mb-8 flex flex-wrap gap-x-5 gap-y-2">
+            <span className="font-mono text-[0.78rem] uppercase tracking-[0.09em] font-medium text-accent-deep">{roleTag}</span>
+            <span className="font-mono text-[0.78rem] uppercase tracking-[0.09em] text-ink-faint">{eyebrow}</span>
+          </div>
+
+          {/* Outcomes appear before the detail so a recruiter can assess the
+              result before deciding how deeply to read the case. */}
+          <div className="mb-9 grid gap-3 sm:grid-cols-3">
+            {metrics.map((m, i) => (
+              <div key={i} className="bg-ink p-5 xl:p-6">
+                <div
+                  className="font-display text-accent font-light leading-none mb-3 tabular-nums"
+                  style={{ fontSize: "clamp(1.8rem, 3.4vw, 2.9rem)" }}
+                >
+                  {m.value}
+                </div>
+                <div className="text-[0.86rem] xl:text-[0.92rem] text-on-dark-soft leading-relaxed">
+                  {m.label}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-7">
+            <div className="grid grid-cols-[112px_1fr] gap-5">
+              <p className="font-mono text-[0.78rem] uppercase tracking-[0.09em] font-medium text-accent-deep pt-0.5">
+                The challenge
+              </p>
+              <p className="text-ink-soft leading-relaxed text-[1rem] xl:text-[1.06rem]">{mandate}</p>
+            </div>
+            <div className="grid grid-cols-[112px_1fr] gap-5">
+              <p className="font-mono text-[0.78rem] uppercase tracking-[0.09em] font-medium text-accent-deep pt-0.5">
+                My role
+              </p>
+              <p className="text-ink-soft leading-relaxed text-[1rem] xl:text-[1.06rem]">{leadership}</p>
+            </div>
+          </div>
+
+        </div>
+
+        <aside className="lg:self-start">
+          <div
+            className={`relative aspect-[5/4] overflow-hidden rounded-sm ${onImageClick ? "cursor-zoom-in" : ""}`}
+            onClick={() => onImageClick?.(image, imageAlt)}
+            role={onImageClick ? "button" : undefined}
+            tabIndex={onImageClick ? 0 : undefined}
+            aria-label={onImageClick ? `Enlarge image: ${imageAlt}` : undefined}
+            onKeyDown={(e) => {
+              if (onImageClick && (e.key === "Enter" || e.key === " ")) {
+                e.preventDefault();
+                onImageClick(image, imageAlt);
+              }
+            }}
+          >
+            <Image
+              src={image}
+              alt={imageAlt}
+              fill
+              sizes="(min-width: 1280px) 680px, (min-width: 768px) 50vw, 100vw"
+              className="object-cover transition-transform duration-500 hover:scale-[1.02]"
+            />
+            <div className="absolute top-3 left-3">
+              <span className="font-mono text-[0.78rem] uppercase tracking-[0.09em] bg-paper/90 backdrop-blur-sm text-ink-soft border border-line px-3 py-2 rounded-sm">
+                Product evidence
+              </span>
+            </div>
+          </div>
+          {ctaLabel && onCta && (
+            <div className="mt-5">
+              <p className="text-ink-soft text-[0.95rem] leading-relaxed mb-3">
+                {ctaContext}
+              </p>
+              <button
+                onClick={onCta}
+                className="inline-flex items-center gap-2 font-mono text-[0.78rem] uppercase tracking-[0.07em] bg-ink text-paper border border-ink px-4 py-3 rounded-sm hover:bg-accent-deep hover:border-accent-deep transition-all duration-300 group"
+                style={{ transform: "translateY(0)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
+                onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+              >
+                {ctaLabel}
+                <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                  <ArrowIcon />
+                </span>
+              </button>
+              {docs.length > 0 && (
+                <div className="mt-5">
+                  <p className="font-mono text-[0.78rem] uppercase tracking-[0.1em] text-ink-faint mb-3">
+                    Supporting evidence
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {docs.map((doc, i) => (
+                      <button
+                        key={i}
+                        onClick={() =>
+                          onOverlayOpen?.({ url: doc.url, title: doc.name, subtitle: doc.subtitle })
+                        }
+                        className="inline-flex items-center gap-1.5 font-mono text-[0.78rem] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent-deep rounded-sm px-3 py-2 transition-all duration-200 group"
+                      >
+                        {doc.name}
+                        <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                          <ArrowIcon />
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </aside>
+      </div>
+
+      <div className="pt-8">
+        <p className="mb-8 text-[1rem] text-ink-soft xl:text-[1.08rem]">
+          <span className="mr-3 font-mono text-[0.78rem] font-medium uppercase tracking-[0.09em] text-accent-deep">Selected customers</span>
+          {customerLine}
+        </p>
+
+        {decisions && decisions.length > 0 && (
+          <div className="mt-14">
+            <p className="font-mono text-[0.78rem] font-medium uppercase tracking-[0.1em] text-accent-deep">03 / Product decisions</p>
+            <h4 className="mt-3 font-display text-[clamp(1.9rem,3.4vw,3rem)] font-light leading-tight text-ink">The decisions that made the product useful</h4>
+            <p className="mt-3 max-w-3xl text-[1rem] leading-relaxed text-ink-soft xl:text-[1.08rem]">Each choice starts with the customer problem and ends with the practical result.</p>
+            <ul className="mt-8 space-y-4">
               {decisions.slice(0, 3).map((d, i) => {
                 const text = typeof d === "string" ? d : d.text;
+                const label = typeof d === "string" ? undefined : d.label;
+                const impact = typeof d === "string" ? undefined : d.impact;
                 const links = typeof d !== "string" ? d.links : undefined;
                 const chip =
-                  "font-mono text-[10px] uppercase tracking-[0.06em] border border-accent-deep/40 text-accent-deep hover:bg-accent-deep hover:text-paper transition-all rounded-sm px-2 py-1 whitespace-nowrap";
+                  "font-mono text-[0.75rem] uppercase tracking-[0.06em] border border-accent-deep/40 text-accent-deep hover:bg-accent-deep hover:text-paper transition-colors rounded-sm px-3 py-2 whitespace-nowrap";
                 return (
-                  <li key={i} className="text-sm text-ink-soft leading-relaxed">
-                    <div className="flex gap-3">
-                      <span className="text-accent-deep shrink-0 mt-0.5 font-light">–</span>
-                      <span>{text}</span>
+                  <li key={i} className="grid gap-5 bg-paper-2 p-6 md:grid-cols-[minmax(230px,0.7fr)_minmax(0,1.3fr)] md:gap-12 md:p-8 xl:gap-20">
+                    <div>
+                      <p className="font-mono text-[0.75rem] uppercase tracking-[0.09em] text-ink-faint">Decision 0{i + 1}</p>
+                      {label && (
+                        <h5 className="mt-2 font-display text-[1.4rem] font-light leading-tight text-ink">{label}</h5>
+                      )}
+                      {impact && (
+                        <p className="mt-2 text-[0.95rem] font-medium leading-relaxed text-accent-deep">{impact}</p>
+                      )}
                     </div>
-                    {links && links.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mt-2 pl-[1.6rem]">
-                        {links.map((link) =>
-                          link.onClick ? (
-                            <button key={link.label} onClick={link.onClick} className={chip}>
-                              {link.label} ↗
-                            </button>
-                          ) : link.url && onOverlayOpen ? (
-                            <button
-                              key={link.label}
-                              onClick={() =>
-                                onOverlayOpen({ url: link.url!, title: link.label, subtitle: link.subtitle })
-                              }
-                              className={chip}
-                            >
-                              {link.label} ↗
-                            </button>
-                          ) : null
-                        )}
-                      </div>
-                    )}
+                    <div className="text-[1rem] leading-relaxed text-ink-soft xl:text-[1.08rem]">
+                      <p>{text}</p>
+                      {links && links.length > 0 && (
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {links.map((link) =>
+                            link.onClick ? (
+                              <button key={link.label} onClick={link.onClick} className={chip}>{link.label} ↗</button>
+                            ) : link.url && onOverlayOpen ? (
+                              <button key={link.label} onClick={() => onOverlayOpen({ url: link.url!, title: link.label, subtitle: link.subtitle })} className={chip}>{link.label} ↗</button>
+                            ) : null
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </li>
                 );
               })}
             </ul>
-          )}
-
-          {/* CTA (only when the article has no inline entry point) */}
-          {ctaLabel && onCta && (
-            <button
-              onClick={onCta}
-              className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.06em] bg-ink text-paper border border-ink px-4 py-2.5 rounded-sm hover:bg-accent-deep hover:border-accent-deep transition-all duration-300 group"
-              style={{ transform: "translateY(0)" }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
-            >
-              {ctaLabel}
-              <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
-                <ArrowIcon />
-              </span>
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Metrics grid */}
-      <div
-        className={`grid border-r border-b border-line mb-10 grid-cols-2 ${
-          cols === 4 ? "md:grid-cols-4" : "md:grid-cols-3"
-        }`}
-      >
-        {metrics.map((m, i) => (
-          <div key={i} className="border-t border-l border-line p-5 md:p-6">
-            <div
-              className="font-display text-accent-deep font-light leading-none mb-2"
-              style={{ fontSize: "clamp(2rem, 4.5vw, 3.2rem)" }}
-            >
-              {m.value}
-            </div>
-            <div className="font-mono text-[11px] uppercase tracking-[0.1em] text-ink-faint leading-relaxed">
-              {m.label}
-            </div>
           </div>
-        ))}
+        )}
       </div>
 
       {/* Pullquote */}
@@ -523,37 +584,18 @@ function WorkArticle({
         <figure className="mb-8">
           <blockquote
             className="font-display font-light italic text-ink-soft leading-snug mb-4"
-            style={{ fontSize: "clamp(1.15rem, 2.2vw, 1.55rem)" }}
+            style={{ fontSize: "clamp(1.25rem, 2.2vw, 1.7rem)" }}
           >
             <span className="text-accent-deep not-italic">&ldquo;</span>
             {quote.text}
             <span className="text-accent-deep not-italic">&rdquo;</span>
           </blockquote>
-          <figcaption className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-faint text-right">
+          <figcaption className="font-mono text-[11px] uppercase tracking-[0.1em] text-ink-faint text-right">
             {quote.author} · {quote.role}
           </figcaption>
         </figure>
       )}
 
-      {/* Doc chips — every artifact opens in-site via the doc overlay */}
-      {docs.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {docs.map((doc, i) => (
-            <button
-              key={i}
-              onClick={() =>
-                onOverlayOpen?.({ url: doc.url, title: doc.name, subtitle: doc.subtitle })
-              }
-              className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.06em] border border-line text-ink-soft hover:border-accent hover:text-accent-deep rounded-sm px-2.5 py-1.5 transition-all duration-200 group"
-            >
-              {doc.name}
-              <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
-                <ArrowIcon />
-              </span>
-            </button>
-          ))}
-        </div>
-      )}
     </article>
   );
 }
@@ -585,42 +627,42 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
   }, []);
 
   return (
-    <section id="work" className="bg-paper px-6 py-12 md:py-20 xl:py-24">
-      <div className="max-w-[1180px] mx-auto">
-        {/* Section header */}
-        <div className="flex items-center gap-4 border-b border-line pb-5 mb-10">
-          <span className="font-mono text-[11px] text-accent-deep font-medium tracking-[0.1em]">01</span>
-          <h2
-            className="font-display font-light text-ink leading-tight"
-            style={{ fontSize: "clamp(2rem, 5.4vw, 3.6rem)" }}
-          >
-            Selected work
+    <section id="work" className="bg-paper px-6 py-14 md:py-24 xl:py-28">
+      <div className="max-w-[1360px] mx-auto">
+        <div className="mb-14">
+          <p className="font-mono text-[0.78rem] font-medium uppercase tracking-[0.1em] text-accent-deep">01 / Product work</p>
+          <h2 className="mt-3 font-display font-light leading-tight text-ink" style={{ fontSize: "clamp(2.2rem, 5.4vw, 3.8rem)" }}>
+            Selected product work
           </h2>
+          <p className="mt-4 max-w-3xl text-[1.05rem] leading-relaxed text-ink-soft xl:text-[1.15rem]">
+            The outcome comes first. Then see the customer problem, my role, the decisions I made, and the evidence behind the work.
+          </p>
         </div>
 
         <div className="space-y-12 md:space-y-16">
           <WorkArticle
-            eyebrow="AI Platform · Oqton · 2025–Present"
+            id="ai-monitoring"
+            caseNumber="01"
+            eyebrow="Oqton · 2025–Present"
             roleTag="Senior PM, AI Platform"
-            title="Took an AI monitoring tool from pilot to five enterprise contracts in five months"
-            description="I took AMVero from first enterprise pilot to five paying clients in five months, writing the GTM narrative, designing the smart alerting system that eliminated operator alert fatigue, and authoring the deployment playbook that got regulated manufacturers live without disrupting production."
+            title="Turned an alert-heavy AI pilot into a trusted product used by five enterprise customers"
+            mandate="Turn an AI monitoring pilot that operators did not trust into a product customers could buy, install, and rely on."
+            leadership="Led product strategy from customer discovery through requirements, pricing, launch, and deployment. Led an international group across 6 engineers, 2 designers, 2 marketing partners, 3 sales partners, and 5 application engineers."
             decisions={[
               {
-                text: "Chose condition-based multi-layer filtering over severity thresholds. Turned AMVero from a noise source into a trusted monitoring tool operators actually relied on.",
-                links: [
-                  { label: "Smart Alerts Prototype", onClick: onOpenAmvero },
-                  { label: "Alerts PRD", url: "/artifacts/amvero-smart-alerting-prd.html", subtitle: "Product spec" },
-                ],
+                label: "Signal over noise",
+                impact: "Outcome: ~90% fewer layers for engineers to review",
+                text: "Operators were reviewing alerts on roughly 3,000 of 6,000 layers, so they could not tell which events needed action. I set rules that required the same issue across multiple layers before raising an alert. That cut the review set by about 90% and let engineers focus on genuinely critical events.",
               },
-              "Defined on-premise as a product, not a cloud port, for aerospace and defense clients who required air-gapped environments.",
               {
-                text: "Moved pricing from flat per-seat to consumption-based credits, aligning costs with customer production volume.",
-                links: [
-                  {
-                    label: "Credit Pricing Model",
-                    onClick: () => setPricingOpen(true),
-                  },
-                ],
+                label: "Roadmap judgment",
+                impact: "Outcome: better operator visibility and protected uptime",
+                text: "In the closed on-premise environments we served, a few known users could work without SSO. The more urgent customer need was knowing when the system was unhealthy, so I deferred SSO and shipped Diagnostics first. That gave operators a way to spot and fix reliability problems before production was disrupted.",
+              },
+              {
+                label: "Enterprise adoption",
+                impact: "Outcome: self-deployment in one day, not days of support",
+                text: "Command-line installation made customers depend on days of technical support before they could see value. I prioritized a guided installer and documentation so they could self-deploy in one day and begin using the product without waiting on our team.",
               },
             ]}
             image="/amvero-product.png"
@@ -628,35 +670,38 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
             metrics={[
               { value: "98%", label: "Reduction in active monitoring time, Baker Hughes" },
               { value: "18%", label: "Scrap cost reduction via mid-run failure detection" },
-              { value: "136h", label: "Saved per printer per year vs. manual layer review" },
               { value: "5", label: "Enterprise clients in 5 months" },
             ]}
             customerLine="Baker Hughes · Thales · Elos Medtech · 3D Systems · Beehive"
             onOverlayOpen={setDoc}
             onImageClick={(src, alt) => setOverlayImage({ src, alt })}
             docs={[
-              { name: "Go-to-Market Narrative", url: "/artifacts/amvero-go-to-market-narrative.html", subtitle: "GTM document" },
-              { name: "Launch Announcement", url: "/artifacts/amvero-launch-announcement.html", subtitle: "Announcement" },
+              { name: "Alerts PRD", url: "/artifacts/amvero-smart-alerting-prd.html", subtitle: "Product spec" },
               { name: "Deployment Playbook", url: "/artifacts/amvero-enterprise-deployment-playbook.html", subtitle: "Playbook" },
-              { name: "Traceability Record", url: "/artifacts/amvero-end-to-end-traceability-record.html", subtitle: "Compliance record" },
+              { name: "GTM Narrative", url: "/artifacts/amvero-go-to-market-narrative.html", subtitle: "GTM document" },
             ]}
+            ctaLabel="Open AI monitoring prototype"
+            ctaContext="Try the condition-based alert flow that made critical events easier to find."
+            onCta={onOpenAmvero}
             quote={{
               text: "We've seen a 98% reduction in engineering review time per build, allowing our team to focus on more critical tasks. This, combined with an 18% reduction in scrap costs, has delivered a powerful return on investment.",
               author: "Amar Patel",
               role: "Digital Transformation Lead, Baker Hughes",
             }}
-            imageLeft={true}
           />
 
           <WorkArticle
-            eyebrow="Predictive Simulation · Oqton · 2022–2025"
+            id="predictive-simulation"
+            caseNumber="02"
+            eyebrow="Oqton · 2022–2025"
             roleTag="Product Manager, Simulation"
-            title="Shipped three simulation modules, culminating in the thermo-mechanical solver that made first-time-right manufacturing achievable"
-            description="I built out the Simulation Suite over three years, shipping a Thermal module, a Mechanical module, and then the Thermo-mechanical module that combined both into a single pass. That eliminated inter-stage wait times and made first-time-right serial production viable: parts come out correct on the first run, with no physical trial iterations."
+            title="Turned a third-party physics engine into an enterprise product that helped manufacturers get 3D-printed parts right on the first production run"
+            mandate="Turn a third-party physics engine into a product that helped manufacturers predict how a 3D-printed part would behave before committing time and material to a production run."
+            leadership="Led 5 engineers, 2 designers, 2 sales partners, and 2 application engineers from first launch through enterprise adoption. Turned complex physics into a workflow manufacturing engineers could use, then tested it with customers."
             decisions={[
-              "Shipped Thermal and Mechanical as separate modules, then unified them into a single coupled thermo-mechanical pass, eliminating inter-stage wait times and making first-time-right accuracy viable in serial production.",
-              "Validated on standard engineering workstations, not servers. Expanded the addressable market to manufacturers without specialized compute infrastructure.",
-              "Ran a structured beta with Knauf before release, reducing launch risk and generating a credible customer story at release.",
+              { label: "From engine to production tool", impact: "Outcome: more accurate predictions before committing to a production run", text: "At first, the product predicted separate parts of the printing process. I led the move to a complete thermo-mechanical prediction that captured the full picture. Manufacturers could make higher-confidence production decisions before spending time and material on a build." },
+              { label: "Made it usable", impact: "Outcome: manufacturing engineers could use it without specialist infrastructure", text: "Manufacturing engineers needed a tool they could run without simulation specialists or dedicated servers. I made standard workstation support and clear pass/fail outputs product requirements, so more teams could use the product with confidence." },
+              { label: "Proved it before launch", impact: "Outcome: confidence to change a production process", text: "Customers would only change a production process if the predictions matched real parts. I tested the results with Knauf and Emerson before launch, giving users confidence in the predictions and the launch team measured proof." },
             ]}
             image="/simulation-knauf-fit.png"
             imageAlt="Predictive simulation structural fit validation"
@@ -665,8 +710,9 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
               { value: "~100%", label: "Of dimensional distortion compensated by predictive pre-deformation" },
               { value: "<150µm", label: "Maximum measured deviation on the same large-format part" },
             ]}
-            customerLine="Knauf · Wärtsilä · tooling manufacturers across Europe"
-            ctaLabel="Explore case study"
+            customerLine="Knauf · Emerson · Wärtsilä"
+            ctaLabel="Open simulation validation"
+            ctaContext="See the validation evidence behind predictions that supported first-time-right production."
             onCta={onOpenSimulation}
             onOverlayOpen={setDoc}
             onImageClick={(src, alt) => setOverlayImage({ src, alt })}
@@ -680,7 +726,6 @@ export default function SelectedWork({ onOpenAmvero, onOpenSimulation }: Selecte
               author: "Francesco Trevisan",
               role: "AM Expert, Wärtsilä",
             }}
-            imageLeft={false}
           />
         </div>
       </div>

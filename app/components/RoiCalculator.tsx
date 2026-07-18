@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 
 // Interactive model behind the AMVero pricing decision: flat per-seat licenses
-// vs consumption-based credits. Renders natively on the site's cream surface —
+// vs consumption-based credits. Renders natively on the site's cream surface;
 // same tokens as the case-study modals (see globals.css @theme).
 
 const fmtMoney = (v: number) => {
@@ -294,7 +294,7 @@ export default function RoiCalculator() {
                 </defs>
               </svg>
 
-              {/* Your current volume — moves with the Weekly Builds slider */}
+              {/* Your current volume; moves with the Weekly Builds slider */}
               <div
                 className="absolute top-0 bottom-0 border-l border-dashed border-accent-deep/60 pointer-events-none"
                 style={{ left: `${yearlyPct}%` }}
@@ -306,7 +306,7 @@ export default function RoiCalculator() {
                 Your volume: {yearlyBuilds.toLocaleString()}/yr
               </div>
 
-              {/* Parity point — HTML dot so it can't be stretched by the SVG scaling */}
+              {/* Parity point; HTML dot so it can't be stretched by SVG scaling */}
               {tippingPointBuilds > 0 && tippingPointBuilds < lineChartData.maxRange && (
                 <>
                   <div
@@ -332,7 +332,7 @@ export default function RoiCalculator() {
                 </span>
               </div>
 
-              {/* Hover readout — restores the old chart's value tooltips */}
+              {/* Hover readout; restores the old chart's value tooltips */}
               {lineHover !== null && hoverBuilds !== null && hoverProposed !== null && (
                 <>
                   <div
