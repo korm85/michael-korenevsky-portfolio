@@ -19,7 +19,7 @@ export default function Home() {
   const [amveroOpen, setAmveroOpen] = useState(false);
   const [simulationOpen, setSimulationOpen] = useState(false);
 
-  // Case study modals are synced to the URL hash so they are deep-linkable
+  // Product-work modals are synced to the URL hash so they are deep-linkable
   // and the browser Back button closes them instead of leaving the site.
   const syncFromHash = useCallback(() => {
     const h = window.location.hash;
@@ -54,7 +54,7 @@ export default function Home() {
       {/* ── Hero ── */}
       <section
         id="hero"
-        className="relative min-h-screen flex flex-col justify-center items-center bg-canvas text-on-dark px-6 overflow-hidden"
+        className="relative flex min-h-[720px] flex-col justify-center overflow-hidden bg-canvas px-6 text-on-dark lg:min-h-[760px]"
       >
         {/* Subtle grid pattern */}
         <div
@@ -75,108 +75,95 @@ export default function Home() {
           }}
         />
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
-          {/* Identity: plain name/role line -- no availability signal here.
-              That already lives once, in Contact, where it belongs. */}
-          <p className="mb-6">
-            <span className="font-mono font-semibold text-sm md:text-base uppercase tracking-[0.14em] text-on-dark">
-              Michael Korenevsky
-            </span>
-            <span className="hidden sm:inline font-mono text-sm text-on-dark-soft/40"> · </span>
-            <span className="block sm:inline font-mono text-[11px] uppercase tracking-[0.2em] text-on-dark-soft mt-1.5 sm:mt-0">
-              Senior Product Manager
-            </span>
-          </p>
-
-          {/* Positioning headline — the PM's signature move, not a product line */}
-          <h1
-            className="font-display font-light text-on-dark leading-[1.05] tracking-[-0.01em] mb-6 max-w-2xl mx-auto"
-            style={{ fontSize: "clamp(2.4rem, 6vw, 4.8rem)" }}
-          >
-            Taking enterprise AI from{" "}
-            <span className="text-accent">pilot to production</span> in
-            high-stakes industries
-          </h1>
-
-          {/* Subhead — two short bullets (metric-led, one per product) instead
-              of a dense paragraph; easier to scan than unbroken prose */}
-          <ul className="max-w-2xl mx-auto mb-9 space-y-2.5 text-left">
-            <li className="flex gap-3">
-              <span className="text-accent shrink-0 mt-0.5 font-light">–</span>
-              <span
-                className="text-on-dark leading-snug"
-                style={{ fontSize: "clamp(1rem, 1.9vw, 1.2rem)" }}
-              >
-                Five paying enterprise customers in five months for a
-                real-time AI monitoring product I owned end to end, from
-                build to deployment.
-              </span>
-            </li>
-            <li className="flex gap-3">
-              <span className="text-accent shrink-0 mt-0.5 font-light">–</span>
-              <span
-                className="text-on-dark leading-snug"
-                style={{ fontSize: "clamp(1rem, 1.9vw, 1.2rem)" }}
-              >
-                A physics-based simulation product I shipped in three
-                releases over three years. It predicts how a part will
-                deform during manufacturing and corrects for it upfront, so
-                customers get parts right the first time instead of paying
-                for trial runs.
-              </span>
-            </li>
-          </ul>
-
-          {/* CTAs */}
-          <div className="flex items-center justify-center gap-4 mb-10">
-            <a
-              href="#work"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("work")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.06em] bg-on-dark text-canvas px-5 py-3 rounded-sm border border-on-dark hover:bg-accent hover:border-accent hover:text-white transition-all duration-300"
-              style={{ transform: "translateY(0)" }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
-            >
-              View Work
-            </a>
-            <a
-              href="#contact"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.06em] bg-transparent text-on-dark px-5 py-3 rounded-sm border border-on-dark/40 hover:bg-on-dark hover:text-canvas hover:border-on-dark transition-all duration-300"
-              style={{ transform: "translateY(0)" }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
-            >
-              Get in Touch
-            </a>
-          </div>
-
-          {/* Customers — own zone behind a hairline divider so it reads as a
-              distinct proof band, not part of the text stack. One line per
-              industry/company pair instead of a 2-row grid. */}
-          <div className="max-w-2xl mx-auto pt-8 border-t border-line-dark">
-            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-on-dark-faint mb-4">
-              Shipped to enterprise customers in
+        <div className="relative z-10 mx-auto w-full max-w-[1360px] py-28 lg:py-24 xl:py-28">
+          <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.08fr)_minmax(420px,0.92fr)] lg:gap-16 xl:gap-24">
+            <div>
+            <p className="mb-7 font-mono text-[0.8rem] uppercase tracking-[0.12em] text-accent">
+              Michael Korenevsky <span className="px-2 text-on-dark-faint">/</span> Senior Product Manager
             </p>
-            <p className="font-mono text-[11px] uppercase tracking-[0.06em] flex flex-wrap justify-center gap-x-8 gap-y-2">
-              {[
-                ["Energy", "Baker Hughes"],
-                ["Aerospace & Defense", "Thales · Beehive"],
-                ["Medical Devices", "Elos Medtech"],
-                ["Manufacturing Operations", "3D Systems"],
-              ].map(([industry, companies]) => (
-                <span key={industry}>
-                  <span className="text-on-dark">{industry}</span>
-                  <span className="text-on-dark-faint">: {companies}</span>
-                </span>
+            <h1
+              className="max-w-4xl font-display font-light leading-[0.98] text-balance text-on-dark"
+              style={{ fontSize: "clamp(3rem, 5.2vw, 5.25rem)" }}
+            >
+              I turn complex industrial AI into products <span className="text-accent">customers trust and use.</span>
+            </h1>
+            <p
+              className="mt-8 max-w-3xl text-pretty text-on-dark-soft leading-relaxed"
+              style={{ fontSize: "clamp(1.05rem, 1.6vw, 1.22rem)" }}
+            >
+              I lead enterprise software from customer discovery through launch. I choose the work that protects uptime, makes adoption easier, and creates measurable value.
+            </p>
+
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <a
+                href="#work"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("work")?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="inline-flex items-center gap-2 bg-accent px-5 py-3 font-mono text-[0.78rem] uppercase tracking-[0.07em] text-white transition-colors duration-200 hover:bg-on-dark hover:text-canvas"
+              >
+                Explore product work
+              </a>
+              <a
+                href="#contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="inline-flex items-center gap-2 border border-line-dark px-5 py-3 font-mono text-[0.78rem] uppercase tracking-[0.07em] text-on-dark transition-colors duration-200 hover:border-on-dark hover:bg-on-dark hover:text-canvas"
+              >
+                Get in touch
+              </a>
+            </div>
+
+            <div className="mt-12">
+              <p className="mb-3 font-mono text-[0.75rem] uppercase tracking-[0.12em] text-on-dark-faint">Trusted by enterprise customers</p>
+              <p className="flex flex-wrap gap-x-5 gap-y-2 text-[1rem] text-on-dark-soft">
+              {["Baker Hughes", "Thales", "Elos Medtech", "3D Systems", "Beehive"].map((customer) => (
+                <span key={customer} className="whitespace-nowrap">{customer}</span>
               ))}
-            </p>
+              </p>
+            </div>
+            </div>
+
+            <aside className="self-stretch" aria-label="Selected outcomes">
+              <div className="h-full bg-on-dark/[0.045] px-7 py-9 sm:px-10 sm:py-11 lg:min-h-[690px] lg:px-11 lg:py-12">
+                <p className="font-mono text-[0.78rem] uppercase tracking-[0.12em] text-accent">Selected outcomes</p>
+
+                <div className="mt-11 grid gap-12 sm:grid-cols-2 sm:gap-8 lg:block">
+                <a href="#ai-monitoring" className="group block max-w-[24rem]">
+                  <span className="font-mono text-[0.78rem] uppercase tracking-[0.1em] text-on-dark-soft transition-colors duration-200 group-hover:text-accent">AI monitoring ↘</span>
+                  <p className="font-display text-[clamp(5.5rem,9vw,8.5rem)] font-light leading-[0.78] text-accent tabular-nums">5</p>
+                  <p className="mt-5 text-balance text-[1.15rem] font-medium leading-snug text-on-dark">enterprise customers in five months</p>
+                  <div className="mt-5 grid grid-cols-2 gap-x-5 gap-y-2 text-[0.92rem] leading-snug text-on-dark-soft">
+                    {['Baker Hughes', 'Thales', 'Elos Medtech', '3D Systems', 'Beehive'].map((customer) => (
+                      <span key={customer} className="flex items-center gap-2"><span className="size-1.5 shrink-0 bg-accent" />{customer}</span>
+                    ))}
+                  </div>
+                  <p className="mt-5 font-mono text-[0.74rem] uppercase tracking-[0.08em] text-on-dark-faint">Too many alerts → a product customers could install and rely on</p>
+                </a>
+
+                <a href="#predictive-simulation" className="group block max-w-[25rem] lg:mt-12 lg:ml-12">
+                  <span className="font-mono text-[0.78rem] uppercase tracking-[0.1em] text-on-dark-soft transition-colors duration-200 group-hover:text-accent">Predictive simulation ↘</span>
+                  <p className="font-display text-[clamp(4.7rem,7.5vw,7.2rem)] font-light leading-[0.78] text-accent tabular-nums">80%</p>
+                  <p className="mt-5 text-balance text-[1.15rem] font-medium leading-snug text-on-dark">fewer size errors in a full-day test print</p>
+                  <div className="mt-6 grid gap-3 sm:grid-cols-1 lg:grid-cols-2">
+                    <div className="bg-canvas/35 px-4 py-4">
+                      <p className="font-mono text-[0.7rem] uppercase tracking-[0.09em] text-accent">Knauf beta</p>
+                      <p className="mt-2 text-[0.96rem] font-medium leading-snug text-on-dark">Made a large metal tool without repeated trial prints</p>
+                      <p className="mt-2 text-[0.82rem] leading-relaxed text-on-dark-soft">Most of the part was within a tenth of a millimetre of the intended size.</p>
+                    </div>
+                    <div className="bg-canvas/35 px-4 py-4">
+                      <p className="font-mono text-[0.7rem] uppercase tracking-[0.09em] text-accent">Emerson test</p>
+                      <p className="mt-2 text-[0.96rem] font-medium leading-snug text-on-dark">A 20+ hour print met the required size tolerance</p>
+                      <p className="mt-2 text-[0.82rem] leading-relaxed text-on-dark-soft">The printer kept running at its normal production pace.</p>
+                    </div>
+                  </div>
+                </a>
+                </div>
+              </div>
+            </aside>
           </div>
         </div>
       </section>
@@ -194,87 +181,65 @@ export default function Home() {
       <CareerTimeline />
 
       {/* ── About ── */}
-      <section id="about" className="bg-paper-2 px-6 py-12 md:py-20 xl:py-24">
-        <div className="max-w-[1180px] mx-auto">
-          {/* Section header */}
-          <div className="flex items-center gap-4 border-b border-line pb-5 mb-10">
-            <span className="font-mono text-[11px] text-accent-deep font-medium tracking-[0.1em]">04</span>
-            <h2
-              className="font-display font-light text-ink leading-tight"
-              style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.8rem)" }}
-            >
-              Mechanical engineer by training, product manager by craft
+      <section id="about" className="bg-paper-2 px-6 py-14 md:py-24 xl:py-28">
+        <div className="max-w-[1360px] mx-auto">
+          <div className="mb-14">
+            <p className="font-mono text-[0.78rem] font-medium uppercase tracking-[0.1em] text-accent-deep">04 / Background</p>
+            <h2 className="mt-3 font-display font-light leading-tight text-ink" style={{ fontSize: "clamp(2.2rem, 5.4vw, 3.8rem)" }}>
+              Why my background helps
             </h2>
+            <p className="mt-4 max-w-3xl text-[1.05rem] leading-relaxed text-ink-soft xl:text-[1.15rem]">
+              A reliability-first approach to product leadership, built in environments where getting it wrong is expensive.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-10 md:gap-12 items-start">
+          <div className="grid items-start gap-12 md:grid-cols-[0.85fr_1.15fr] xl:gap-24">
             {/* Profile photo */}
             <div>
-              <div className="overflow-hidden rounded-sm" style={{ maxWidth: 340 }}>
+              <div className="overflow-hidden rounded-sm w-full max-w-[440px]">
                 <Image
                   src="/OfficialProfile.jpg"
                   alt="Michael Korenevsky"
-                  width={340}
-                  height={425}
+                  width={440}
+                  height={550}
                   className="w-full object-cover object-top"
                   style={{ aspectRatio: "4/5" }}
                 />
               </div>
             </div>
 
-            {/* Bio + details */}
+            {/* Opening statement */}
             <div>
-              <p
-                className="text-ink-soft leading-relaxed mb-8"
-                style={{ fontSize: "clamp(1rem, 1.8vw, 1.1rem)" }}
-              >
-                Ten years building and certifying industrial software before moving into
-                product management. The QA years weren&apos;t a detour. They taught me
-                to find failure modes before users do, which turns out to be exactly
-                what enterprise AI products need.
+              <h3 className="max-w-3xl font-display text-[clamp(2rem,3.8vw,3.2rem)] font-light leading-tight text-ink">
+                I build products people can depend on when getting it wrong is expensive.
+              </h3>
+              <p className="mt-7 max-w-3xl text-[1.05rem] leading-relaxed text-ink-soft xl:text-[1.15rem]">
+                Mechanical engineering and years validating industrial software taught me to look beyond a feature working in a demo. I look for failure modes, unclear workflows, and adoption barriers that appear when a customer has to rely on the product in the real world.
               </p>
-
-              {/* Education — crow */}
-              <div className="grid grid-cols-[90px_1fr] sm:grid-cols-[110px_1fr] gap-4 items-baseline py-5 border-b border-line">
-                <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-faint">
-                  Education
-                </span>
-                <div>
-                  <p className="text-ink font-medium text-sm">B.Sc. Mechanical Engineering</p>
-                  <p className="text-ink-faint text-sm mt-0.5">Ben-Gurion University · 2008–2012</p>
-                </div>
-              </div>
-
-              {/* Languages — crow */}
-              <div className="grid grid-cols-[90px_1fr] sm:grid-cols-[110px_1fr] gap-4 items-baseline py-5 border-b border-line">
-                <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-faint">
-                  Languages
-                </span>
-                <div className="flex flex-wrap gap-x-6 gap-y-1">
-                  {[
-                    ["Hebrew", "Native"],
-                    ["English", "Professional"],
-                    ["Russian", "Fluent"],
-                  ].map(([lang, level]) => (
-                    <div key={lang} className="flex items-baseline gap-1.5">
-                      <span className="text-ink text-sm font-medium">{lang}</span>
-                      <span className="text-ink-faint text-xs">{level}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Location — crow */}
-              <div className="grid grid-cols-[110px_1fr] gap-6 items-baseline py-5">
-                <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-faint">
-                  Location
-                </span>
-                <p className="text-ink-soft text-sm">
-                  Israel · Open to remote and hybrid roles
-                </p>
-              </div>
+              <p className="mt-5 max-w-3xl text-[1.05rem] leading-relaxed text-ink-soft xl:text-[1.15rem]">
+                That perspective now shapes how I lead product work: start with the people doing the job, turn technical complexity into a workflow they can use, and validate the result before asking them to change how they work.
+              </p>
             </div>
           </div>
+
+          <div className="mt-14 grid gap-8 md:grid-cols-3 md:gap-12 xl:gap-20">
+            <div>
+              <p className="font-mono text-[0.78rem] font-medium uppercase tracking-[0.1em] text-accent-deep">Reliability mindset</p>
+              <p className="mt-3 text-[1rem] leading-relaxed text-ink-soft">I treat uptime, clarity, and deployment as part of the product experience.</p>
+            </div>
+            <div>
+              <p className="font-mono text-[0.78rem] font-medium uppercase tracking-[0.1em] text-accent-deep">Complexity, made usable</p>
+              <p className="mt-3 text-[1rem] leading-relaxed text-ink-soft">I work with engineering to turn AI and physics into workflows customers can understand and trust.</p>
+            </div>
+            <div>
+              <p className="font-mono text-[0.78rem] font-medium uppercase tracking-[0.1em] text-accent-deep">From build to adoption</p>
+              <p className="mt-3 text-[1rem] leading-relaxed text-ink-soft">I carry the work through customer validation, launch, installation, and feedback.</p>
+            </div>
+          </div>
+
+          <p className="mt-12 font-mono text-[0.78rem] uppercase tracking-[0.08em] text-ink-faint">
+            B.Sc. Mechanical Engineering, Ben-Gurion University · Hebrew, English, Russian · Israel, open to remote and hybrid roles
+          </p>
         </div>
       </section>
 
@@ -283,8 +248,8 @@ export default function Home() {
 
       {/* ── Footer ── */}
       {/* Extra bottom padding keeps the floating action pill clear of content */}
-      <footer className="bg-canvas border-t border-line-dark px-6 pt-8 pb-24">
-        <div className="max-w-[1180px] mx-auto font-mono text-[10px] uppercase tracking-[0.15em] text-on-dark-faint">
+      <footer className="bg-canvas px-6 pt-8 pb-24">
+        <div className="max-w-[1360px] mx-auto font-mono text-[11px] uppercase tracking-[0.12em] text-on-dark-faint">
           <span>© 2026 Michael Korenevsky</span>
         </div>
       </footer>

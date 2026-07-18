@@ -47,10 +47,15 @@
     min-height: 100dvh;
   }
 
-  /* No fixed header anymore — small offset keeps anchored sections off the
+  /* No fixed header anymore; small offset keeps anchored sections off the
      very top edge */
   * {
     scroll-margin-top: 24px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
   }
 
   /* Pin Fraunces' optical size and turn WONK off. Left on "auto", high opsz

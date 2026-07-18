@@ -30,7 +30,7 @@ export default function SimulationModal({ isOpen, onClose }: SimulationModalProp
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label="Physics-based simulation case study"
+      aria-label="Predictive simulation product work"
     >
       <div
         className="w-full max-w-[94vw] xl:max-w-7xl h-[90dvh] md:h-[82vh] bg-paper border border-line rounded-sm flex flex-col overflow-hidden animate-scale-in text-left select-text shadow-2xl"
@@ -40,10 +40,10 @@ export default function SimulationModal({ isOpen, onClose }: SimulationModalProp
         <div className="flex justify-between items-center px-6 py-4 border-b border-line bg-paper-2 flex-shrink-0">
           <div>
             <p className="font-mono text-[9px] md:text-[10px] uppercase tracking-widest text-accent-deep font-medium">
-              PREDICTIVE SOLVER CASE STUDY
+              PRODUCT WORK & VALIDATION EVIDENCE
             </p>
             <h3 className="text-base md:text-xl font-display font-light text-ink mt-0.5">
-              Physics-based Simulation Suite
+              From physics engine to production tool
             </h3>
           </div>
           <button
@@ -63,23 +63,32 @@ export default function SimulationModal({ isOpen, onClose }: SimulationModalProp
             {/* Left: Scope & Docs */}
             <div className="md:col-span-7 space-y-6">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent-deep font-medium mb-1.5">
-                  THE PRODUCT & MISSION
+                <p className="font-mono text-[0.72rem] uppercase tracking-[0.16em] text-accent-deep font-medium mb-1.5">
+                  MY MANDATE
                 </p>
                 <p className="text-sm md:text-xl font-display font-light text-ink leading-snug">
-                  Simulation software that predicts thermal stress, shrink, and warp before manufacturing, enabling clients to achieve first-time-right production and eliminate expensive physical trials.
+                  Turn a third-party physics engine into a product that helped manufacturers predict how a 3D-printed part would behave before committing time and material to a production run.
                 </p>
-                <p className="text-xs md:text-sm text-ink-faint leading-relaxed mt-2">
-                  Packages thermo-mechanical physics into single-click workflows any manufacturing engineer can run on a standard workstation.
+                <p className="text-[0.82rem] md:text-sm text-ink-faint leading-relaxed mt-2">
+                  I led 5 engineers with design, sales, and application engineering partners from first launch through enterprise adoption, turning complex physics into a workflow customers could test before launch.
                 </p>
               </div>
 
               <div className="border-t border-line pt-4">
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent-deep font-medium mb-1.5">
-                  PM CONTRIBUTION
+                <p className="font-mono text-[0.72rem] uppercase tracking-[0.16em] text-accent-deep font-medium mb-1.5">
+                  KEY PRODUCT JUDGMENT
                 </p>
-                <p className="text-xs md:text-sm leading-relaxed text-ink-soft">
-                  Defined the three-phase roadmap: Thermal module, Mechanical module, then the coupled Thermo-mechanical pass that eliminated the wait between stages. Worked with physics researchers to package complex finite element solvers into single-click workflows any manufacturing engineer could run on a standard workstation. No physics expertise required. Ran the structured Knauf beta that validated accuracy before launch and produced the customer story we shipped with.
+                <p className="text-[0.82rem] md:text-sm leading-relaxed text-ink-soft">
+                  At first, the product predicted separate parts of the printing process. I led the move to a complete thermo-mechanical prediction that captured the full picture and gave manufacturers more accurate predictions before a production run. Standard workstation support and simple pass/fail outputs made the product usable without specialist infrastructure. Testing the results with customers gave them confidence in the predictions before launch.
+                </p>
+              </div>
+
+              <div className="border-t border-line pt-4">
+                <p className="font-mono text-[0.72rem] uppercase tracking-[0.16em] text-ink-faint font-medium mb-1.5">
+                  PRODUCT CONTEXT
+                </p>
+                <p className="text-[0.82rem] md:text-sm leading-relaxed text-ink-faint">
+                  The product predicts how a 3D-printed part will behave before it is made, so teams can correct likely problems before spending time and material on a production run.
                 </p>
               </div>
 
